@@ -1,3 +1,3 @@
-<h1>Session.new</h1>
-<%= link "Sign in", to: "auth/vkontakte" %>
-<%= link "Sign out", to: Routes.signout_path(@conn, :destroy) %>
+<%= button "Login", to: "/auth/vk", method: :get, class: "btn" %>
+
+<%= button "Logout", to: Routes.logout_path(@conn, :destroy), method: :post, class: "btn" %>
