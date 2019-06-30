@@ -8,14 +8,14 @@
   ],
   "author": "@ARtoriouSs https://github.com/ARtoriouSs",
   "license": "MIT",
-
   "repository": {
     "type": "git",
     "url": "https://github.com/ARtoriouSs/squadster.git"
   },
   "homepage": "https://github.com/ARtoriouSs/squadster",
-  "bugs": { "url": "https://github.com/ARtoriouSs/squadster/issues" },
-
+  "bugs": {
+    "url": "https://github.com/ARtoriouSs/squadster/issues"
+  },
   "scripts": {
     "deploy": "webpack --mode production",
     "watch": "webpack --mode development --watch"
