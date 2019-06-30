@@ -1,20 +1,30 @@
 # Squadster
 
-To start your Phoenix server:
+It's an application for squads management in university military departments.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+### Install locally
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+First of all you should create OAuth application on [vk.com]("https://vk.com/apps?act=manage"). You will need your application id and secret key from here.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+Then you need to add custom hostname to your `/etc/hosts` file. This hostname should be the same with one created in vk application.
 
-## Learn more
+As soon as it's done clone the repo and configure environment:
+```bash
+git clone ...
+cd squadster
+cp .env.example .env
+```
+Edit `.env` file and specify all variables marked as `# required`, others are optional and have default values.
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+Then install dependencies and create database:
+```bash
+mix deps.get
+mix ecto.setup
+cd assets && npm install && cd -
+```
+
+That's all, run the server with `mix phx.server` and visit [`localhost:4000`](http://localhost:4000) from your browser.
+
+### Deploy
+
+Check [deployment guides](https://hexdocs.pm/phoenix/deployment.html).
