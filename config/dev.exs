@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :squadster, Squadster.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "squadster_user",
+  password: "squadster_user",
   database: "squadster_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
