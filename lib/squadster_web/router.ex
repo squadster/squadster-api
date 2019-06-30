@@ -14,7 +14,7 @@ defmodule SquadsterWeb.Router do
 
     get "/", SessionController, :new, as: :root
 
-    get "/auth/:provider/callback", SessionsController, :create
+    get "/auth/:provider/callback", SessionController, :create
     get "/auth/failure", SessionController, :failure_callback
     get "/signout", SessionController, :destroy, as: :signout
 
