@@ -1,10 +1,3 @@
-# This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
-#
-# This configuration file is loaded before any dependency and
-# is restricted to this project.
-
-# General application configuration
 use Mix.Config
 
 config :squadster,
@@ -12,8 +5,8 @@ config :squadster,
 
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,
-  url: [host: "local.squad.io"],
-  secret_key_base: "3EpslvV8zh+QGjzuHhfBLEUuHVFp9HPrrmGyIFU8/TiJTLuY9JdYOsCtZ7DcX3VZ",
+  url: [host: System.get_env("HOSTNAME") || "squadster.io"],
+  secret_key_base: System.get_env("SECRET_KEY_BASE") || "YwHUkFneakAZRdSvutrJqpOZZ2kogjIFMsZntnRE89BibSBDUDc+SjBnABMMcZhCTiJTLuY9JdYOsCtZ7DcX3VZ",
   render_errors: [view: SquadsterWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Squadster.PubSub, adapter: Phoenix.PubSub.PG2]
 
@@ -32,8 +25,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.VK.OAuth,
-  client_id: System.get_env("VK_CLIENT_ID"),
-  client_secret: System.get_env("VK_CLIENT_SECRET")
+  client_id: System.get_env("VK_APP_ID"),
+  client_secret: System.get_env("VK_SECRET_KEY")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
