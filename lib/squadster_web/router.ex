@@ -9,18 +9,15 @@ defmodule SquadsterWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
   scope "/", SquadsterWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
-  end
+    get "/", SessionController, :new, as: :root
 
-  # Other scopes may use custom stacks.
-  # scope "/api", SquadsterWeb do
-  #   pipe_through :api
-  # end
+    get "/auth/:provider/callback", SessionsController, :create
+    get "/auth/failure", SessionController, :failure_callback
+    get "/signout", SessionController, :destroy, as: :signout
+
+    resources "/users", UserController
+  end
 end
