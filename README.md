@@ -10,7 +10,7 @@ Then you need to add custom hostname to your `/etc/hosts` file. This hostname sh
 
 As soon as it's done clone the repo and configure environment:
 ```bash
-git clone ...
+git clone https://github.com/ARtoriouSs/squadster.git
 cd squadster
 cp .env.example .env
 ```
@@ -23,7 +23,7 @@ mix ecto.setup
 cd assets && npm install && cd -
 ```
 
-That's all, run the server with `mix phx.server` and visit [`localhost:4000`](http://localhost:4000) from your browser.
+That's all, share environment with `source .env`, run the server with `mix phx.server` and visit [`squadster.io:4000`](http://squadster.io:4000) from your browser.
 
 ### Deploy
 
