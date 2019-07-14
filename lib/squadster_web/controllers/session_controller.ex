@@ -2,6 +2,7 @@ defmodule SquadsterWeb.SessionController do
   use SquadsterWeb, :controller
   plug Ueberauth
   alias Ueberauth.Strategy.Helpers
+  alias Squadster.User
 
 
   # def new(conn, _params) do
@@ -9,7 +10,7 @@ defmodule SquadsterWeb.SessionController do
   # end
 
   # def create(_conn, _params) do
-  #   # user = User.find_or_create_from_omniauth(request.env["omniauth.auth"])
+  #   # user = User.find_or_create_from_auth_from_omniauth(request.env["omniauth.auth"])
   #   # session[:user_id] = user.id
   #   # redirect_to user_path(user), notice: "Signed in!"
   # end
@@ -41,7 +42,7 @@ defmodule SquadsterWeb.SessionController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    case UserFromAuth.find_or_create(auth) do
+    case User.find_or_create_from_auth(auth) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")
@@ -54,5 +55,4 @@ defmodule SquadsterWeb.SessionController do
         |> redirect(to: "/")
     end
   end
-
 end
