@@ -10,8 +10,8 @@ Then you need to add custom hostname to your `/etc/hosts` file. This hostname sh
 
 As soon as it's done clone the repo and configure environment:
 ```bash
-git clone https://github.com/ARtoriouSs/squadster.git
-cd squadster
+git clone https://github.com/ARtoriouSs/squadster-api.git
+cd squadster-api
 cp .env.example .env
 ```
 Edit `.env` file and specify all variables marked as `# required`, others are optional and have default values.
