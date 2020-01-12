@@ -21,7 +21,7 @@ config :phoenix, :json_library, Jason
 # VK OAuth configuration
 config :ueberauth, Ueberauth,
   providers: [
-    vk: {Ueberauth.Strategy.VK, []}
+    vk: {Ueberauth.Strategy.VK, [profile_fields: "first_name,last_name,bdate,education,universities,photo_200,photo_100"]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.VK.OAuth,

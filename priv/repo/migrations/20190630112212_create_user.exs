@@ -13,7 +13,7 @@ defmodule Squadster.Repo.Migrations.CreateUser do
       add :faculty, :string
       add :vk_url, :string
       add :image_url, :string
-      timestamps
+      timestamps()
     end
   end
 end

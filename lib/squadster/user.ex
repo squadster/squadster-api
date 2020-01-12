@@ -1,9 +1,13 @@
 defmodule Squadster.User do
   use Ecto.Schema
+
   import Ecto.Changeset
   require Logger
   require Poison
+
   alias Ueberauth.Auth
+  alias Squadster.Repo
+  alias Squadster.User
 
   schema "users" do
     field :uid, :string
@@ -27,10 +31,23 @@ defmodule Squadster.User do
     |> validate_format(:mobile_phone, ~r/^[-+()0-9]+$/)
   end
 
+  def list_users do
+    Repo.all(User)
+  end
+
   def find_or_create_from_auth(%Auth{} = auth) do
-    # should Repo be here?
+    require IEx
+    IEx.pry
+    auth.extra.raw_info.user["id"]
+
+
+
     user = Repo.get_by(User, uid: auth.uid)
     if user, do: user, else: Repo.insert(User, auth)
+  end
+
+  def create_from_auth(%Auth{} = auth) do
+
   end
 
   # defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}}), do: image

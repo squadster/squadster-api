@@ -9,6 +9,10 @@ defmodule SquadsterWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
   # scope "/", SquadsterWeb do
   #   pipe_through :browser
 
@@ -23,6 +27,12 @@ defmodule SquadsterWeb.Router do
 
     get "/", SessionController, :request, as: :root
     resources "/users", UserController
+  end
+
+  scope "/api" do
+    pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Squadster.Schema
   end
 
   scope "/auth", SquadsterWeb do
