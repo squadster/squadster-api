@@ -72,10 +72,10 @@ Your ideas and wishes are welcome via [issues](https://github.com/ARtoriouSs/squ
 
 ## License
 
-[Creative Commons Attribution Non Commercial](http://creativecommons.org/licenses/by-nc/4.0)
+[CC BY-NC-SA](http://creativecommons.org/licenses/by-nc/4.0)
 
 * You cannot use this for commercial purposes.
 * If you make your own application based on this you must somehow link this repo on your pages.
 * You are not allowed to change license terms
 
-Check out the [LICENCE](LICENSE) file
+Check out the [LICENCE](LICENSE.md) file
