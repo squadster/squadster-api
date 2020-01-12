@@ -63,8 +63,6 @@ Check the [deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
 Your ideas and wishes are welcome via [issues](https://github.com/ARtoriouSs/squadster-api/issues) and [pull requets](https://github.com/ARtoriouSs/squadster-api/pulls).
 
-Check out the [contribution guides](CONTRIBUTING.md).
-
 **Contributors:**
 
 * TODO:
