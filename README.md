@@ -39,6 +39,8 @@ That's all, load environment with `source .env`, run the server with `mix phx.se
 
 ### Other parts of application
 
+This repo is only an API part of application. There are also some other parts:
+
 * **Frontend**
 
 Check out [the repo](https://github.com/ARtoriouSs/squadster-frontend) and it's installation guides.
