@@ -35,7 +35,7 @@ defmodule Squadster.User do
     Repo.all(User)
   end
 
-  def find_or_create_from_auth(%Auth{} = auth) do
+  def find_or_create(%Auth{} = auth) do
     require IEx
     IEx.pry
     auth.extra.raw_info.user["id"]
@@ -46,7 +46,7 @@ defmodule Squadster.User do
     if user, do: user, else: Repo.insert(User, auth)
   end
 
-  def create_from_auth(%Auth{} = auth) do
+  def create(%Auth{} = auth) do
 
   end
 

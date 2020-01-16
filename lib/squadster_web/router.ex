@@ -1,46 +1,22 @@
 defmodule SquadsterWeb.Router do
   use SquadsterWeb, :router
 
-  pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  # scope "/", SquadsterWeb do
-  #   pipe_through :browser
+  scope "/auth", SquadsterWeb do
+    pipe_through :api
 
-
-  #   get "/auth/:provider/callback", SessionController, :create
-  #   get "/auth/failure", SessionController, :failure_callback
-  #   get "/signout", SessionController, :destroy, as: :signout
-  # end
-
-  scope "/", SquadsterWeb do
-    pipe_through :browser
-
-    get "/", SessionController, :request, as: :root
-    resources "/users", UserController
+    get "/:provider", SessionController, :request
+    get "/:provider/callback", SessionController, :callback
+    post "/:provider/callback", SessionController, :callback
+    post "/logout", SessionController, :destroy, as: :logout
   end
 
   scope "/api" do
     pipe_through :api
 
     forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Squadster.Schema
-  end
-
-  scope "/auth", SquadsterWeb do
-    pipe_through [:browser]
-
-    get "/:provider", SessionController, :request
-    get "/:provider/callback", SessionController, :callback
-    post "/:provider/callback", SessionController, :callback
-    post "/logout", SessionController, :destroy, as: :logout
   end
 end
