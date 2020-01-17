@@ -8,11 +8,9 @@ defmodule Squadster.User do
   alias Ueberauth.Auth
   alias Squadster.Repo
   alias Squadster.User
+  alias Squadster.DateHelper
 
   schema "users" do
-    field :uid, :string
-    field :vk_url, :string
-    field :image_url, :string
     field :first_name, :string
     field :last_name, :string
     field :birth_date, :date
@@ -20,12 +18,16 @@ defmodule Squadster.User do
     field :mobile_phone, :string
     field :university, :string
     field :faculty, :string
+    field :uid, :string
+    field :auth_token, :string
+    field :small_image_url, :string
+    field :image_url, :string
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:uid, :first_name, :last_name, :email, :university, :faculty])
+    |> cast(params, [:uid, :first_name, :last_name, :email, :mobile_phone])
     |> validate_required([:uid, :first_name, :last_name])
     |> validate_format(:email, ~r/^.+@.+\..+$/)
     |> validate_format(:mobile_phone, ~r/^[-+()0-9]+$/)
@@ -35,20 +37,27 @@ defmodule Squadster.User do
     Repo.all(User)
   end
 
-  def find_or_create(%Auth{} = auth) do
-    require IEx
-    IEx.pry
-    auth.extra.raw_info.user["id"]
-
-
-
-    user = Repo.get_by(User, uid: auth.uid)
-    if user, do: user, else: Repo.insert(User, auth)
+  def find_or_create(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}} = auth) do
+    uid = Integer.to_string(info["id"])
+    user = Repo.get_by(User, uid: uid)
+    if user do
+      {:found, user}
+    else
+      {:created, Repo.insert(
+        %User{
+          first_name: info["first_name"],
+          last_name: info["last_name"],
+          birth_date: DateHelper.date_from_string(info["bdate"]),
+          email: info["email"], # TODO: verify
+          mobile_phone: info["mobile_phone"], # TODO: verify
+          university: info["university_name"],
+          faculty: info["faculty_name"],
+          uid: uid,
+          small_image_url: info["photo_100"],
+          image_url: info["photo_200"],
+          auth_token: token
+        })
+      }
+    end
   end
-
-  def create(%Auth{} = auth) do
-
-  end
-
-  # defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}}), do: image
 end
