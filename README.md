@@ -45,21 +45,23 @@ This repo is only an API part of application. There are also some other parts:
 
 Check out [the repo](https://github.com/ARtoriouSs/squadster-frontend) and it's installation guides.
 
-* **vk notifier**
+* **Mercury**
 
-Bot for notifications via [vk.com API](https://vk.com/dev). Check out [the repo](TODO: add link) and it's installation guides.
+Bot for notifications via [vk.com API](https://vk.com/dev). Check out [the repo](https://github.com/Squadster/mercury) and it's installation guides.
 
 * **Android application**
 
-Check out [the repo](TODO: add link) and it's installation guides..
+Check out [the repo](https://github.com/Squadster/squadster-android) and it's installation guides.
 
 * **iOS application**
 
-Check out [the repo](TODO: add link) and it's installation guides..
+Check out [the repo](https://github.com/Squadster/squadster-ios) and it's installation guides.
 
 ### Deployment
 
-Check the [deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+Check the [Elixir deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+
+For the whole application check out [this repo](https://github.com/Squadster/squadster-deployment).
 
 ## Contributing
 
