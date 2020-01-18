@@ -27,10 +27,16 @@ defmodule Squadster.User do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:uid, :first_name, :last_name, :email, :mobile_phone])
-    |> validate_required([:uid, :first_name, :last_name])
+    |> cast(params, [:first_name, :last_name, :birth_date, :email, :mobile_phone, :university, :faculty])
+    |> validate_required([:first_name, :last_name])
     |> validate_format(:email, ~r/^.+@.+\..+$/)
     |> validate_format(:mobile_phone, ~r/^[-+()0-9]+$/)
+  end
+
+  def auth_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, auth_fields)
+    |> validate_required([:uid, :first_name, :last_name])
   end
 
   def list_users do
@@ -38,26 +44,50 @@ defmodule Squadster.User do
   end
 
   def find_or_create(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}} = auth) do
-    uid = Integer.to_string(info["id"])
-    user = Repo.get_by(User, uid: uid)
+    user = Repo.get_by(User, uid: uid_from_auth(auth))
     if user do
-      {:found, user}
+      user
+      |> auth_changeset(data_from_auth(auth))
+      |> delete_change(:uid)
+      |> Repo.update()
     else
-      {:created, Repo.insert(
-        %User{
-          first_name: info["first_name"],
-          last_name: info["last_name"],
-          birth_date: DateHelper.date_from_string(info["bdate"]),
-          email: info["email"], # TODO: verify
-          mobile_phone: info["mobile_phone"], # TODO: verify
-          university: info["university_name"],
-          faculty: info["faculty_name"],
-          uid: uid,
-          small_image_url: info["photo_100"],
-          image_url: info["photo_200"],
-          auth_token: token
-        })
-      }
+      Repo.insert(auth_changeset(%User{}, data_from_auth(auth)))
     end
+  end
+
+  defp data_from_auth(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}} = auth) do
+    %{
+      first_name: info["first_name"],
+      last_name: info["last_name"],
+      birth_date: DateHelper.date_from_string(info["bdate"]),
+      email: info["email"], # TODO: verify
+      mobile_phone: info["mobile_phone"], # TODO: verify
+      university: info["university_name"],
+      faculty: info["faculty_name"],
+      small_image_url: info["photo_100"],
+      image_url: info["photo_200"],
+      uid: uid_from_auth(auth),
+      auth_token: token
+    }
+  end
+
+  defp uid_from_auth(%Auth{extra: %{raw_info: %{user: %{"id" => uid}}}}) do
+    Integer.to_string(uid)
+  end
+
+  defp auth_fields do
+    [
+      :first_name,
+      :last_name,
+      :birth_date,
+      :email,
+      :mobile_phone,
+      :university,
+      :faculty,
+      :uid,
+      :auth_token,
+      :small_image_url,
+      :image_url
+    ]
   end
 end

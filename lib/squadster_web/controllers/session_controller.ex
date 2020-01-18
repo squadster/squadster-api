@@ -7,23 +7,29 @@ defmodule SquadsterWeb.SessionController do
   alias Squadster.User
 
   def destroy(conn, _params) do
+    # TODO: nullify token on current user
     conn
-    |> configure_session(drop: true)
-    |> send_resp(200, %{info: "logged out"})
+    |> put_status(:ok)
+    |> json(%{message: "Logged out"})
   end
 
   def callback(%{assigns: %{ueberauth_failure: reason}} = conn, _params) do
-    send_resp(conn, 401, %{error: reason})
+    send_auth_error(conn, reason)
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case User.find_or_create(auth) do
-      {status, user} when status in [:created, :found] ->
+      {:ok, user} ->
         conn
-        |> put_session(:current_user, user)
-        |> configure_session(renew: true)
-        |> send_resp(200, %{info: "logged in", token: user.auth_token})
-      {:error, reason} -> send_resp(conn, 401, %{error: reason})
+        |> put_status(:created)
+        |> json(%{message: "Logged in", token: user.auth_token})
+      {:error, reason} -> send_auth_error(conn, reason)
     end
+  end
+
+  defp send_auth_error(conn, reason) do
+    conn
+    |> put_status(:unauthorized)
+    |> json(%{error: reason, message: "Failed to authenticate"})
   end
 end
