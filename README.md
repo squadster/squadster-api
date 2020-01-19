@@ -74,7 +74,7 @@ Your ideas and wishes are welcome via [issues](https://github.com/squadster/squa
 
 ## License
 
-[CC BY-NC-SA](http://creativecommons.org/licenses/by-nc/4.0)
+[CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0)
 
 * You cannot use this for commercial purposes.
 * If you make your own application based on this you must somehow link this repo on your pages.
