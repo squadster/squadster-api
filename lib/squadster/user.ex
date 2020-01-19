@@ -8,11 +8,9 @@ defmodule Squadster.User do
   alias Ueberauth.Auth
   alias Squadster.Repo
   alias Squadster.User
+  alias Squadster.DateHelper
 
   schema "users" do
-    field :uid, :string
-    field :vk_url, :string
-    field :image_url, :string
     field :first_name, :string
     field :last_name, :string
     field :birth_date, :date
@@ -20,35 +18,95 @@ defmodule Squadster.User do
     field :mobile_phone, :string
     field :university, :string
     field :faculty, :string
+    field :uid, :string
+    field :auth_token, :string
+    field :small_image_url, :string
+    field :image_url, :string
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:uid, :first_name, :last_name, :email, :university, :faculty])
-    |> validate_required([:uid, :first_name, :last_name])
+    |> cast(params, [:first_name, :last_name, :birth_date, :email, :mobile_phone, :university, :faculty])
+    |> validate_required([:first_name, :last_name])
     |> validate_format(:email, ~r/^.+@.+\..+$/)
     |> validate_format(:mobile_phone, ~r/^[-+()0-9]+$/)
+  end
+
+  def auth_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, auth_fields())
+    |> validate_required([:uid, :first_name, :last_name])
   end
 
   def list_users do
     Repo.all(User)
   end
 
-  def find_or_create_from_auth(%Auth{} = auth) do
-    require IEx
-    IEx.pry
-    auth.extra.raw_info.user["id"]
-
-
-
-    user = Repo.get_by(User, uid: auth.uid)
-    if user, do: user, else: Repo.insert(User, auth)
+  def current(conn) do
+    conn.assigns[:current_user]
   end
 
-  def create_from_auth(%Auth{} = auth) do
-
+  def signed_in?(conn) do
+    !!current(conn)
   end
 
-  # defp avatar_from_auth(%{info: %{urls: %{avatar_url: image}}}), do: image
+  def logout(conn) do
+    conn
+    |> current
+    |> auth_changeset
+    |> put_change(:auth_token, nil)
+    |> Repo.update
+  end
+
+  def find_or_create(%Auth{} = auth) do
+    if user = Repo.get_by(User, uid: uid_from_auth(auth)) do
+      user
+      |> auth_changeset(data_from_auth(auth))
+      |> delete_change(:uid)
+      |> Repo.update
+    else
+      Repo.insert(auth_changeset(%User{}, data_from_auth(auth)))
+    end
+  end
+
+  def find_by_token(token) do
+    Repo.get_by(User, auth_token: token)
+  end
+
+  defp data_from_auth(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}} = auth) do
+    %{
+      first_name: info["first_name"],
+      last_name: info["last_name"],
+      birth_date: DateHelper.date_from_string(info["bdate"]),
+      email: info["email"], # TODO: verify
+      mobile_phone: info["mobile_phone"], # TODO: verify
+      university: info["university_name"],
+      faculty: info["faculty_name"],
+      small_image_url: info["photo_100"],
+      image_url: info["photo_200"],
+      uid: uid_from_auth(auth),
+      auth_token: token
+    }
+  end
+
+  defp uid_from_auth(%Auth{extra: %{raw_info: %{user: %{"id" => uid}}}}) do
+    Integer.to_string(uid)
+  end
+
+  defp auth_fields do
+    [
+      :first_name,
+      :last_name,
+      :birth_date,
+      :email,
+      :mobile_phone,
+      :university,
+      :faculty,
+      :uid,
+      :auth_token,
+      :small_image_url,
+      :image_url
+    ]
+  end
 end
