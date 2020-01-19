@@ -5,6 +5,12 @@ defmodule SquadsterWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/", SquadsterWeb do
+    pipe_through :api
+
+    get "/ping", PingController, :ping
+  end
+
   scope "/auth", SquadsterWeb do
     pipe_through :api
 
@@ -17,6 +23,6 @@ defmodule SquadsterWeb.Router do
   scope "/api" do
     pipe_through [:api, SquadsterWeb.Plugs.Auth]
 
-    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Squadster.Schema
+    forward "/query", Absinthe.Plug.GraphiQL, schema: Squadster.Schema
   end
 end
