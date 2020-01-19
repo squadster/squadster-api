@@ -22,7 +22,7 @@ Then you need to add custom hostname to your `/etc/hosts` file. This hostname sh
 
 As soon as it's done clone the repo and configure environment:
 ```bash
-git clone https://github.com/Squadster/squadster-api.git
+git clone https://github.com/squadster/squadster-api.git
 cd squadster-api
 cp .env.sample .env
 ```
@@ -43,29 +43,29 @@ This repo is only an API part of application. There are also some other parts:
 
 * **Frontend**
 
-Check out [the repo](https://github.com/ARtoriouSs/squadster-frontend) and it's installation guides.
+Check out [the repo](https://github.com/squadster/squadster-frontend) and it's installation guides.
 
 * **Mercury**
 
-Bot for notifications via [vk.com API](https://vk.com/dev). Check out [the repo](https://github.com/Squadster/mercury) and it's installation guides.
+Bot for notifications via [vk.com API](https://vk.com/dev). Check out [the repo](https://github.com/squadster/mercury) and it's installation guides.
 
 * **Android application**
 
-Check out [the repo](https://github.com/Squadster/squadster-android) and it's installation guides.
+Check out [the repo](https://github.com/squadster/squadster-android) and it's installation guides.
 
 * **iOS application**
 
-Check out [the repo](https://github.com/Squadster/squadster-ios) and it's installation guides.
+Check out [the repo](https://github.com/squadster/squadster-ios) and it's installation guides.
 
 ### Deployment
 
 Check the [Elixir deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
-For the whole application check out [this repo](https://github.com/Squadster/squadster-deployment).
+For the whole application check out [this repo](https://github.com/squadster/squadster-deployment).
 
 ## Contributing
 
-Your ideas and wishes are welcome via [issues](https://github.com/ARtoriouSs/squadster-api/issues) and [pull requets](https://github.com/ARtoriouSs/squadster-api/pulls).
+Your ideas and wishes are welcome via [issues](https://github.com/squadster/squadster-api/issues) and [pull requets](https://github.com/squadster/squadster-api/pulls).
 
 **Contributors:**
 
