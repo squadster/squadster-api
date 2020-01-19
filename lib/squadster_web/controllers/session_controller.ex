@@ -2,12 +2,12 @@ defmodule SquadsterWeb.SessionController do
   use SquadsterWeb, :controller
 
   plug Ueberauth
+  plug SquadsterWeb.Plugs.Auth when action in [:destroy]
 
-  alias Ueberauth.Strategy.Helpers
   alias Squadster.User
 
   def destroy(conn, _params) do
-    # TODO: nullify token on current user
+    User.logout(conn)
     conn
     |> put_status(:ok)
     |> json(%{message: "Logged out"})

@@ -35,7 +35,7 @@ defmodule Squadster.User do
 
   def auth_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, auth_fields)
+    |> cast(params, auth_fields())
     |> validate_required([:uid, :first_name, :last_name])
   end
 
@@ -43,16 +43,35 @@ defmodule Squadster.User do
     Repo.all(User)
   end
 
-  def find_or_create(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}} = auth) do
-    user = Repo.get_by(User, uid: uid_from_auth(auth))
-    if user do
+  def current(conn) do
+    conn.assigns[:current_user]
+  end
+
+  def signed_in?(conn) do
+    !!current(conn)
+  end
+
+  def logout(conn) do
+    conn
+    |> current
+    |> auth_changeset
+    |> put_change(:auth_token, nil)
+    |> Repo.update
+  end
+
+  def find_or_create(%Auth{} = auth) do
+    if user = Repo.get_by(User, uid: uid_from_auth(auth)) do
       user
       |> auth_changeset(data_from_auth(auth))
       |> delete_change(:uid)
-      |> Repo.update()
+      |> Repo.update
     else
       Repo.insert(auth_changeset(%User{}, data_from_auth(auth)))
     end
+  end
+
+  def find_by_token(token) do
+    Repo.get_by(User, auth_token: token)
   end
 
   defp data_from_auth(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}} = auth) do
