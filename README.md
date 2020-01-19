@@ -41,7 +41,7 @@ cd assets && npm install && cd -
 That's all, load environment with `source .env`, run the server with `mix phx.server` and test it with
 
 ```bash
-curl squadster.io:4000/ping
+curl squadster.io:4000/api/ping
 ```
 
 ### Other parts of application
