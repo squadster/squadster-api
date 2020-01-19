@@ -21,21 +21,28 @@ First of all you should create OAuth application on [vk.com]("https://vk.com/app
 Then you need to add custom hostname to your `/etc/hosts` file. This hostname should be the same with one created in vk application. Let it be `squadster.io`
 
 As soon as it's done clone the repo and configure environment:
+
 ```bash
 git clone https://github.com/squadster/squadster-api.git
 cd squadster-api
 cp .env.sample .env
 ```
+
 Edit `.env` file and specify all variables marked as `# required`, others are optional, some heve default values.
 
 Then install dependencies and create database:
+
 ```bash
 mix deps.get
 mix ecto.setup
 cd assets && npm install && cd -
 ```
 
-That's all, load environment with `source .env`, run the server with `mix phx.server` and test it with `curl squadster.io/ping`
+That's all, load environment with `source .env`, run the server with `mix phx.server` and test it with
+
+```bash
+curl squadster.io:4000/ping
+```
 
 ### Other parts of application
 
