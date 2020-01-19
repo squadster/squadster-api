@@ -4,7 +4,7 @@ It's an application for squads management in university military departments.
 
 ## The problem it \*will\* solve
 
-No one wants to go to army, that's why students attends to military departments in univercities, and no one wants to learn something and care about it because there is completely useless information.
+No one wants to go to army, that's why students attends to military departments in universities, and no one wants to learn something and care about it because there is completely useless information.
 
 But unfortunately if student do nothing he can be expelled from the department or have some problems there.
 
