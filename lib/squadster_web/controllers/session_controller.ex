@@ -1,7 +1,7 @@
 defmodule SquadsterWeb.SessionController do
   use SquadsterWeb, :controller
 
-  plug Ueberauth
+  plug Ueberauth when action not in [:destroy]
   plug SquadsterWeb.Plugs.Auth when action in [:destroy]
 
   alias Squadster.User
