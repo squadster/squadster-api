@@ -35,13 +35,20 @@ Then install dependencies and create database:
 ```bash
 mix deps.get
 mix ecto.setup
-cd assets && npm install && cd -
 ```
 
 That's all, load environment with `source .env`, run the server with `mix phx.server` and test it with
 
 ```bash
 curl squadster.io:4000/api/ping
+```
+
+### Running test suite
+
+We use [ESpec](https://github.com/antonmi/espec) for testing. To run all specs execute
+
+```bash
+mix espec
 ```
 
 ### Other parts of application
