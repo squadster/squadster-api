@@ -1,22 +1,30 @@
 defmodule SquadsterWeb.Router do
   use SquadsterWeb, :router
 
+  alias SquadsterWeb.Plugs.Auth
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/auth", SquadsterWeb do
+  scope "/api" do
     pipe_through :api
 
-    get "/:provider", SessionController, :request
-    get "/:provider/callback", SessionController, :callback
-    post "/:provider/callback", SessionController, :callback
-    delete "/logout", SessionController, :destroy, as: :logout
-  end
+    scope "/" do
+      pipe_through Auth
 
-  scope "/api" do
-    pipe_through [:api, SquadsterWeb.Plugs.Auth]
+      forward "/query", Absinthe.Plug.GraphiQL, schema: Squadster.Schema
+    end
 
-    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Squadster.Schema
+    scope "/", SquadsterWeb do
+      scope "/auth" do
+        get "/:provider", SessionController, :request
+        get "/:provider/callback", SessionController, :callback
+        post "/:provider/callback", SessionController, :callback
+        delete "/logout", SessionController, :destroy, as: :logout
+      end
+
+      get "/ping", PingController, :ping
+    end
   end
 end

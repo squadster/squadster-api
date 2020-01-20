@@ -20,15 +20,7 @@ config :squadster, SquadsterWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: Path.expand("../assets", __DIR__)
-    ]
-  ]
+  watchers: []
 
 # ## SSL Support
 #
@@ -58,7 +50,7 @@ config :squadster, SquadsterWeb.Endpoint,
 config :squadster, SquadsterWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg|txt)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/squadster_web/{live,views}/.*(ex)$",
       ~r"lib/squadster_web/templates/.*(eex)$"

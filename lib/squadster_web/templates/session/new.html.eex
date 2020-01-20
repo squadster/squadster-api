@@ -1,3 +1,0 @@
-<%= button "Login", to: "/auth/vk", method: :get, class: "btn" %>
-
-<%= button "Logout", to: Routes.logout_path(@conn, :destroy), method: :post, class: "btn" %>
