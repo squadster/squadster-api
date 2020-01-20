@@ -9,5 +9,3 @@ ESpec.configure fn(config) ->
     Ecto.Adapters.SQL.Sandbox.checkin(Squadster.Repo, [])
   end
 end
-
-Application.ensure_all_started(:bypass)
