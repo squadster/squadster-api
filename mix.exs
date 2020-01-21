@@ -10,7 +10,8 @@ defmodule Squadster.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      preferred_cli_env: [espec: :test]
     ]
   end
 
@@ -45,7 +46,10 @@ defmodule Squadster.MixProject do
       {:poison, "~> 3.1"},
       {:ueberauth_vk, "~> 0.3"},
       {:absinthe, "~> 1.4.0"},
-      {:absinthe_plug, "~> 1.4.0"}
+      {:absinthe_plug, "~> 1.4.0"},
+      {:bypass, "~> 1.0", only: :test},
+      {:espec, "~> 1.8.1", only: :test},
+      {:espec_phoenix, "~> 0.7.1", only: :test},
     ]
   end
 

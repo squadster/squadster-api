@@ -20,8 +20,7 @@ defmodule SquadsterWeb.Router do
       scope "/auth" do
         get "/:provider", SessionController, :request
         get "/:provider/callback", SessionController, :callback
-        post "/:provider/callback", SessionController, :callback
-        delete "/logout", SessionController, :destroy, as: :logout
+        delete "/", SessionController, :destroy, as: :logout
       end
 
       get "/ping", PingController, :ping
