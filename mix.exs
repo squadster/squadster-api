@@ -50,6 +50,7 @@ defmodule Squadster.MixProject do
       {:bypass, "~> 1.0", only: :test},
       {:espec, "~> 1.8.1", only: :test},
       {:espec_phoenix, "~> 0.7.1", only: :test},
+      {:cors_plug, "~> 2.0"}
     ]
   end
 
