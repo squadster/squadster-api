@@ -39,8 +39,7 @@ defmodule SquadsterWeb.Endpoint do
     signing_salt: "R47ZSydk"
 
   # Allow requests from frontend
-  # NOTE: '*' allows all sources, for development only
-  plug CORSPlug, origin: "*" # System.get_env("FRONTEND_URL")
+  plug CORSPlug, origin: System.get_env("FRONTEND_URL")
 
   plug SquadsterWeb.Router
 end

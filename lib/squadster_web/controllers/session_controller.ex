@@ -20,16 +20,16 @@ defmodule SquadsterWeb.SessionController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case User.find_or_create(auth) do
       {:ok, user} ->
-        conn
-        |> put_status(:created)
-        |> json(%{message: "Logged in", token: user.auth_token})
+        redirect(conn, external: "#{auth_callback_url}?message=logged_in&token=#{user.auth_token}")
       {:error, reason} -> send_auth_error(conn, reason)
     end
   end
 
   defp send_auth_error(conn, reason) do
-    conn
-    |> put_status(:unauthorized)
-    |> json(%{error: reason, message: "Failed to authenticate"})
+    redirect(conn, external: "#{auth_callback_url}?message=error&reason=#{reason}")
+  end
+
+  defp auth_callback_url do
+    System.get_env("FRONTEND_URL") <> "/auth_callback"
   end
 end
