@@ -7,7 +7,7 @@ defmodule SquadsterWeb.Plugs.Auth do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    unless token = Enum.at(get_req_header(conn, "auth-token"), 0) do
+    unless token = Enum.at(get_req_header(conn, "authorization"), 0) do
       send_auth_error(conn, "Auth token not provided")
     end
 
