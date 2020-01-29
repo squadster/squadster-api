@@ -6,6 +6,8 @@ defmodule SquadsterWeb.SessionController do
 
   alias Squadster.User
 
+  @base_redirect_url System.get_env("FRONTEND_URL") <> "/auth_callback"
+
   def destroy(conn, _params) do
     User.logout(conn)
     conn
@@ -20,16 +22,20 @@ defmodule SquadsterWeb.SessionController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case User.find_or_create(auth) do
       {:ok, user} ->
-        redirect(conn, external: "#{auth_callback_url}?message=logged_in&token=#{user.auth_token}")
+        redirect(conn, external: redirect_url(token: user.auth_token))
       {:error, reason} -> send_auth_error(conn, reason)
     end
   end
 
   defp send_auth_error(conn, reason) do
-    redirect(conn, external: "#{auth_callback_url}?message=error&reason=#{reason}")
+    redirect(conn, external: redirect_url(error: reason))
   end
 
-  defp auth_callback_url do
-    System.get_env("FRONTEND_URL") <> "/auth_callback"
+  defp redirect_url(error: reason) do
+    @base_redirect_url <> "?message=error&reason=#{reason}"
+  end
+
+  defp redirect_url(token: token) do
+    @base_redirect_url <> "&message=logged_in&token=#{token}"
   end
 end
