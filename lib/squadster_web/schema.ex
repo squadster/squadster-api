@@ -1,7 +1,7 @@
 defmodule Squadster.Schema do
   use Absinthe.Schema
 
-  import_types Squadster.Schema.DataTypes
+  import_types SquadsterWeb.Schema.DataTypes
 
   query do
     @desc "Get a list of users"
