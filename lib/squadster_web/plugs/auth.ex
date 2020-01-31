@@ -1,4 +1,6 @@
 defmodule SquadsterWeb.Plugs.Auth do
+  @behaviour Plug
+
   import Plug.Conn
   import Phoenix.Controller
 

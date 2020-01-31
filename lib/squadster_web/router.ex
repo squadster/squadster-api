@@ -2,6 +2,7 @@ defmodule SquadsterWeb.Router do
   use SquadsterWeb, :router
 
   alias SquadsterWeb.Plugs.Auth
+  alias SquadsterWeb.Plugs.Context
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -11,7 +12,7 @@ defmodule SquadsterWeb.Router do
     pipe_through :api
 
     scope "/" do
-      pipe_through Auth
+      pipe_through Context
 
       forward "/query", Absinthe.Plug.GraphiQL, schema: Squadster.Schema
     end
