@@ -1,4 +1,4 @@
-defmodule Squadster.DateHelper do
+defmodule Squadster.Helpers.Dates do
   def date_from_string(string_date) do
     [day, month, year] = string_date \
     |> String.split(".")

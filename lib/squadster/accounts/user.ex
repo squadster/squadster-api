@@ -1,4 +1,4 @@
-defmodule Squadster.User do
+defmodule Squadster.Accounts.User do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -6,9 +6,7 @@ defmodule Squadster.User do
   require Poison
 
   alias Ueberauth.Auth
-  alias Squadster.Repo
-  alias Squadster.User
-  alias Squadster.DateHelper
+  alias Squadster.Helpers.Dates
 
   schema "users" do
     field :first_name, :string
@@ -39,46 +37,11 @@ defmodule Squadster.User do
     |> validate_required([:uid, :first_name, :last_name])
   end
 
-  def list_users do
-    Repo.all(User)
-  end
-
-  def current(conn) do
-    conn.assigns[:current_user]
-  end
-
-  def signed_in?(conn) do
-    !!current(conn)
-  end
-
-  def logout(conn) do
-    conn
-    |> current
-    |> auth_changeset
-    |> put_change(:auth_token, nil)
-    |> Repo.update
-  end
-
-  def find_or_create(%Auth{} = auth) do
-    if user = Repo.get_by(User, uid: uid_from_auth(auth)) do
-      user
-      |> auth_changeset(data_from_auth(auth))
-      |> delete_change(:uid)
-      |> Repo.update
-    else
-      Repo.insert(auth_changeset(%User{}, data_from_auth(auth)))
-    end
-  end
-
-  def find_by_token(token) do
-    Repo.get_by(User, auth_token: token)
-  end
-
-  defp data_from_auth(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}} = auth) do
+  def data_from_auth(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}} = auth) do
     %{
       first_name: info["first_name"],
       last_name: info["last_name"],
-      birth_date: DateHelper.date_from_string(info["bdate"]),
+      birth_date: Dates.date_from_string(info["bdate"]),
       email: info["email"], # TODO: verify
       mobile_phone: info["mobile_phone"], # TODO: verify
       university: info["university_name"],
@@ -90,7 +53,7 @@ defmodule Squadster.User do
     }
   end
 
-  defp uid_from_auth(%Auth{extra: %{raw_info: %{user: %{"id" => uid}}}}) do
+  def uid_from_auth(%Auth{extra: %{raw_info: %{user: %{"id" => uid}}}}) do
     Integer.to_string(uid)
   end
 

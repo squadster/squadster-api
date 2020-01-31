@@ -1,13 +1,11 @@
-defmodule SquadsterWeb.Schema.DataTypes do
+defmodule SquadsterWeb.Schema.AccountTypes do
   use Absinthe.Schema.Notation
 
-  alias Squadster.DateHelper
+  alias Squadster.Helpers.Dates
 
   object :user do
     field :id, non_null(:id)
     field :uid, non_null(:string)
-    field :vk_url, non_null(:string)
-    field :image_url, :string
     field :first_name, non_null(:string)
     field :last_name, non_null(:string)
     field :birth_date, :date
@@ -15,10 +13,12 @@ defmodule SquadsterWeb.Schema.DataTypes do
     field :mobile_phone, :string
     field :university, :string
     field :faculty, :string
+    field :small_image_url, :string
+    field :image_url, :string
   end
 
   scalar :date do
-    parse &DateHelper.date_from_string/1
-    serialize &DateHelper.date_to_string/1
+    parse &Dates.date_from_string/1
+    serialize &Dates.date_to_string/1
   end
 end
