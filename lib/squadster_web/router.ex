@@ -1,7 +1,6 @@
 defmodule SquadsterWeb.Router do
   use SquadsterWeb, :router
 
-  alias SquadsterWeb.Plugs.Auth
   alias SquadsterWeb.Plugs.Context
 
   pipeline :api do
