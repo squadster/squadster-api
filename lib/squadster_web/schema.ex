@@ -14,5 +14,9 @@ defmodule Squadster.Schema do
       arg :id, non_null(:id)
       resolve &SquadsterWeb.Resolvers.Accounts.find_user/3
     end
+
+    field :current_user, :user do
+      resolve &SquadsterWeb.Resolvers.Accounts.current_user/3
+    end
   end
 end

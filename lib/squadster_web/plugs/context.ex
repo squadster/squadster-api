@@ -9,8 +9,9 @@ defmodule SquadsterWeb.Plugs.Context do
   def call(conn, _opts) do
     if conn.method == "POST" do
       conn = Auth.call(conn, %{})
-      Absinthe.Plug.put_options(conn, context: conn.assigns[:current_user])
+      Absinthe.Plug.put_options(conn, context: %{current_user: conn.assigns[:current_user]})
+    else
+      conn
     end
-    conn
   end
 end

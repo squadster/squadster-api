@@ -11,6 +11,13 @@ defmodule SquadsterWeb.Resolvers.Accounts do
   end
 
   def list_users(_parent, _args, _resolution) do
-    Accounts.list_users
+    {:ok, Accounts.list_users}
+  end
+
+  def current_user(_parent, _args, %{context: %{current_user: current_user}}) do
+    {:ok, current_user}
+  end
+  def current_user(_parent, _args, _resolution) do
+    {:error, "Not logged in"}
   end
 end
