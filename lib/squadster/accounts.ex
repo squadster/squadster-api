@@ -22,7 +22,7 @@ defmodule Squadster.Accounts do
   end
 
   def list_users do
-    Repo.all(User)
+    {:ok, Repo.all(User)}
   end
 
   def find_user(id) do
