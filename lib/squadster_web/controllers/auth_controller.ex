@@ -6,7 +6,7 @@ defmodule SquadsterWeb.AuthController do
 
   alias Squadster.Accounts
 
-  @base_redirect_url System.get_env("FRONTEND_URL") <> "/auth_callback"
+  @base_redirect_url System.get_env("FRONTEND_URL") <> "/auth_callback?"
 
   def destroy(conn, _params) do
     Accounts.logout(conn)
@@ -30,9 +30,9 @@ defmodule SquadsterWeb.AuthController do
   end
 
   defp redirect_url(error: reason) do
-    @base_redirect_url <> "?message=error&reason=#{reason}"
+    @base_redirect_url <> URI.encode_query(%{message: "Error", reason: reason})
   end
   defp redirect_url(token: token) do
-    @base_redirect_url <> "&message=logged_in&token=#{token}"
+    @base_redirect_url <> URI.encode_query(%{message: "Logged in", token: token})
   end
 end
