@@ -22,7 +22,7 @@ config :phoenix, :json_library, Jason
 config :ueberauth, Ueberauth,
   base_path: "/api/auth",
   providers: [
-    vk: {Ueberauth.Strategy.VK, [profile_fields: "first_name,last_name,bdate,education,universities,photo_200,photo_100"]}
+    vk: {Ueberauth.Strategy.VK, [profile_fields: "first_name,last_name,bdate,education,universities,domain,photo_400,photo_100"]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.VK.OAuth,

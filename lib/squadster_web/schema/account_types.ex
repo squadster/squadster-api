@@ -9,12 +9,12 @@ defmodule SquadsterWeb.Schema.AccountTypes do
     field :first_name, non_null(:string)
     field :last_name, non_null(:string)
     field :birth_date, :date
-    field :email, :string
     field :mobile_phone, :string
     field :university, :string
     field :faculty, :string
     field :small_image_url, :string
     field :image_url, :string
+    field :vk_url, :string
   end
 
   scalar :date do
