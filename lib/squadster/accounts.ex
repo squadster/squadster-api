@@ -40,7 +40,7 @@ defmodule Squadster.Accounts do
       |> delete_change(:uid)
       |> Repo.update
     else
-      Repo.insert(User.auth_changeset(%User{}, User.data_from_auth(auth)))
+      Repo.insert(User.auth_changeset(User.data_from_auth(auth)))
     end
   end
 end

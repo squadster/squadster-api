@@ -23,7 +23,10 @@ defmodule Squadster.Accounts.User do
     timestamps()
   end
 
-  def changeset(struct, params \\ %{}) do
+  def changeset(params) do
+     changeset(%__MODULE__{}, params)
+  end
+  def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
     |> cast(params, [:first_name, :last_name, :birth_date, :email, :mobile_phone, :university, :faculty])
     |> validate_required([:first_name, :last_name])
@@ -31,7 +34,10 @@ defmodule Squadster.Accounts.User do
     |> validate_format(:mobile_phone, ~r/^[-+()0-9]+$/)
   end
 
-  def auth_changeset(struct, params \\ %{}) do
+  def auth_changeset(params) do
+     auth_changeset(%__MODULE__{}, params)
+  end
+  def auth_changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
     |> cast(params, auth_fields())
     |> validate_required([:uid, :first_name, :last_name])
