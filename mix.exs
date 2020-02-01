@@ -11,7 +11,14 @@ defmodule Squadster.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      preferred_cli_env: [espec: :test]
+      preferred_cli_env: [espec: :test],
+      releases: [
+        squadster: [
+          include_executables_for: [:unix],
+          applications: [runtime_tools: :permanent]
+        ]
+      ],
+      default_release: 'squadster'
     ]
   end
 

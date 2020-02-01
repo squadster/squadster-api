@@ -4,7 +4,7 @@ use Mix.Config
 config :squadster, Squadster.Repo,
   username: System.get_env("DB_USERNAME") || "squadster",
   password: System.get_env("DB_PASSWORD") || "squadster",
-  database: "squadster_test",
+  database: (System.get_env("DB_BASE_NAME") || "squadster") <> "_dev",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
