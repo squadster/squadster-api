@@ -1,0 +1,31 @@
+language: elixir
+elixir: '1.9.0'
+otp_release: '21.3'
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y libssl1.0.0 postgresql-client
+  - sudo apt-get autoclean
+
+#stages:
+  #- compile
+  #- test
+  #- name: deploy
+    #if: branch = deployment
+
+
+jobs:
+  include:
+    - stage: test
+      #script: ./scripts/test.sh
+      script: mix espec
+    #- stage: deploy
+      #script: ./scripts/deploy.sh
+
+#compile:
+  #provider: script
+  #script: mix compile
+
+#deploy:
+  #provider: script
+  #script: ./scripts/deploy.sh
