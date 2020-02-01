@@ -28,6 +28,7 @@ defmodule Squadster.Accounts.User do
   def changeset(params) do
      changeset(%__MODULE__{}, params)
   end
+
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
     |> cast(params, [:first_name, :last_name, :birth_date, :mobile_phone, :university, :faculty])
@@ -38,6 +39,7 @@ defmodule Squadster.Accounts.User do
   def auth_changeset(params) do
      auth_changeset(%__MODULE__{}, params)
   end
+
   def auth_changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
     |> cast(params, auth_fields())

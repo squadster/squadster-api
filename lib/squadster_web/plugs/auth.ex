@@ -1,4 +1,9 @@
 defmodule SquadsterWeb.Plugs.Auth do
+  @moduledoc """
+  Assigns current_user if authorization token provided,
+  sends unauthorized otherwise.
+  """
+
   @behaviour Plug
 
   import Plug.Conn
