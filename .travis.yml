@@ -26,4 +26,4 @@ jobs:
       script:
         - MIX_ENV=test mix espec
     - stage: build
-      script: echo "BUILD"
+      script: ./scripts/build.sh
