@@ -5,15 +5,15 @@ otp_release: '20.1'
 services:
   - postgresql
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y libssl1.0.0 postgresql-client
-  - sudo apt-get autoclean
-
 stages:
   - test
   - name: build
     if: branch = release
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y libssl1.0.0 postgresql-client
+  - sudo apt-get autoclean
 
 jobs:
   include:
