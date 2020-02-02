@@ -51,6 +51,8 @@ We use [ESpec](https://github.com/antonmi/espec) for testing. To run all specs e
 mix espec
 ```
 
+_NOTE: Deprecated Ruby-style syntax fails with OTP 21 and newer, so use Elixir way for it. See [this comment](https://github.com/antonmi/espec/issues/272#issuecomment-399740506)._
+
 ### Other parts of application
 
 This repo is only an API part of application. There are also some other parts:
