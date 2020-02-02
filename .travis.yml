@@ -17,8 +17,7 @@ before_install:
 jobs:
   include:
     - stage: test
-      #script: ./scripts/test.sh
-      script: mix espec
+      script: ./scripts/test.sh
     #- stage: deploy
       #script: ./scripts/deploy.sh
 
