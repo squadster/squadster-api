@@ -7,7 +7,7 @@ defmodule Squadster.PingControllerSpec do
     end
 
     it "pings!" do
-      expect(response().resp_body).to match(~r/Pong!/)
+      expect response().resp_body |> to(match(~r/Pong!/))
     end
   end
 end
