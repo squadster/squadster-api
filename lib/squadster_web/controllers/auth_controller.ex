@@ -21,7 +21,7 @@ defmodule SquadsterWeb.AuthController do
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case Accounts.find_or_create_user(auth) do
-      {:ok, user}      -> redirect(conn, external: redirect_url(token: user.auth_token))
+      {:ok, user} -> redirect(conn, external: redirect_url(token: user.auth_token))
       {:error, reason} -> send_auth_error(conn, reason)
     end
   end

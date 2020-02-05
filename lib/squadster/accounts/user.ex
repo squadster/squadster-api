@@ -9,6 +9,19 @@ defmodule Squadster.Accounts.User do
   alias Squadster.Helpers.Dates
 
   @vk_url "https://vk.com/"
+  @auth_fields [
+    :first_name,
+    :last_name,
+    :birth_date,
+    :mobile_phone,
+    :university,
+    :faculty,
+    :uid,
+    :auth_token,
+    :small_image_url,
+    :image_url,
+    :vk_url
+  ]
 
   schema "users" do
     field :first_name, :string
@@ -42,7 +55,7 @@ defmodule Squadster.Accounts.User do
 
   def auth_changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, auth_fields())
+    |> cast(params, @auth_fields)
     |> validate_required([:uid, :first_name, :last_name])
   end
 
@@ -64,21 +77,5 @@ defmodule Squadster.Accounts.User do
 
   def uid_from_auth(%Auth{extra: %{raw_info: %{user: %{"id" => uid}}}}) do
     Integer.to_string(uid)
-  end
-
-  defp auth_fields do
-    [
-      :first_name,
-      :last_name,
-      :birth_date,
-      :mobile_phone,
-      :university,
-      :faculty,
-      :uid,
-      :auth_token,
-      :small_image_url,
-      :image_url,
-      :vk_url
-    ]
   end
 end

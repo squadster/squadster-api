@@ -1,6 +1,6 @@
 defmodule Squadster.Helpers.Dates do
   def date_from_string(string_date) do
-    [day, month, year] = string_date \
+    [day, month, year] = string_date
     |> String.split(".")
     |> Enum.map(&String.to_integer/1)
 
