@@ -6,7 +6,7 @@ defmodule SquadsterWeb.AuthController do
 
   alias Squadster.Accounts
 
-  @base_redirect_url System.get_env("FRONTEND_URL") <> "/auth_callback?"
+  @base_redirect_url Application.fetch_env!(:ueberauth, Ueberauth.Strategy.VK.OAuth)[:base_redirect_url]
 
   def destroy(conn, _params) do
     Accounts.logout(conn)

@@ -7,7 +7,7 @@ defmodule Squadster.ErrorViewSpec do
     end
 
     it "renders json" do
-      expect(content()).to eq(%{errors: %{detail: "Not Found"}})
+      expect content() |> to(eq %{errors: %{detail: "Not Found"}})
     end
   end
 
@@ -18,7 +18,7 @@ defmodule Squadster.ErrorViewSpec do
     end
 
     it "renders json" do
-      expect(content()).to eq(%{errors: %{detail: "Internal Server Error"}})
+      expect content() |> to(eq %{errors: %{detail: "Internal Server Error"}})
     end
   end
 end

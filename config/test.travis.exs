@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :squadster, Squadster.Repo,
-  username: System.get_env("DB_USERNAME") || "squadster",
-  password: System.get_env("DB_PASSWORD") || "squadster",
+  username: "postgres",
+  password: "",
   database: (System.get_env("DB_BASE_NAME") || "squadster") <> "_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
