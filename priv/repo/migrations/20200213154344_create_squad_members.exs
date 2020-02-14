@@ -3,7 +3,7 @@ defmodule Squadster.Repo.Migrations.CreateSquadMembers do
 
   def change do
     create table(:squad_members) do
-      add :role, :int
+      add :role, :int, default: 3
       add :user_id, references(:users)
       add :squad_id, references(:squads)
 

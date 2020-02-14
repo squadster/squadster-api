@@ -6,7 +6,7 @@ defmodule Squadster.Squad do
   schema "squad" do
     field :squad_number, :string
     field :advertisment, :string
-    has_many :squad_member, Squadster.SquadMember
+    has_many :squad_members, Squadster.SquadMember
 
     timestamps()
   end
