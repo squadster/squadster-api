@@ -1,4 +1,4 @@
-defmodule Squadster.SquadMember do
+defmodule Squadster.Formations.SquadMember do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -9,7 +9,7 @@ defmodule Squadster.SquadMember do
   schema "squad_members" do
     field :role, RoleEnum
     belongs_to :user, Squadster.Accounts.User
-    belongs_to :squad, Squadster.Squad
+    belongs_to :squad, Squadster.Formations.Squad
 
     timestamps()
   end

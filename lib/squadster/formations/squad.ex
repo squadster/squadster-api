@@ -1,12 +1,16 @@
-defmodule Squadster.Squad do
+defmodule Squadster.Formations.Squad do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import EctoEnum
+
+  defenum ClassDayEnum, monday: 1, twesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 7
 
   schema "squad" do
     field :squad_number, :string
     field :advertisment, :string
-    has_many :squad_members, Squadster.SquadMember
+    field :class_day, ClassDayEnum
+    has_many :squad_members, Squadster.Formations.SquadMember
 
     timestamps()
   end
