@@ -22,7 +22,7 @@ jobs:
         - cp config/test.travis.exs config/test.exs
         - MIX_ENV=test mix ecto.create
         - MIX_ENV=test mix ecto.migrate
-        - MIX_ENV=test mix run priv/repo/seeds.exs
+        - MIX_ENV=test mix ecto.seed
       script:
         - MIX_ENV=test mix espec
     - stage: build
