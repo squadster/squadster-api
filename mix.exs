@@ -46,7 +46,6 @@ defmodule Squadster.MixProject do
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
@@ -54,11 +53,15 @@ defmodule Squadster.MixProject do
       {:ueberauth_vk, "~> 0.3"},
       {:absinthe, "~> 1.4.0"},
       {:absinthe_plug, "~> 1.4.0"},
+      {:cors_plug, "~> 2.0"},
+      {:ecto_enum, "~> 1.4"},
+      {:faker, "~> 0.13"},
+
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+
       {:bypass, "~> 1.0", only: :test},
       {:espec, "~> 1.8.1", only: :test},
-      {:espec_phoenix, "~> 0.7.1", only: :test},
-      {:cors_plug, "~> 2.0"},
-      {:ecto_enum, "~> 1.4"}
+      {:espec_phoenix, "~> 0.7.1", only: :test}
     ]
   end
 
@@ -70,9 +73,9 @@ defmodule Squadster.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      "ecto.seed": ["run priv/repo/seeds.#{Mix.env()}.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "ecto.seed"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"]
     ]
   end
 end

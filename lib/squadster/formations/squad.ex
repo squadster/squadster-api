@@ -6,7 +6,7 @@ defmodule Squadster.Formations.Squad do
 
   defenum ClassDayEnum, monday: 1, twesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 7
 
-  schema "squad" do
+  schema "squads" do
     field :squad_number, :string
     field :advertisment, :string
     field :class_day, ClassDayEnum
