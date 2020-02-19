@@ -4,7 +4,7 @@ defmodule Squadster.Formations.SquadRequest do
   import Ecto.Changeset
 
   schema "squad_requests" do
-    has_one :approver, Squadster.Formations.SquadMember
+    belongs_to :approver, Squadster.Formations.SquadMember
     belongs_to :user, Squadster.Accounts.User
     belongs_to :squad, Squadster.Formations.Squad
     field :approved_at, :utc_datetime
