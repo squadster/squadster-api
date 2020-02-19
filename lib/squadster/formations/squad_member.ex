@@ -20,7 +20,7 @@ defmodule Squadster.Formations.SquadMember do
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, [:role])
-    |> validate_required([:role])
+    |> cast(params, [:role, :user, :squad])
+    |> validate_required([:role, :user, :squad])
   end
 end
