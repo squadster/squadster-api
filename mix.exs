@@ -55,13 +55,13 @@ defmodule Squadster.MixProject do
       {:absinthe_plug, "~> 1.4.0"},
       {:cors_plug, "~> 2.0"},
       {:ecto_enum, "~> 1.4"},
+      {:faker, "~> 0.13"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 
       {:bypass, "~> 1.0", only: :test},
       {:espec, "~> 1.8.1", only: :test},
-      {:espec_phoenix, "~> 0.7.1", only: :test},
-      {:faker, "~> 0.13", only: :test}
+      {:espec_phoenix, "~> 0.7.1", only: :test}
     ]
   end
 
@@ -74,7 +74,7 @@ defmodule Squadster.MixProject do
   defp aliases do
     [
       "ecto.seed": ["run priv/repo/seeds.#{Mix.env()}.exs"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "ecto.seed"],
       "ecto.reset": ["ecto.drop", "ecto.setup"]
     ]
   end
