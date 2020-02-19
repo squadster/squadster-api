@@ -3,7 +3,7 @@ defmodule Squadster.Repo.Migrations.AddSquadRequests do
 
   def change do
     create table(:squad_requests) do
-      add :approver_id, references(:users)
+      add :approver_id, references(:squad_members)
       add :user_id, references(:users)
       add :squad_id, references(:squads)
       add :approved_at, :timestamp
