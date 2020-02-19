@@ -4,8 +4,13 @@ alias Squadster.Accounts.User
 alias Squadster.Formations.Squad
 alias Squadster.Formations.SquadMember
 
-seeds_config = [users: 30, squads: 2, users_per_squad: 15]
+seeds_config = [
+  users: 40,
+  squads: 2,
+  users_per_squad: 20 # should be greater than or equal to number of squad_member roles
+]
 
+# create users
 for _ <- (1..seeds_config[:users]) do
   uid = Faker.Util.format("%9d")
   Repo.insert!(%User{
@@ -23,6 +28,7 @@ for _ <- (1..seeds_config[:users]) do
   })
 end
 
+# create squads
 for _ <- (1..seeds_config[:squads]) do
   Repo.insert!(%Squad{
     squad_number: Faker.Util.format("%6d"),
@@ -31,6 +37,7 @@ for _ <- (1..seeds_config[:squads]) do
   })
 end
 
+# connect users and squads
 for index <- (1..seeds_config[:squads]) do
   squad = Repo.get(Squad, index)
 
@@ -42,5 +49,17 @@ for index <- (1..seeds_config[:squads]) do
       user: user,
       squad: squad
     })
+  end
+end
+
+# mark first 3 members as main roles
+Repo.all(Squad)
+|> Repo.preload(:squad_members)
+|> Enum.each fn squad ->
+  for index <- (0..2) do
+    squad.squad_members
+    |> Enum.at(index)
+    |> Ecto.Changeset.change(%{role: index})
+    |> Repo.update()
   end
 end
