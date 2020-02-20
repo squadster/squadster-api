@@ -1,3 +1,5 @@
+import Ecto.Query
+
 alias Squadster.Repo
 
 alias Squadster.Accounts.User
@@ -60,6 +62,19 @@ Repo.all(Squad)
     squad.members
     |> Enum.at(index)
     |> Ecto.Changeset.change(%{role: index})
+    |> Repo.update()
+  end
+end
+
+# set queue numbers for all except commanders
+Repo.all(Squad)
+|> Repo.preload(:members)
+|> Enum.each fn squad ->
+  members = from(m in SquadMember, where: m.squad_id == ^squad.id and m.role in [2, 3]) |> Repo.all()
+  for index <- (0..Enum.count(members) - 1) do
+    members
+    |> Enum.at(index)
+    |> Ecto.Changeset.change(%{queue_number: index})
     |> Repo.update()
   end
 end

@@ -8,6 +8,7 @@ defmodule Squadster.Formations.SquadMember do
 
   schema "squad_members" do
     field :role, RoleEnum
+    field :queue_number, :integer
     belongs_to :user, Squadster.Accounts.User
     belongs_to :squad, Squadster.Formations.Squad
 
