@@ -10,7 +10,6 @@ defmodule Squadster.Formations.SquadMember do
     field :role, RoleEnum
     belongs_to :user, Squadster.Accounts.User
     belongs_to :squad, Squadster.Formations.Squad
-    has_many :approved_squad_requests, Squadster.Formations.SquadRequest, foreign_key: :approver_id
 
     timestamps()
   end
