@@ -1,15 +1,13 @@
-defmodule Squadster.Formations.SquadMember do
+defmodule Squadster.Formations.SquadRequest do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import EctoEnum
 
-  defenum RoleEnum, commander: 0, deputy_commander: 1, journalist: 2, student: 3
-
-  schema "squad_members" do
-    field :role, RoleEnum
+  schema "squad_requests" do
+    belongs_to :approver, Squadster.Formations.SquadMember
     belongs_to :user, Squadster.Accounts.User
     belongs_to :squad, Squadster.Formations.Squad
+    field :approved_at, :utc_datetime
 
     timestamps()
   end
@@ -20,7 +18,7 @@ defmodule Squadster.Formations.SquadMember do
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, [:role])
-    |> validate_required([:role])
+    |> cast(params, [:user, :squad])
+    |> validate_required([:user, :squad])
   end
 end

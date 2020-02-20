@@ -54,10 +54,10 @@ end
 
 # mark first 3 members as main roles
 Repo.all(Squad)
-|> Repo.preload(:squad_members)
+|> Repo.preload(:members)
 |> Enum.each fn squad ->
   for index <- (0..2) do
-    squad.squad_members
+    squad.members
     |> Enum.at(index)
     |> Ecto.Changeset.change(%{role: index})
     |> Repo.update()
