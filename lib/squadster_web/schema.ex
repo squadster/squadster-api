@@ -15,8 +15,22 @@ defmodule Squadster.Schema do
       resolve &SquadsterWeb.Resolvers.Accounts.find_user/3
     end
 
+    @desc "Get current user"
     field :current_user, :user do
       resolve &SquadsterWeb.Resolvers.Accounts.current_user/3
     end
+  end
+
+  def context(ctx) do
+    loader =
+      Dataloader.new
+      |> Dataloader.add_source(Squadster.Accounts, Squadster.Accounts.data())
+      |> Dataloader.add_source(Squadster.Formations, Squadster.Formations.data())
+
+    Map.put(ctx, :loader, loader)
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
 end

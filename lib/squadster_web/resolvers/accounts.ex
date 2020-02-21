@@ -3,10 +3,8 @@ defmodule SquadsterWeb.Resolvers.Accounts do
 
   def find_user(_parent, %{id: id}, _resolution) do
     case Accounts.find_user(id) do
-      nil ->
-        {:error, "user with id #{id} not found"}
-      user ->
-        {:ok, user}
+      nil  -> {:error, "user with id #{id} not found"}
+      user -> {:ok, user}
     end
   end
 

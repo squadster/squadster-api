@@ -1,7 +1,11 @@
 defmodule SquadsterWeb.Schema.AccountTypes do
   use Absinthe.Schema.Notation
 
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
+
   alias Squadster.Helpers.Dates
+
+  import_types SquadsterWeb.Schema.FormationTypes
 
   object :user do
     field :id, non_null(:id)
@@ -15,6 +19,7 @@ defmodule SquadsterWeb.Schema.AccountTypes do
     field :small_image_url, :string
     field :image_url, :string
     field :vk_url, :string
+    field :squad_request, :squad_request, resolve: dataloader(Squadster.Formations)
   end
 
   scalar :date do

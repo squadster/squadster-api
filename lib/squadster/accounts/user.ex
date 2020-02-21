@@ -36,6 +36,7 @@ defmodule Squadster.Accounts.User do
     field :image_url, :string
     field :vk_url, :string
     has_one :squad_member, Squadster.Formations.SquadMember
+    has_one :squad_request, Squadster.Formations.SquadRequest
     timestamps()
   end
 
