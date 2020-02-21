@@ -2,8 +2,7 @@ defmodule Squadster.Schema do
   use Absinthe.Schema
 
   alias SquadsterWeb.Resolvers.Accounts, as: AccountsResolver
-  alias Squadster.Accounts
-  alias Squadster.Formations
+  alias Squadster.{Accounts, Formations}
 
   import_types SquadsterWeb.Schema.AccountTypes
 

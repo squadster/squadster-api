@@ -3,8 +3,7 @@ defmodule SquadsterWeb.Schema.AccountTypes do
 
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
-  import_types SquadsterWeb.Schema.SharedTypes
-  import_types SquadsterWeb.Schema.FormationTypes
+  import_types SquadsterWeb.Schema.{SharedTypes, FormationTypes}
 
   object :user do
     field :id, non_null(:id)
