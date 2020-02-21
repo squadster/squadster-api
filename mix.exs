@@ -57,6 +57,7 @@ defmodule Squadster.MixProject do
       {:ecto_enum, "~> 1.4"},
       {:faker, "~> 0.13"},
       {:dataloader, "~> 1.0.0"},
+      {:timex, "~> 3.5"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 

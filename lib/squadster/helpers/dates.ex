@@ -1,19 +1,19 @@
 defmodule Squadster.Helpers.Dates do
   def date_from_string(string_date) do
-    [day, month, year] = string_date
-    |> String.split(".")
-    |> Enum.map(&String.to_integer/1)
-
-    case Date.new(year, month, day) do
-      {:ok, date} -> date
-      {:error, _reason} -> nil
-    end
+    string_date
+    |> Timex.parse!("%d.%m.%Y", :strftime)
+    |> NaiveDateTime.to_date
   end
 
-  def date_to_string(date) do
-    [date.day, date.month, date.year]
-    |> Enum.map(&to_string/1)
-    |> Enum.map(&String.pad_leading(&1, 2, "0"))
-    |> Enum.join(".")
+  def datetime_from_string(string_datetime) do
+    string_datetime |> Timex.parse!("%d.%m.%Y %H:%M", :strftime)
+  end
+
+  def date_to_string(%Date{} = date) do
+    date |> Timex.format!("%d.%m.%Y", :strftime)
+  end
+
+  def date_to_string(datetime) do
+    datetime |> Timex.format!("%d.%m.%Y %H:%M", :strftime)
   end
 end

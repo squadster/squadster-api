@@ -3,8 +3,7 @@ defmodule SquadsterWeb.Schema.AccountTypes do
 
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
-  alias Squadster.Helpers.Dates
-
+  import_types SquadsterWeb.Schema.SharedTypes
   import_types SquadsterWeb.Schema.FormationTypes
 
   object :user do
@@ -20,10 +19,5 @@ defmodule SquadsterWeb.Schema.AccountTypes do
     field :image_url, :string
     field :vk_url, :string
     field :squad_request, :squad_request, resolve: dataloader(Squadster.Formations)
-  end
-
-  scalar :date do
-    parse &Dates.date_from_string/1
-    serialize &Dates.date_to_string/1
   end
 end
