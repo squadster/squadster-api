@@ -7,13 +7,8 @@ defmodule SquadsterWeb.Schema.FormationTypes do
     field :user, :user, resolve: dataloader(Squadster.Accounts)
     #field :squad, :squad
     #field :approver, :squad_member
-    #field :approved_at, :date
-    #
-    #timestamps()
-  end
 
-  #scalar :date do
-    #parse &Dates.date_from_string/1
-    #serialize &Dates.date_to_string/1
-  #end
+    #field :approved_at, :datetime
+    #field :inserted_at, :datetime
+  end
 end
