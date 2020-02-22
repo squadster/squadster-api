@@ -2,9 +2,10 @@ defmodule Squadster.Schema do
   use Absinthe.Schema
 
   alias SquadsterWeb.Resolvers.Accounts, as: AccountsResolver
+  alias SquadsterWeb.Resolvers.Formations, as: FormationsResolver
   alias Squadster.{Accounts, Formations}
 
-  import_types SquadsterWeb.Schema.AccountTypes
+  import_types SquadsterWeb.Schema.{SharedTypes, AccountTypes, FormationTypes}
 
   query do
     @desc "Get a list of users"
@@ -21,6 +22,17 @@ defmodule Squadster.Schema do
     @desc "Get current user"
     field :current_user, :user do
       resolve &AccountsResolver.current_user/3
+    end
+
+    @desc "Get a list of squads"
+    field :squads, list_of(:squad) do
+      resolve &FormationsResolver.list_squads/3
+    end
+
+    @desc "Get a squad by number"
+    field :squad, :squad do
+      arg :squad_number, non_null(:string)
+      resolve &FormationsResolver.find_squad/3
     end
   end
 
