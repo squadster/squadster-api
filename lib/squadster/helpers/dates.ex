@@ -1,7 +1,7 @@
 defmodule Squadster.Helpers.Dates do
   def date_from_string(string_date) do
     string_date
-    |> Timex.parse!("%d.%m.%Y", :strftime)
+    |> Timex.parse!("%-d.%-m.%Y", :strftime)
     |> NaiveDateTime.to_date
   end
 
