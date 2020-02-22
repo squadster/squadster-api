@@ -17,4 +17,10 @@ defmodule Squadster.Formations do
   def find_squad(number) do
     Squad |> Repo.get_by(squad_number: number)
   end
+
+  def create_squad(args) do
+    args
+    |> Squad.changeset
+    |> Repo.insert
+  end
 end

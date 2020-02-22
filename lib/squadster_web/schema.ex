@@ -36,6 +36,17 @@ defmodule Squadster.Schema do
     end
   end
 
+  mutation do
+    @desc "Create a squad"
+    field :create_squad, type: :squad do
+      arg :squad_number, non_null(:string)
+      arg :advertisment, :string
+      arg :class_day, non_null(:integer)
+
+      resolve &FormationsResolver.create_squad/3
+    end
+  end
+
   def context(ctx) do
     loader =
       Dataloader.new

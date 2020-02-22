@@ -11,4 +11,12 @@ defmodule SquadsterWeb.Resolvers.Formations do
       squad -> {:ok, squad}
     end
   end
+
+  def create_squad(_parent, args, %{context: %{current_user: user}}) do
+    Formations.create_squad(args, user)
+  end
+
+  def create_squad(_parent, _args, _resolution) do
+    {:error, "Access denied"}
+  end
 end
