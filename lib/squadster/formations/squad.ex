@@ -22,7 +22,7 @@ defmodule Squadster.Formations.Squad do
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, [:squad_number, :advertisment])
-    |> validate_required([:squad_number])
+    |> cast(params, [:squad_number, :advertisment, :class_day])
+    |> validate_required([:squad_number, :class_day])
   end
 end
