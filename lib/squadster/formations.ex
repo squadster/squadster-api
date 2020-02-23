@@ -23,4 +23,15 @@ defmodule Squadster.Formations do
     |> Squad.changeset
     |> Repo.insert
   end
+
+  def update_squad(args) do
+    squad = Squad |> Repo.get(args.id)
+    |> Squad.changeset(args)
+    |> Repo.update
+  end
+
+  def delete_squad(id) do
+    squad = Squad |> Repo.get(id)
+    |> Repo.delete
+  end
 end

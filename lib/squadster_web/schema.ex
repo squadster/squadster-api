@@ -45,6 +45,23 @@ defmodule Squadster.Schema do
 
       resolve &FormationsResolver.create_squad/3
     end
+
+    @desc "Update a squad"
+    field :update_squad, type: :squad do
+      arg :id, non_null(:id)
+      arg :squad_number, :string
+      arg :advertisment, :string
+      arg :class_day, :integer
+
+      resolve &FormationsResolver.update_squad/3
+    end
+
+    @desc "Delete a squad"
+    field :delete_squad, type: :squad do
+      arg :id, non_null(:id)
+
+      resolve &FormationsResolver.delete_squad/3
+    end
   end
 
   def context(ctx) do

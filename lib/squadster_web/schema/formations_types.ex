@@ -12,6 +12,7 @@ defmodule SquadsterWeb.Schema.FormationTypes do
   end
 
   object :squad do
+    field :id, :integer
     field :squad_number, :string
     field :advertisment, :string
     field :class_day, :integer
