@@ -56,6 +56,7 @@ defmodule Squadster.Formations do
     |> Repo.update
   end
 
+  # TODO: delete squad members
   def delete_squad(id) do
     Squad
     |> Repo.get(id)
