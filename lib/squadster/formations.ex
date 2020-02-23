@@ -50,13 +50,15 @@ defmodule Squadster.Formations do
   end
 
   def update_squad(args) do
-    squad = Squad |> Repo.get(args.id)
+    Squad
+    |> Repo.get(args.id)
     |> Squad.changeset(args)
     |> Repo.update
   end
 
   def delete_squad(id) do
-    squad = Squad |> Repo.get(id)
+    Squad
+    |> Repo.get(id)
     |> Repo.delete
   end
 end
