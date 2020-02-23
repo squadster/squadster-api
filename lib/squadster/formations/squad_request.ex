@@ -18,7 +18,10 @@ defmodule Squadster.Formations.SquadRequest do
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, [:user, :squad])
-    |> validate_required([:user, :squad])
+    |> cast(params, [:approved_at, :user_id, :squad_id, :approver_id])
+    |> validate_required([:user_id, :squad_id])
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:squad_id)
+    |> foreign_key_constraint(:approver_id)
   end
 end

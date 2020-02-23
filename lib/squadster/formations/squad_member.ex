@@ -19,12 +19,11 @@ defmodule Squadster.Formations.SquadMember do
      changeset(%__MODULE__{}, params)
   end
 
-  # TODO: use cast_assoc/3 to cast assotiations
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, [:role, :queue_number])
-    # |> cast_assoc(:user, with: &Squadster.Accounts.User.changeset/2)
-    # |> cast_assoc(:squad, with: &Squadster.Formations.Squad.changeset/2)
-    |> validate_required([:role, :user, :squad])
+    |> cast(params, [:role, :queue_number, :user_id, :squad_id])
+    |> validate_required([:role, :user_id, :squad_id])
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:squad_id)
   end
 end
