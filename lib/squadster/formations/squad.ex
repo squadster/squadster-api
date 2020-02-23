@@ -10,8 +10,8 @@ defmodule Squadster.Formations.Squad do
     field :squad_number, :string
     field :advertisment, :string
     field :class_day, ClassDayEnum
-    has_many :members, Squadster.Formations.SquadMember
-    has_many :requests, Squadster.Formations.SquadRequest
+    has_many :members, Squadster.Formations.SquadMember, on_delete: :delete_all
+    has_many :requests, Squadster.Formations.SquadRequest, on_delete: :delete_all
 
     timestamps()
   end
