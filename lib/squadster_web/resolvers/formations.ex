@@ -21,7 +21,7 @@ defmodule SquadsterWeb.Resolvers.Formations do
   end
 
   def update_squad(_parent, args, %{context: %{current_user: user}}) do
-    Formations.update_squad(args)
+    Formations.update_squad(args, user)
   end
 
   def update_squad(_parent, _args, _resolution) do
@@ -29,10 +29,34 @@ defmodule SquadsterWeb.Resolvers.Formations do
   end
 
   def delete_squad(_parent, %{id: id}, %{context: %{current_user: user}}) do
-    Formations.delete_squad(id)
+    Formations.delete_squad(id, user)
   end
 
   def delete_squad(_parent, _args, _resolution) do
+    {:error, "Access denied"}
+  end
+
+  def create_squad_request(_parent, %{squad_id: squad_id}, %{context: %{current_user: user}}) do
+    Formations.create_squad_request(squad_id, user)
+  end
+
+  def create_squad_request(_parent, _args, _resolution) do
+    {:error, "Access denied"}
+  end
+
+  def approve_squad_request(_parent, %{id: id}, %{context: %{current_user: user}}) do
+    Formations.approve_squad_request(id, user)
+  end
+
+  def approve_squad_request(_parent, _args, _resolution) do
+    {:error, "Access denied"}
+  end
+
+  def delete_squad_request(_parent, %{id: id}, %{context: %{current_user: user}}) do
+    Formations.delete_squad_request(id, user)
+  end
+
+  def approve_squad_request(_parent, _args, _resolution) do
     {:error, "Access denied"}
   end
 end

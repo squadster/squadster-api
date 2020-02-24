@@ -1,7 +1,7 @@
 defmodule Squadster.Formations do
   alias Squadster.Repo
-  alias Squadster.Formations.Squad
-  alias Squadster.Formations.SquadMember
+  alias Squadster.Helpers.Permissions
+  alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -32,23 +32,65 @@ defmodule Squadster.Formations do
     end
   end
 
-  defp add_commander_to_squad(squad_response, user) do
-    {:ok, squad} = squad_response
-    %{role: :commander, user_id: user.id, squad_id: squad.id}
-    |> SquadMember.changeset
+  def update_squad(%{id: id} = args, user) do
+    with squad <- Squad |> Repo.get(id) do
+      if Permissions.can_update?(user, squad) do
+        squad
+        |> Squad.changeset(args)
+        |> Repo.update
+      else
+        {:error, "Not enough permissions"}
+      end
+    end
+  end
+
+  def delete_squad(id, user) do
+    with squad <- Squad |> Repo.get(id) do
+      if Permissions.can_delete?(user, squad) do
+        squad |> Repo.delete
+      else
+        {:error, "Not enough permissions"}
+      end
+    end
+  end
+
+  def create_squad_request(squad_id, user) do
+    %{squad_request: squad_request} = user |> Repo.preload(:squad_request)
+    unless is_nil(squad_request), do: squad_request |> Repo.delete
+
+    %{user_id: user.id, squad_id: squad_id}
+    |> SquadRequest.changeset
     |> Repo.insert
   end
 
-  def update_squad(args) do
-    Squad
-    |> Repo.get(args.id)
-    |> Squad.changeset(args)
-    |> Repo.update
+  # TODO: new changeset?
+  def approve_squad_request(id, approver) do
+    with squad_request <- SquadRequest |> Repo.get(id) do
+      if Permissions.can_update?(approver, squad_request) do
+        squad_request
+        |> SquadRequest.changeset(%{approver_id: approver.id, approved_at: Timex.now})
+        |> Repo.update
+      else
+        {:error, "Not enough permissions"}
+      end
+    end
   end
 
-  def delete_squad(id) do
-    Squad
-    |> Repo.get(id)
-    |> Repo.delete
+  def delete_squad_request(id, user) do
+    with squad_request <- SquadRequest |> Repo.get(id) do
+      if Permissions.can_delete?(user, squad_request) do
+        squad_request |> Repo.delete
+      else
+        {:error, "Not enough permissions"}
+      end
+    end
+  end
+
+  defp add_commander_to_squad(squad_response, user) do
+    {:ok, squad} = squad_response
+
+    %{role: :commander, user_id: user.id, squad_id: squad.id}
+    |> SquadMember.changeset
+    |> Repo.insert
   end
 end
