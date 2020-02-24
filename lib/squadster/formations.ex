@@ -63,7 +63,6 @@ defmodule Squadster.Formations do
     |> Repo.insert
   end
 
-  # TODO: new changeset?
   def approve_squad_request(id, approver) do
     with squad_request <- SquadRequest |> Repo.get(id) do
       if Permissions.can_update?(approver, squad_request) do
