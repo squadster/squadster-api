@@ -68,7 +68,7 @@ defmodule Squadster.Formations do
     with squad_request <- SquadRequest |> Repo.get(id) do
       if Permissions.can_update?(approver, squad_request) do
         squad_request
-        |> SquadRequest.changeset(%{approver_id: approver.id, approved_at: Timex.now})
+        |> SquadRequest.approve_changeset(%{approver_id: approver.id})
         |> Repo.update
       else
         {:error, "Not enough permissions"}
