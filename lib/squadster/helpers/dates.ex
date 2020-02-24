@@ -16,4 +16,8 @@ defmodule Squadster.Helpers.Dates do
   def date_to_string(datetime) do
     datetime |> Timex.format!("%d.%m.%Y %H:%M", :strftime)
   end
+
+  def without_microseconds(datetime) do
+    DateTime.truncate(datetime, :second)
+  end
 end

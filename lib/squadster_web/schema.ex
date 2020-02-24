@@ -13,9 +13,10 @@ defmodule Squadster.Schema do
       resolve &AccountsResolver.list_users/3
     end
 
-    @desc "Find user by id"
+    @desc "Find a user by id"
     field :user, :user do
       arg :id, non_null(:id)
+
       resolve &AccountsResolver.find_user/3
     end
 
@@ -32,6 +33,7 @@ defmodule Squadster.Schema do
     @desc "Get a squad by number"
     field :squad, :squad do
       arg :squad_number, non_null(:string)
+
       resolve &FormationsResolver.find_squad/3
     end
   end
@@ -61,6 +63,27 @@ defmodule Squadster.Schema do
       arg :id, non_null(:id)
 
       resolve &FormationsResolver.delete_squad/3
+    end
+
+    @desc "Create a squad_request"
+    field :create_squad_request, type: :squad_request do
+      arg :squad_id, non_null(:id)
+
+      resolve &FormationsResolver.create_squad_request/3
+    end
+
+    @desc "Approve a squad_request"
+    field :approve_squad_request, type: :squad_request do
+      arg :id, non_null(:id)
+
+      resolve &FormationsResolver.approve_squad_request/3
+    end
+
+    @desc "Delete/decline a squad_request"
+    field :delete_squad_request, type: :squad_request do
+      arg :id, non_null(:id)
+
+      resolve &FormationsResolver.delete_squad_request/3
     end
   end
 
