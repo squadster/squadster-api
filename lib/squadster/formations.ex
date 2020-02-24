@@ -1,6 +1,5 @@
 defmodule Squadster.Formations do
   alias Squadster.Repo
-
   alias Squadster.Formations.Squad
   alias Squadster.Formations.SquadMember
 
@@ -21,32 +20,23 @@ defmodule Squadster.Formations do
   end
 
   def create_squad(args, user) do
-    user = user |> Repo.preload(:squad_member)
-    case user.squad_member do
-      nil ->
+    user
+    |> Repo.preload(:squad_member)
+    |> case do
+      %{squad_member: nil} ->
         args
         |> Squad.changeset
         |> Repo.insert
-        |> create_squad_member(user)
-      _member -> {:error, "Delete existing squad to create new one"}
+        |> add_commander_to_squad(user)
+      %{squad_member: _member} -> {:error, "Delete existing squad to create new one"}
     end
   end
 
-  # TODO: Refactor member creation with changeset
-  defp create_squad_member(squad, user) do
-    case squad do
-      {:ok, squadster} ->
-        # new_member = %SquadMember{role: 0, user: user, squad: squadster}
-        # |> SquadMember.changeset
-        # |> Repo.insert
-        Repo.insert!(%SquadMember{
-          role: :commander,
-          user: user,
-          squad: squadster
-        })
-        {:ok, squadster}
-      {:error, reason} -> {:error, reason}
-    end
+  defp add_commander_to_squad(squad_response, user) do
+    {:ok, squad} = squad_response
+    %{role: :commander, user_id: user.id, squad_id: squad.id}
+    |> SquadMember.changeset
+    |> Repo.insert
   end
 
   def update_squad(args) do
