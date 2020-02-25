@@ -24,8 +24,7 @@ defmodule Squadster.Accounts do
   def logout(conn) do
     conn
     |> current_user
-    |> User.auth_changeset
-    |> put_change(:auth_token, nil)
+    |> User.auth_changeset(%{auth_token: nil})
     |> Repo.update
   end
 
