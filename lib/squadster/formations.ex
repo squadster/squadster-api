@@ -91,5 +91,6 @@ defmodule Squadster.Formations do
     %{role: :commander, user_id: user.id, squad_id: squad.id}
     |> SquadMember.changeset
     |> Repo.insert
+    squad_response
   end
 end
