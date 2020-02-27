@@ -45,13 +45,11 @@ curl squadster.io:4000/api/ping
 
 ### Running test suite
 
-We use [ESpec](https://github.com/antonmi/espec) for testing. To run all specs execute
+We use ExUnit for testing. To run all tests execute
 
 ```bash
-mix espec
+mix test
 ```
-
-_NOTE: Deprecated Ruby-style syntax fails with OTP 21 and newer, so use Elixir way for it. See [this comment](https://github.com/antonmi/espec/issues/272#issuecomment-399740506)._
 
 ### Other parts of application
 

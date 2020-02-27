@@ -11,7 +11,6 @@ defmodule Squadster.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      preferred_cli_env: [espec: :test],
       releases: [
         squadster: [
           include_executables_for: [:unix],
@@ -60,10 +59,6 @@ defmodule Squadster.MixProject do
       {:timex, "~> 3.5"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-
-      {:bypass, "~> 1.0", only: :test},
-      {:espec, "~> 1.8.1", only: :test},
-      {:espec_phoenix, "~> 0.7.1", only: :test}
     ]
   end
 
