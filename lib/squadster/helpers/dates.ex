@@ -20,4 +20,16 @@ defmodule Squadster.Helpers.Dates do
   def without_microseconds(datetime) do
     DateTime.truncate(datetime, :second)
   end
+
+  def yesterday do
+    Timex.now |> Timex.shift(days: -1)
+  end
+
+  def day_of_a_week(date) do
+    {day_of_a_week, _remainder} =
+      date
+      |> Timex.format!("%w", :strftime)
+      |> Integer.parse()
+    day_of_a_week + 1 # because in datetime monday is 0, tuesday is 1, etc.
+  end
 end
