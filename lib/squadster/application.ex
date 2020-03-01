@@ -11,9 +11,9 @@ defmodule Squadster.Application do
       # Start the Ecto repository
       Squadster.Repo,
       # Start the endpoint when the application starts
-      SquadsterWeb.Endpoint
-      # Starts a worker by calling: Squadster.Worker.start_link(arg)
-      # {Squadster.Worker, arg},
+      SquadsterWeb.Endpoint,
+      # Start scheduler
+      Squadster.Workers
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
