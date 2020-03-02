@@ -30,6 +30,6 @@ defmodule Squadster.Helpers.Dates do
       date
       |> Timex.format!("%w", :strftime)
       |> Integer.parse()
-    day_of_a_week + 1 # because in datetime monday is 0, tuesday is 1, etc.
+    if day_of_a_week == 0, do: 7, else: day_of_a_week # because Sunday is 0 for Timex
   end
 end
