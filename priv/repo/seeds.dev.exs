@@ -35,7 +35,7 @@ for _ <- (1..seeds_config[:squads]) do
   Repo.insert!(%Squad{
     squad_number: Faker.Util.format("%6d"),
     advertisment: Faker.StarWars.quote,
-    class_day: Faker.Util.pick([:monday, :twesday, :wednesday, :thursday, :friday, :saturday])
+    class_day: Faker.Util.pick([:monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
   })
 end
 
@@ -74,7 +74,7 @@ Repo.all(Squad)
   for index <- (0..Enum.count(members) - 1) do
     members
     |> Enum.at(index)
-    |> Ecto.Changeset.change(%{queue_number: index})
+    |> Ecto.Changeset.change(%{queue_number: index + 1})
     |> Repo.update()
   end
 end
