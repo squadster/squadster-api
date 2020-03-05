@@ -60,6 +60,7 @@ defmodule Squadster.MixProject do
       {:timex, "~> 3.5"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:autoalias, "~> 0.1.0", only: :dev},
 
       {:bypass, "~> 1.0", only: :test},
       {:espec, "~> 1.8.1", only: :test},
