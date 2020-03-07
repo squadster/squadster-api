@@ -65,7 +65,7 @@ defmodule Squadster.MixProject do
       {:bypass, "~> 1.0", only: :test},
       {:espec, "~> 1.8.1", only: :test},
       {:espec_phoenix, "~> 0.7.1", only: :test},
-      {:ex_machina, "~> 2.3"}
+      {:ex_machina, "~> 2.4"}
     ]
   end
 

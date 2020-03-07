@@ -3,5 +3,5 @@ defmodule Squadster.Factory do
   use Squadster.UserFactory
   use Squadster.SquadFactory
   use Squadster.SquadRequestFactory
-  use Squadster.SquadMemberFactroy
+  use Squadster.SquadMemberFactory
 end
