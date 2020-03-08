@@ -35,7 +35,7 @@ defmodule SquadsterWeb.AuthController do
   end
 
   defp redirect_url(user: user) do
-    user_data = Map.take(user, Squadster.Accounts.User.user_fields)
+    user_data = Map.take(user, Accounts.User.user_fields)
     @base_redirect_url <> URI.encode_query(%{message: "Logged in", user: Poison.encode(user_data) |> elem(1) })
   end
 end
