@@ -51,6 +51,10 @@ defmodule Squadster.Accounts.User do
     timestamps()
   end
 
+  def user_fields do
+    [:id | @auth_fields]
+  end
+
   def changeset(params) do
      changeset(%__MODULE__{}, params)
   end

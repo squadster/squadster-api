@@ -21,7 +21,7 @@ defmodule SquadsterWeb.AuthController do
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case Accounts.find_or_create_user(auth) do
-      {:ok, user} -> redirect(conn, external: redirect_url(token: user.auth_token))
+      {:ok, user} -> redirect(conn, external: redirect_url(user: user))
       {:error, reason} -> send_auth_error(conn, reason)
     end
   end
@@ -34,7 +34,8 @@ defmodule SquadsterWeb.AuthController do
     @base_redirect_url <> URI.encode_query(%{message: "Error", reason: reason})
   end
 
-  defp redirect_url(token: token) do
-    @base_redirect_url <> URI.encode_query(%{message: "Logged in", token: token})
+  defp redirect_url(user: user) do
+    user_data = Map.take(user, Squadster.Accounts.User.user_fields)
+    @base_redirect_url <> URI.encode_query(%{message: "Logged in", user: Poison.encode(user_data) |> elem(1) })
   end
 end
