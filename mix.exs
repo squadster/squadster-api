@@ -58,6 +58,7 @@ defmodule Squadster.MixProject do
       {:faker, "~> 0.13"},
       {:dataloader, "~> 1.0.0"},
       {:timex, "~> 3.5"},
+      {:quantum, "~> 3.0-rc"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 
