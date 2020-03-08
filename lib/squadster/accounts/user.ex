@@ -2,6 +2,7 @@ defmodule Squadster.Accounts.User do
   use Ecto.Schema
 
   import Ecto.Changeset
+
   require Logger
   require Poison
 
@@ -50,6 +51,8 @@ defmodule Squadster.Accounts.User do
     has_one :squad_request, Squadster.Formations.SquadRequest
     timestamps()
   end
+
+  def user_fields, do: [:id | @auth_fields]
 
   def changeset(params) do
      changeset(%__MODULE__{}, params)
