@@ -5,6 +5,7 @@ defmodule Squadster.Workers.ShiftQueueNumbers do
 
   alias Squadster.Formations.{Squad, SquadMember}
   alias Squadster.Repo
+  alias Squadster.Helpers.Dates
 
   def start_link(args) do
     Task.start_link(__MODULE__, :run, [args])

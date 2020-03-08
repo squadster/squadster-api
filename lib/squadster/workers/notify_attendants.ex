@@ -5,7 +5,7 @@ defmodule Squadster.Workers.NotifyAttendants do
     Task.start_link(__MODULE__, :run, [args])
   end
 
-  def run(args) do
+  def run(_args) do
     # TODO: implement
   end
 end
