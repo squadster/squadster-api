@@ -1,6 +1,6 @@
 # Squadster
 
-It's an application for squads management in university military departments.
+Application for squads management in university military departments.
 
 ## The problem it \*will\* solve
 
@@ -65,28 +65,17 @@ Check out [the repo](https://github.com/squadster/squadster-frontend) and it's i
 
 Bot for notifications via [vk.com API](https://vk.com/dev). Check out [the repo](https://github.com/squadster/mercury) and it's installation guides.
 
-* **Android application**
-
-Check out [the repo](https://github.com/squadster/squadster-android) and it's installation guides.
-
-* **iOS application**
-
-Check out [the repo](https://github.com/squadster/squadster-ios) and it's installation guides.
-
 ### Deployment
 
-Check the [Elixir deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+We use GitHub packages for deployment.
 
-For the whole application check out [this repo](https://github.com/squadster/squadster-deployment).
+Check out [Dockerfile](Dockerfile) and [this repo](https://github.com/squadster/squadster-deployment) for more information.
+
+Also check the [Elixir deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
 ## Contributing
 
 Your ideas and wishes are welcome via [issues](https://github.com/squadster/squadster-api/issues) and [pull requets](https://github.com/squadster/squadster-api/pulls).
-
-**Contributors:**
-
-* TODO:
-* add them :)
 
 ## License
 

@@ -16,7 +16,7 @@ defmodule SquadsterWeb.Plugs.Auth do
   def call(conn, _opts) do
     token = case get_req_header(conn, "authorization") do
       ["Bearer " <> token] -> token
-      [token] -> send_auth_error(conn, "Authorization token must be prepended with type, e.g. Bearer")
+      [_token] -> send_auth_error(conn, "Authorization token must be prepended with type, e.g. Bearer")
       _ -> send_auth_error(conn, "Authorization token not provided")
     end
 
