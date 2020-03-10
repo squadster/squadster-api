@@ -1,6 +1,6 @@
 # Squadster
 
-It's an application for squads management in university military departments.
+Application for squads management in university military departments.
 
 ## The problem it \*will\* solve
 
