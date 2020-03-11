@@ -4,7 +4,7 @@ defmodule Squadster.Schema.SchemaSpec do
   @endpoint SquadsterWeb.Endpoint
 
   alias Squadster.Repo
-  alias Squadster.Formations.{Squad,SquadMember}
+  alias Squadster.Formations.Squad
 
   import Squadster.Factory
 
@@ -90,16 +90,10 @@ defmodule Squadster.Schema.SchemaSpec do
 
     it "deletes a squad by id" do
       user = insert(:user)
-      squad = build(:squad)
-      squad_member = insert(:squad_member, user: user, squad: squad)
-      squad |> insert
-      # squad = build(:squad) |> with_commander(user) |> insert
-      IO.inspect squad |> Repo.preload(:members)
-      # IO.inspect List.last(Repo.all(SquadMember) |> Repo.preload([:squad, :user]))
+      squad = build(:squad) |> with_commander(user) |> insert
       previous_count = entities_count(Squad)
-      # api_request(delete_squad_query(squad.id))
-      expect json_response(api_request(delete_squad_query(squad.id), token()), 200) |> to(eq "123")
-      # expect entities_count(Squad) |> to(eq previous_count - 1)
+      api_request(delete_squad_query(squad.id), user.auth_token)
+      expect entities_count(Squad) |> to(eq previous_count - 1)
     end
   end
 end
