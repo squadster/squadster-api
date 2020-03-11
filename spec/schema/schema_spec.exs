@@ -7,6 +7,9 @@ defmodule Squadster.Schema.SchemaSpec do
   alias Squadster.Formations.Squad
 
   import Squadster.Factory
+  import EctoEnum
+
+  defenum ClassDayEnum, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 7
 
   let :create do
     """
@@ -72,7 +75,6 @@ defmodule Squadster.Schema.SchemaSpec do
     |> post("/api/query", payload)
   end
 
-
   def delete_squad_query(squad_id) do
     %{query: delete(), variables: %{id: squad_id}}
   end
@@ -119,8 +121,7 @@ defmodule Squadster.Schema.SchemaSpec do
       squad = build(:squad) |> with_commander(user) |> insert
       api_request(update_squad_query(squad.id), user.auth_token)
       expect Repo.get(Squad, squad.id).advertisment |> to(eq update_params().advertisment)
-      # TODO: Conver to enum (we send "4", but Repo returns ":thursday")
-      # expect Repo.get(Squad, squad.id).class_day |> to(eq update_params().class_day)
+      expect {:ok, Repo.get(Squad, squad.id).class_day} |> to(eq ClassDayEnum.cast(update_params().class_day))
       expect Repo.get(Squad, squad.id).squad_number |> to(eq update_params().squad_number)
     end
   end

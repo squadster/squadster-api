@@ -1,6 +1,7 @@
 defmodule Squadster.SquadMemberFactory do
   defmacro __using__(opts) do
     quote do
+      # TODO: implement methods for associations
       def squad_member_factory do
         %Squadster.Formations.SquadMember{
           role: :commander,

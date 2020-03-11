@@ -19,13 +19,13 @@ defmodule Squadster.UserFactory do
       end
 
       def with_squad_request(user) do
-        insert(:squad_request, user: user)
-        user
+        squad_request = insert(:squad_request, user: user)
+        %{user | squad_request: squad_request}
       end
 
       def with_squad_member(user) do
-        insert(:squad_member, user: user)
-        user
+        squad_member = insert(:squad_member, user: user)
+        %{user | squad_member: squad_member}
       end
     end
   end
