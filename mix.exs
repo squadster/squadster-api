@@ -28,12 +28,12 @@ defmodule Squadster.MixProject do
   def application do
     [
       mod: {Squadster.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_vk, :absinthe_plug]
+      extra_applications: [:logger, :runtime_tools, :ueberauth_vk, :absinthe_plug, :ex_machina]
     ]
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "spec/support", "spec/factories"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -64,7 +64,8 @@ defmodule Squadster.MixProject do
 
       {:bypass, "~> 1.0", only: :test},
       {:espec, "~> 1.8.1", only: :test},
-      {:espec_phoenix, "~> 0.7.1", only: :test}
+      {:espec_phoenix, "~> 0.7.1", only: :test},
+      {:ex_machina, "~> 2.4"}
     ]
   end
 
