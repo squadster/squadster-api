@@ -5,10 +5,11 @@ RUN apt-get update && \
     apt-get autoclean
 
 RUN mkdir -p /app/_build
-COPY _build /app/_build
+COPY _build/prod/rel/squadster ./app
+COPY scripts/entrypoint.sh ./app
 
 WORKDIR /app
 
 ENV PORT 4000
-EXPOSE 4000
-CMD ["_build/prod/rel/squadster/bin/squadster", "start"]
+
+ENTRYPOINT ["/app/entrypoint.sh"]
