@@ -16,5 +16,6 @@ defmodule SquadsterWeb.Schema.AccountTypes do
     field :image_url, :string
     field :vk_url, :string
     field :squad_request, :squad_request, resolve: dataloader(Squadster.Formations)
+    field :squad_member, :squad_member, resolve: dataloader(Squadster.Formations)
   end
 end
