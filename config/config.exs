@@ -2,8 +2,8 @@ use Mix.Config
 
 config :squadster,
   ecto_repos: [Squadster.Repo],
-  frontend_url: System.get_env("FRONTEND_URL")
-  bot_url: System.get_env("BOT_ENDPOINT")
+  frontend_url: System.get_env("FRONTEND_URL"),
+  bot_url: System.get_env("BOT_URL")
 
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,
@@ -19,6 +19,7 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+config :gettext, :default_locale, "ru"
 
 import_config "oauth.exs"
 import_config "scheduler.exs"

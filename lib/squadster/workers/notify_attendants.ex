@@ -1,15 +1,15 @@
 defmodule Squadster.Workers.NotifyAttendants do
   use Task
 
-  import Ecto.Query
   import HTTPoison
+  import Ecto.Query
+  import SquadsterWeb.Gettext
 
   alias Squadster.Repo
   alias Squadster.Helpers.Dates
   alias Squadster.Formations.{Squad, SquadMember}
 
   @bot_endpoint Application.fetch_env!(:squadster, :bot_url) <> "/message"
-  @message "Завтра вы ответственный за лопату!"
   @request_headers [{"content-type", "application/json"}]
 
   def start_link(args) do
@@ -32,10 +32,10 @@ defmodule Squadster.Workers.NotifyAttendants do
     HTTPoison.post @bot_endpoint, request_body(user), @request_headers
   end
 
-  def request_body(user) do
+  defp request_body(user) do
     """
       {
-        "text": "#{@message}",
+        "text": "#{gettext("You are on duty tomorrow!")}",
         "target": #{user.id}
       }
     """
