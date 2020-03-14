@@ -22,6 +22,7 @@ defmodule SquadsterWeb.Schema.FormationTypes do
   end
 
   object :squad_member do
+    field :id, non_null(:id)
     field :role, :integer
     field :queue_number, :integer
     field :user, :user, resolve: dataloader(Squadster.Accounts)
