@@ -6,7 +6,7 @@ config :squadster,
 
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,
-  url: [host: System.get_env("HOSTNAME") || "squadster.io"],
+  url: [host: System.get_env("HOSTNAME") || "squadster.wtf"],
   secret_key_base: System.get_env("SECRET_KEY_BASE") || "YwHUkFneakAZRdSvutrJqpOZZ2kogjIFMsZntnRE89BibSBDUDc+SjBnABMMcZhCTiJTLuY9JdYOsCtZ7DcX3VZ",
   render_errors: [view: SquadsterWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Squadster.PubSub, adapter: Phoenix.PubSub.PG2]

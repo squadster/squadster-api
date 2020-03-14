@@ -18,7 +18,7 @@ This application helps students to minimalize care about military studying.
 
 First of all you should create OAuth application on [vk.com]("https://vk.com/apps?act=manage"). You will need your application id and secret key from here.
 
-Then you need to add custom hostname to your `/etc/hosts` file. This hostname should be the same with one created in vk application. Let it be `squadster.io`
+Then you need to add custom hostname to your `/etc/hosts` file. This hostname should be the same with one created in vk application. Let it be `squadster.wtf`
 
 As soon as it's done clone the repo and configure environment:
 
@@ -40,7 +40,7 @@ mix ecto.setup
 That's all, load environment with `source .env`, run the server with `mix phx.server` and test it with
 
 ```bash
-curl squadster.io:4000/api/ping
+curl squadster.wtf:4000/api/ping
 ```
 
 ### Running test suite
