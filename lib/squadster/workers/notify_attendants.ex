@@ -4,10 +4,11 @@ defmodule Squadster.Workers.NotifyAttendants do
   import Ecto.Query
   import HTTPoison
 
-  alias Squadster.Formations.SquadMember
   alias Squadster.Repo
+  alias Squadster.Helpers.Dates
+  alias Squadster.Formations.{Squad, SquadMember}
 
-  @bot_endpoint "https://mercury-dev.herokuapp.com/message"
+  @bot_endpoint Application.fetch_env!(:squadster, :bot_url) <> "/message"
   @message "Завтра вы ответственный за лопату!"
   @request_headers [{"content-type", "application/json"}]
 
@@ -16,23 +17,26 @@ defmodule Squadster.Workers.NotifyAttendants do
   end
 
   def run(_args) do
-    next_day_duties = from(member in SquadMember, where: member.queue_number == 1)
+    tomorrow = Dates.tomorrow |> Dates.day_of_a_week
+    from(squad in Squad, where: squad.class_day == ^tomorrow)
     |> Repo.all
-    |> Repo.preload(:user)
-    |> Enum.each fn duty ->
-      notify(duty.user)
+    |> Repo.preload(members: :user)
+    |> Enum.each fn %{members: members} ->
+      members
+      |> Enum.filter(fn member -> member.queue_number == 1 end)
+      |> Enum.each(&notify/1)
     end
   end
 
-  defp notify(duty) do
-    HTTPoison.post @bot_endpoint, request_body(duty.id), @request_headers
+  defp notify(%{user: user}) do
+    HTTPoison.post @bot_endpoint, request_body(user), @request_headers
   end
 
-  def request_body(duty_id) do
+  def request_body(user) do
     """
       {
         "text": "#{@message}",
-        "targer": #{duty_id}
+        "target": #{user.id}
       }
     """
   end
