@@ -47,8 +47,8 @@ defmodule Squadster.Helpers.Permissions do
     %{squad: squad, user: request_user} = squad_request |> Repo.preload(:squad) |> Repo.preload(:user)
 
     cond do
-      is_nil(member) -> false
       request_user == user -> true
+      is_nil(member) -> false
       member.role in [:commander, :deputy_commander, :journalist] and squad == member.squad -> true
       true -> false
     end
