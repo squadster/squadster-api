@@ -8,7 +8,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
 
   let :user do
     member = build(:squad_member) |> make_commander |> insert
-    build(:user) |> with_squad_member(member) |> insert
+    insert(:user, squad_member: member)
   end
 
   let :squad do
@@ -37,7 +37,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
       context "if user is a deputy_commander of the squad" do
         let :user do
           member = build(:squad_member) |> make_deputy_commander |> insert
-          build(:user) |> with_squad_member(member) |> insert
+          insert(:user, squad_member: member)
         end
 
         it "returns true" do
@@ -54,7 +54,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
       context "if user is a journalist of the squad" do
         let :user do
           member = build(:squad_member) |> make_journalist |> insert
-          build(:user) |> with_squad_member(member) |> insert
+          insert(:user, squad_member: member)
         end
 
         it "returns true" do
@@ -71,7 +71,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
       context "if user is a student" do
         let :user do
           member = insert(:squad_member)
-          build(:user) |> with_squad_member(member) |> insert
+          insert(:user, squad_member: member)
         end
 
         it "returns false" do
@@ -102,7 +102,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
       context "if user is a deputy_commander of the squad" do
         let :user do
           member = build(:squad_member) |> make_deputy_commander |> insert
-          build(:user) |> with_squad_member(member) |> insert
+          insert(:user, squad_member: member)
         end
 
         it "returns false" do
@@ -113,7 +113,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
       context "if user is a journalist of the squad" do
         let :user do
           member = build(:squad_member) |> make_journalist |> insert
-          build(:user) |> with_squad_member(member) |> insert
+          insert(:user, squad_member: member)
         end
 
         it "returns false" do
@@ -124,7 +124,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
       context "if user is a student" do
         let :user do
           member = insert(:squad_member)
-          build(:user) |> with_squad_member(member) |> insert
+          insert(:user, squad_member: member)
         end
 
         it "returns false" do
