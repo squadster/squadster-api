@@ -12,7 +12,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
   end
 
   let :squad do
-    %{squad_member: %{squad: squad}} = user |> Repo.preload(squad_member: :squad)
+    %{squad_member: %{squad: squad}} = user() |> Repo.preload(squad_member: :squad)
     squad
   end
 
@@ -24,12 +24,12 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
     context "when checking squad" do
       context "if user is a commander of the squad" do
         it "returns true" do
-          expect(user |> Permissions.can_update?(squad)) |> to(eq true)
+          expect(user() |> Permissions.can_update?(squad())) |> to(eq true)
         end
 
         context "and this is not a target squad" do
           it "returns false" do
-            expect(user |> Permissions.can_update?(another_squad())) |> to(eq false)
+            expect(user() |> Permissions.can_update?(another_squad())) |> to(eq false)
           end
         end
       end
@@ -41,12 +41,12 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
         end
 
         it "returns true" do
-          expect(user |> Permissions.can_update?(squad)) |> to(eq true)
+          expect(user() |> Permissions.can_update?(squad())) |> to(eq true)
         end
 
         context "and this is not a target squad" do
           it "returns false" do
-            expect(user |> Permissions.can_update?(another_squad())) |> to(eq false)
+            expect(user() |> Permissions.can_update?(another_squad())) |> to(eq false)
           end
         end
       end
@@ -58,24 +58,24 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
         end
 
         it "returns true" do
-          expect(user |> Permissions.can_update?(squad)) |> to(eq true)
+          expect(user() |> Permissions.can_update?(squad())) |> to(eq true)
         end
 
         context "and this is not a target squad" do
           it "returns false" do
-            expect(user |> Permissions.can_update?(another_squad())) |> to(eq false)
+            expect(user() |> Permissions.can_update?(another_squad())) |> to(eq false)
           end
         end
       end
 
-      context "if user is a student" do
+      context "if user() is a student" do
         let :user do
           member = insert(:squad_member)
           insert(:user, squad_member: member)
         end
 
         it "returns false" do
-          expect(user |> Permissions.can_update?(squad)) |> to(eq false)
+          expect(user() |> Permissions.can_update?(squad())) |> to(eq false)
         end
       end
     end
@@ -89,12 +89,12 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
     context "when checking squad" do
       context "if user is a commander of the squad" do
         it "returns true" do
-          expect(user |> Permissions.can_delete?(squad)) |> to(eq true)
+          expect(user() |> Permissions.can_delete?(squad())) |> to(eq true)
         end
 
         context "and this is not a target squad" do
           it "returns false" do
-            expect(user |> Permissions.can_update?(another_squad())) |> to(eq false)
+            expect(user() |> Permissions.can_update?(another_squad())) |> to(eq false)
           end
         end
       end
@@ -106,7 +106,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
         end
 
         it "returns false" do
-          expect(user |> Permissions.can_delete?(squad)) |> to(eq false)
+          expect(user() |> Permissions.can_delete?(squad())) |> to(eq false)
         end
       end
 
@@ -117,7 +117,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
         end
 
         it "returns false" do
-          expect(user |> Permissions.can_delete?(squad)) |> to(eq false)
+          expect(user() |> Permissions.can_delete?(squad())) |> to(eq false)
         end
       end
 
@@ -128,7 +128,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
         end
 
         it "returns false" do
-          expect(user |> Permissions.can_delete?(squad)) |> to(eq false)
+          expect(user() |> Permissions.can_delete?(squad())) |> to(eq false)
         end
       end
     end
