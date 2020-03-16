@@ -1,4 +1,4 @@
-defmodule Squadster.PingControllerSpec do
+defmodule Squadster.Web.PingControllerSpec do
   use ESpec.Phoenix, controller: PingController, async: true
 
   describe "GET /api/ping" do

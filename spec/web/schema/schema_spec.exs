@@ -1,13 +1,12 @@
-defmodule Squadster.Schema.SchemaSpec do
+defmodule Squadster.Web.Schema.SchemaSpec do
   use ESpec.Phoenix, async: true
+  use ESpec.Phoenix.Extend, :controller
   use Phoenix.ConnTest
-  @endpoint SquadsterWeb.Endpoint
 
-  alias Squadster.Repo
-  alias Squadster.Formations.Squad
-
-  import Squadster.Factory
+  import Squadster.Support.Factory
   import EctoEnum
+
+  alias Squadster.Formations.Squad
 
   defenum ClassDayEnum, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 7
 

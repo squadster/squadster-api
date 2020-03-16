@@ -1,4 +1,4 @@
-defmodule Squadster.SquadFactory do
+defmodule Squadster.Support.Factory.SquadFactory do
   defmacro __using__(opts) do
     quote do
       def squad_factory do

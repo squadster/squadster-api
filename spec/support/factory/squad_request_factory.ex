@@ -1,4 +1,4 @@
-defmodule Squadster.SquadRequestFactory do
+defmodule Squadster.Support.Factory.SquadRequestFactory do
   defmacro __using__(opts) do
     quote do
       # TODO: implement methods for associations
