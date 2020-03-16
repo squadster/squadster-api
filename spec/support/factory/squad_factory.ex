@@ -10,7 +10,7 @@ defmodule Squadster.Support.Factory.SquadFactory do
       end
 
       def with_commander(squad, user) do
-        squad_member = insert(:squad_member, squad: squad, user: user)
+        squad_member = build(:squad_member, squad: squad, user: user) |> make_commander |> insert
         %{squad | members: [squad_member]}
       end
     end

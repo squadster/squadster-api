@@ -27,6 +27,10 @@ defmodule Squadster.Support.Factory.UserFactory do
         squad_member = insert(:squad_member, user: user)
         %{user | squad_member: squad_member}
       end
+
+      def with_squad_member(user, squad_member) do
+        %{user | squad_member: squad_member}
+      end
     end
   end
 end
