@@ -7,7 +7,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
   alias Squadster.Repo
 
   let :user do
-    member = build(:squad_member) |> make_commander |> insert
+    member = insert(:squad_member, role: :commander)
     insert(:user, squad_member: member)
   end
 
@@ -36,7 +36,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
 
       context "if user is a deputy_commander of the squad" do
         let :user do
-          member = build(:squad_member) |> make_deputy_commander |> insert
+          member = insert(:squad_member, role: :deputy_commander)
           insert(:user, squad_member: member)
         end
 
@@ -53,7 +53,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
 
       context "if user is a journalist of the squad" do
         let :user do
-          member = build(:squad_member) |> make_journalist |> insert
+          member = insert(:squad_member, role: :journalist)
           insert(:user, squad_member: member)
         end
 
@@ -101,7 +101,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
 
       context "if user is a deputy_commander of the squad" do
         let :user do
-          member = build(:squad_member) |> make_deputy_commander |> insert
+          member = insert(:squad_member, role: :deputy_commander)
           insert(:user, squad_member: member)
         end
 
@@ -112,7 +112,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
 
       context "if user is a journalist of the squad" do
         let :user do
-          member = build(:squad_member) |> make_journalist |> insert
+          member = insert(:squad_member, role: :journalist)
           insert(:user, squad_member: member)
         end
 
