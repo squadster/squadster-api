@@ -4,8 +4,8 @@ defmodule Squadster.Support.Factory.UserFactory do
       def user_factory do
         uid = Faker.Util.format("%9d")
         %Squadster.Accounts.User{
-          first_name: Faker.Name.Hy.first_name,
-          last_name: Faker.Name.Hy.last_name,
+          first_name: Faker.Name.first_name,
+          last_name: Faker.Name.last_name,
           birth_date: Faker.Date.date_of_birth(17..20),
           mobile_phone: "+375" <> uid,
           university: "University of " <> Faker.Industry.sector,
