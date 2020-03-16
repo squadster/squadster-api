@@ -20,6 +20,14 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
     insert(:squad)
   end
 
+  let :request do
+    insert(:squad_request, squad: squad())
+  end
+
+  let :request_to_another_squad do
+    insert(:squad_request)
+  end
+
   describe "can_update?/2" do
     context "when checking squad" do
       context "if user is a commander of the squad" do
@@ -81,7 +89,62 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
     end
 
     context "when checking squad_request" do
+      context "if approver is a commander of the squad" do
+        it "returns true" do
+          expect(user() |> Permissions.can_update?(request())) |> to(eq true)
+        end
 
+        context "and this is not a squad of a request" do
+          it "returns false" do
+            expect(user() |> Permissions.can_update?(request_to_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if approver is a deputy_commander of the squad" do
+        let :user do
+          member = insert(:squad_member, role: :deputy_commander)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns true" do
+          expect(user() |> Permissions.can_update?(request())) |> to(eq true)
+        end
+
+        context "and this is not a squad of a request" do
+          it "returns false" do
+            expect(user() |> Permissions.can_update?(request_to_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if approver is a journalist of the squad" do
+        let :user do
+          member = insert(:squad_member, role: :journalist)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns true" do
+          expect(user() |> Permissions.can_update?(request())) |> to(eq true)
+        end
+
+        context "and this is not a squad of a request" do
+          it "returns false" do
+            expect(user() |> Permissions.can_update?(request_to_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if approver is a student" do
+        let :user do
+          member = insert(:squad_member)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns false" do
+          expect(user() |> Permissions.can_update?(request())) |> to(eq false)
+        end
+      end
     end
   end
 

@@ -23,7 +23,7 @@ defmodule Squadster.Helpers.Permissions do
 
     cond do
       is_nil(approver) -> false
-      approver.role in [:commander, :deputy_commander] and squad == approver.squad -> true
+      approver.role in [:commander, :deputy_commander, :journalist] and squad == approver.squad -> true
       true -> false
     end
   end
@@ -49,7 +49,7 @@ defmodule Squadster.Helpers.Permissions do
     cond do
       is_nil(member) -> false
       request_user == user -> true
-      member.role in [:commander, :deputy_commander] and squad == member.squad -> true
+      member.role in [:commander, :deputy_commander, :journalist] and squad == member.squad -> true
       true -> false
     end
   end
