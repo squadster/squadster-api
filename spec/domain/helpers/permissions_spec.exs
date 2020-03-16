@@ -16,11 +16,21 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
     squad
   end
 
+  let :another_squad do
+    insert(:squad)
+  end
+
   describe "can_update?/2" do
     context "when checking squad" do
       context "if user is a commander of the squad" do
         it "returns true" do
           expect(user |> Permissions.can_update?(squad)) |> to(eq true)
+        end
+
+        context "and this is not a target squad" do
+          it "returns false" do
+            expect(user |> Permissions.can_update?(another_squad())) |> to(eq false)
+          end
         end
       end
 
@@ -33,6 +43,12 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
         it "returns true" do
           expect(user |> Permissions.can_update?(squad)) |> to(eq true)
         end
+
+        context "and this is not a target squad" do
+          it "returns false" do
+            expect(user |> Permissions.can_update?(another_squad())) |> to(eq false)
+          end
+        end
       end
 
       context "if user is a journalist of the squad" do
@@ -43,6 +59,12 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
 
         it "returns true" do
           expect(user |> Permissions.can_update?(squad)) |> to(eq true)
+        end
+
+        context "and this is not a target squad" do
+          it "returns false" do
+            expect(user |> Permissions.can_update?(another_squad())) |> to(eq false)
+          end
         end
       end
 
@@ -68,6 +90,12 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
       context "if user is a commander of the squad" do
         it "returns true" do
           expect(user |> Permissions.can_delete?(squad)) |> to(eq true)
+        end
+
+        context "and this is not a target squad" do
+          it "returns false" do
+            expect(user |> Permissions.can_update?(another_squad())) |> to(eq false)
+          end
         end
       end
 
