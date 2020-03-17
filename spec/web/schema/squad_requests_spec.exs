@@ -27,6 +27,16 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
     """
   end
 
+  let :approve do
+    """
+      mutation approveSquadRequest($id: Int) {
+        approveSquadRequest(id: $id) {
+          approvedAt
+        }
+      }
+    """
+  end
+
   let :create_squad_request_query, do: %{query: create(), variables: %{squad_id: squad().id}}
 
   let :squad, do: insert(:squad)
@@ -34,6 +44,10 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
 
   def delete_squad_request_query(squad_id) do
     %{query: delete(), variables: %{id: squad_id}}
+  end
+
+  def approve_squad_request_query(squad_id) do
+    %{query: approve(), variables: %{id: squad_id}}
   end
 
   def api_request(payload) do
@@ -75,96 +89,26 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
         api_request(delete_squad_request_query(squad_request().id))
         expect entities_count(SquadRequest) |> to(eq previous_count - 1)
       end
-
-      context "when it is not the request owner" do
-        let :another_user, do: insert(:user)
-
-        it "cannot delete the squad_request" do
-          previous_count = entities_count(SquadRequest)
-          login_as(another_user()) |> query(delete_squad_request_query(squad_request().id))
-          expect entities_count(SquadRequest) |> to(eq previous_count)
-        end
-
-        context "but it's commander of the requested squad" do
-          let :another_user, do: insert(:user)
-          let :squad, do: build(:squad) |> with_commander(another_user()) |> insert
-          let :squad_request, do: insert(:squad_request, user: user(), squad: squad())
-
-          it "can delete the squad_request" do
-            previous_count = entities_count(SquadRequest)
-            login_as(another_user()) |> query(delete_squad_request_query(squad_request().id))
-            expect entities_count(SquadRequest) |> to(eq previous_count - 1)
-          end
-        end
-      end
     end
 
+    context "approve_squad_request" do
+      let :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
+      let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
+      before do: squad_request()
 
+      it "approve existing squad_request and sets approved_at and approver" do
+        expect squad_request().approver |> to(eq nil)
+        expect squad_request().approved_at |> to(eq nil)
 
+        api_request(approve_squad_request_query(squad_request().id))
 
+        request = Repo.get(SquadRequest, squad_request().id) |> Repo.preload(:approver)
+        %{squad_member: approver} = user() |> Repo.preload(:squad_member)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #context "approve_squad_request" do
-      #let :squad_request, do: insert(:squad_request, user: user())
-
-      #before do: squad_request()
-
-      #it "approves existing squad_request" do
-        #previous_count = entities_count(SquadRequest)
-        #api_request(delete_squad_request_query(squad_request().id))
-        #expect entities_count(SquadRequest) |> to(eq previous_count - 1)
-      #end
-
-      #context "when it is not the request owner" do
-        #let :another_user, do: insert(:user)
-
-        #it "cannot approve the squad_request" do
-          #previous_count = entities_count(SquadRequest)
-          #login_as(another_user()) |> query(delete_squad_request_query(squad_request().id))
-          #expect entities_count(SquadRequest) |> to(eq previous_count)
-        #end
-
-        #context "but it's commander of the requested squad" do
-          #let :another_user, do: insert(:user)
-          #let :squad, do: build(:squad) |> with_commander(another_user()) |> insert
-          #let :squad_request, do: insert(:squad_request, user: user(), squad: squad())
-
-          #it "can approve squad_request" do
-            #previous_count = entities_count(SquadRequest)
-            #login_as(another_user()) |> query(delete_squad_request_query(squad_request().id))
-            #expect entities_count(SquadRequest) |> to(eq previous_count - 1)
-          #end
-        #end
-      #end
-    #end
-
-
-
+        expect request.approver |> to(eq approver)
+        expect request.approver |> to_not(eq nil)
+      end
+    end
   end
 end
