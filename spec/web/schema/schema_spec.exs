@@ -4,11 +4,8 @@ defmodule Squadster.Web.Schema.SchemaSpec do
   use Phoenix.ConnTest
 
   import Squadster.Support.Factory
-  import EctoEnum
 
   alias Squadster.Formations.Squad
-
-  defenum ClassDayEnum, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 7
 
   let :create do
     """
@@ -116,7 +113,7 @@ defmodule Squadster.Web.Schema.SchemaSpec do
       squad = build(:squad) |> with_commander(user()) |> insert
       api_request(update_squad_query(squad.id))
       expect Repo.get(Squad, squad.id).advertisment |> to(eq update_params().advertisment)
-      expect {:ok, Repo.get(Squad, squad.id).class_day} |> to(eq ClassDayEnum.cast(update_params().class_day))
+      expect {:ok, Repo.get(Squad, squad.id).class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
       expect Repo.get(Squad, squad.id).squad_number |> to(eq update_params().squad_number)
     end
   end
