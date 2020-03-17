@@ -5,7 +5,7 @@ defmodule Squadster.Support.RequestsHelper do
 
   @endpoint SquadsterWeb.Endpoint
 
-  def login_as(conn, %User{auth_token: token}) do
+  def login_as(%Plug.Conn{} = conn, %User{auth_token: token}) do
     conn |> put_req_header("authorization", "Bearer " <> token)
   end
 
@@ -13,7 +13,7 @@ defmodule Squadster.Support.RequestsHelper do
     build_conn() |> put_req_header("authorization", "Bearer " <> token)
   end
 
-  def query(conn, payload) do
+  def query(%Plug.Conn{} = conn, payload) do
     conn |> post("/api/query", payload)
   end
 end
