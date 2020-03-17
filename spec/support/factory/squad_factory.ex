@@ -1,5 +1,5 @@
-defmodule Squadster.SquadFactory do
-  defmacro __using__(opts) do
+defmodule Squadster.Support.Factory.SquadFactory do
+  defmacro __using__(_opts) do
     quote do
       def squad_factory do
         %Squadster.Formations.Squad{
@@ -10,7 +10,7 @@ defmodule Squadster.SquadFactory do
       end
 
       def with_commander(squad, user) do
-        squad_member = insert(:squad_member, squad: squad, user: user)
+        squad_member = insert(:squad_member, squad: squad, user: user, role: :commander)
         %{squad | members: [squad_member]}
       end
     end

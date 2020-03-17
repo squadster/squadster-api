@@ -1,4 +1,4 @@
-defmodule Squadster.ErrorViewSpec do
+defmodule Squadster.Web.ErrorViewSpec do
   use ESpec.Phoenix, async: true, view: ErrorView
 
   describe "404.json" do

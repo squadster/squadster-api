@@ -6,7 +6,7 @@ defmodule Squadster.Helpers.Dates do
   end
 
   def datetime_from_string(string_datetime) do
-    string_datetime |> Timex.parse!("%d.%m.%Y %H:%M", :strftime)
+    string_datetime |> Timex.parse!("%-d.%-m.%Y %H:%M", :strftime)
   end
 
   def date_to_string(%Date{} = date) do
