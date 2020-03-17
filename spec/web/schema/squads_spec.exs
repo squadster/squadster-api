@@ -4,6 +4,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
   use Phoenix.ConnTest
 
   import Squadster.Support.Factory
+  import Ecto.Query, only: [from: 2]
 
   alias Squadster.Formations.Squad
 
@@ -82,6 +83,10 @@ defmodule Squadster.Web.Schema.SquadSpec do
     struct |> Repo.all |> Enum.count
   end
 
+  def last_squad do
+    Repo.one(from squad in Squad, order_by: [desc: squad.id], limit: 1)
+  end
+
   describe "queries" do
     it "returns list of squads" do
       squads_count = entities_count(Squad)
@@ -92,25 +97,45 @@ defmodule Squadster.Web.Schema.SquadSpec do
   end
 
   describe "mutations" do
-    it "creates a new squad with valid attributes" do
-      previous_count = entities_count(Squad)
-      api_request(create_squad_query())
-      expect entities_count(Squad) |> to(eq previous_count + 1)
+    context "create_squad" do
+      it "creates a new squad with valid attributes" do
+        previous_count = entities_count(Squad)
+
+        api_request(create_squad_query())
+
+        expect entities_count(Squad) |> to(eq previous_count + 1)
+      end
+
+      it "sets creator as a commander" do
+        api_request(create_squad_query())
+
+        %{squad_member: member} = user() |> Repo.preload(:squad_member)
+
+        expect(last_squad() |> Squad.commander) |> to(eq member)
+      end
     end
 
-    it "deletes a squad by id" do
-      squad = build(:squad) |> with_commander(user()) |> insert
-      previous_count = entities_count(Squad)
-      api_request(delete_squad_query(squad.id))
-      expect entities_count(Squad) |> to(eq previous_count - 1)
+    context "delete_squad" do
+      it "deletes a squad by id" do
+        squad = build(:squad) |> with_commander(user()) |> insert
+        previous_count = entities_count(Squad)
+
+        api_request(delete_squad_query(squad.id))
+
+        expect entities_count(Squad) |> to(eq previous_count - 1)
+      end
     end
 
-    it "updates a squad by id" do
-      squad = build(:squad) |> with_commander(user()) |> insert
-      api_request(update_squad_query(squad.id))
-      expect Repo.get(Squad, squad.id).advertisment |> to(eq update_params().advertisment)
-      expect {:ok, Repo.get(Squad, squad.id).class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
-      expect Repo.get(Squad, squad.id).squad_number |> to(eq update_params().squad_number)
+    context "update_squad" do
+      it "updates a squad by id" do
+        squad = build(:squad) |> with_commander(user()) |> insert
+
+        api_request(update_squad_query(squad.id))
+
+        expect Repo.get(Squad, squad.id).advertisment |> to(eq update_params().advertisment)
+        expect {:ok, Repo.get(Squad, squad.id).class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
+        expect Repo.get(Squad, squad.id).squad_number |> to(eq update_params().squad_number)
+      end
     end
   end
 end
