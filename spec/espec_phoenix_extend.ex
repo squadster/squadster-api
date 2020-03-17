@@ -8,8 +8,8 @@ defmodule ESpec.Phoenix.Extend do
   def controller do
     quote do
       import SquadsterWeb.Router.Helpers
+      import Squadster.Support.ControllerHelper
 
-      alias Squadster
       alias Squadster.Repo
 
       @endpoint SquadsterWeb.Endpoint

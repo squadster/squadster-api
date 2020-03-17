@@ -1,5 +1,5 @@
 defmodule Squadster.Support.Factory.UserFactory do
-  defmacro __using__(opts) do
+  defmacro __using__(_opts) do
     quote do
       def user_factory do
         uid = Faker.Util.format("%9d")

@@ -1,5 +1,5 @@
 defmodule Squadster.Support.Factory.SquadRequestFactory do
-  defmacro __using__(opts) do
+  defmacro __using__(_opts) do
     quote do
       def squad_request_factory do
         %Squadster.Formations.SquadRequest{
