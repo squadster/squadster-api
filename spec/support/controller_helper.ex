@@ -1,4 +1,4 @@
-defmodule Squadster.Support.ControllerHelper do
+defmodule Squadster.Support.RequestsHelper do
   use Phoenix.ConnTest
 
   alias Squadster.Accounts.User
