@@ -1,4 +1,4 @@
-defmodule Squadster.Web.Schema.SchemaSpec do
+defmodule Squadster.Web.Schema.SquadSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :controller
   use Phoenix.ConnTest
@@ -83,8 +83,6 @@ defmodule Squadster.Web.Schema.SchemaSpec do
   end
 
   describe "queries" do
-    let :token, do: insert(:user).auth_token
-
     it "returns list of squads" do
       squads_count = entities_count(Squad)
       expect json_response(api_request(list_squads_query()), 200)["data"]["squads"]
@@ -94,8 +92,6 @@ defmodule Squadster.Web.Schema.SchemaSpec do
   end
 
   describe "mutations" do
-    let :token, do: insert(:user).auth_token
-
     it "creates a new squad with valid attributes" do
       previous_count = entities_count(Squad)
       api_request(create_squad_query())

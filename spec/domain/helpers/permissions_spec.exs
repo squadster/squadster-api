@@ -1,10 +1,10 @@
 defmodule Squadster.Domain.Helpers.PermissionsSpec do
   use ESpec.Phoenix, async: true
+  use ESpec.Phoenix.Extend, :helper
 
   import Squadster.Support.Factory
 
-  alias Squadster.Helpers.Permissions
-  alias Squadster.Repo
+  alias Helpers.Permissions
 
   let :user do
     member = insert(:squad_member, role: :commander)

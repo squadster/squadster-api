@@ -5,6 +5,13 @@ defmodule ESpec.Phoenix.Extend do
     end
   end
 
+  def helper do
+    quote do
+      alias Squadster.Helpers
+      alias Squadster.Repo
+    end
+  end
+
   def controller do
     quote do
       import SquadsterWeb.Router.Helpers
