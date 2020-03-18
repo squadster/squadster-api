@@ -16,6 +16,7 @@ defmodule ESpec.Phoenix.Extend do
     quote do
       import SquadsterWeb.Router.Helpers
       import Squadster.Support.RequestsHelper
+      import Squadster.Support.RepoHelper
 
       alias Squadster.Repo
 

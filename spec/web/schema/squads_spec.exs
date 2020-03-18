@@ -4,7 +4,6 @@ defmodule Squadster.Web.Schema.SquadSpec do
   use Phoenix.ConnTest
 
   import Squadster.Support.Factory
-  import Ecto.Query, only: [from: 2]
 
   alias Squadster.Formations.Squad
 
@@ -75,14 +74,6 @@ defmodule Squadster.Web.Schema.SquadSpec do
     %{query: update(), variables: params}
   end
 
-  def entities_count(struct) do
-    struct |> Repo.all |> Enum.count
-  end
-
-  def last_squad do
-    Repo.one(from squad in Squad, order_by: [desc: squad.id], limit: 1)
-  end
-
   describe "queries" do
     it "returns list of squads" do
       squads_count = entities_count(Squad)
@@ -107,7 +98,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
 
         %{squad_member: member} = user() |> Repo.preload(:squad_member)
 
-        expect(last_squad() |> Squad.commander) |> to(eq member)
+        expect(Squad |> last |> Squad.commander) |> to(eq member)
       end
     end
 

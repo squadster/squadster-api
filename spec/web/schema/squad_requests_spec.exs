@@ -51,10 +51,6 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
     %{query: approve(), variables: %{id: squad_id}}
   end
 
-  def entities_count(struct) do
-    struct |> Repo.all |> Enum.count
-  end
-
   describe "mutations" do
     context "create_squad_request" do
       it "creates a new squad_request with valid attributes" do
