@@ -11,6 +11,7 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
     """
       mutation createSquadRequest($squad_id: String) {
         createSquadRequest(squad_id: $squad_id) {
+          id
           insertedAt
         }
       }
@@ -65,12 +66,21 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
       context "when user has another request" do
         it "should delete old request and create new one" do
           count = entities_count(SquadRequest)
-          user() |> api_request(create_squad_request_query())
+          %{"data" => %{"createSquadRequest" => %{"id" => id}}} =
+            user()
+            |> api_request(create_squad_request_query())
+            |> json_response(200)
+
           expect entities_count(SquadRequest) |> to(eq count + 1)
 
           count = entities_count(SquadRequest)
-          user() |> api_request(create_squad_request_query())
+          %{"data" => %{"createSquadRequest" => %{"id" => new_id}}} =
+            user()
+            |> api_request(create_squad_request_query())
+            |> json_response(200)
+
           expect entities_count(SquadRequest) |> to(eq count)
+          expect new_id |> to_not(eq id)
         end
       end
     end
