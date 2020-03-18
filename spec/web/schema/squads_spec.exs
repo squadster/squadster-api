@@ -66,10 +66,6 @@ defmodule Squadster.Web.Schema.SquadSpec do
 
   let :user, do: insert(:user)
 
-  def api_request(payload) do
-    login_as(user()) |> query(payload)
-  end
-
   def delete_squad_query(squad_id) do
     %{query: delete(), variables: %{id: squad_id}}
   end
@@ -107,7 +103,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
       end
 
       it "sets creator as a commander" do
-        api_request(create_squad_query())
+        user() |> api_request(create_squad_query())
 
         %{squad_member: member} = user() |> Repo.preload(:squad_member)
 
@@ -120,7 +116,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
         squad = build(:squad) |> with_commander(user()) |> insert
         previous_count = entities_count(Squad)
 
-        api_request(delete_squad_query(squad.id))
+        user() |> api_request(delete_squad_query(squad.id))
 
         expect entities_count(Squad) |> to(eq previous_count - 1)
       end
@@ -130,7 +126,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
       it "updates a squad by id" do
         squad = build(:squad) |> with_commander(user()) |> insert
 
-        api_request(update_squad_query(squad.id))
+        user() |> api_request(update_squad_query(squad.id))
 
         expect Repo.get(Squad, squad.id).advertisment |> to(eq update_params().advertisment)
         expect {:ok, Repo.get(Squad, squad.id).class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))

@@ -50,10 +50,6 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
     %{query: approve(), variables: %{id: squad_id}}
   end
 
-  def api_request(payload) do
-    login_as(user()) |> query(payload)
-  end
-
   def entities_count(struct) do
     struct |> Repo.all |> Enum.count
   end
@@ -69,11 +65,11 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
       context "when user has another request" do
         it "should delete old request and create new one" do
           count = entities_count(SquadRequest)
-          api_request(create_squad_request_query())
+          user() |> api_request(create_squad_request_query())
           expect entities_count(SquadRequest) |> to(eq count + 1)
 
           count = entities_count(SquadRequest)
-          api_request(create_squad_request_query())
+          user() |> api_request(create_squad_request_query())
           expect entities_count(SquadRequest) |> to(eq count)
         end
       end
@@ -86,7 +82,7 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
 
       it "deletes existing squad_request" do
         previous_count = entities_count(SquadRequest)
-        api_request(delete_squad_request_query(squad_request().id))
+        user() |> api_request(delete_squad_request_query(squad_request().id))
         expect entities_count(SquadRequest) |> to(eq previous_count - 1)
       end
     end
@@ -101,7 +97,7 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
         expect squad_request().approver |> to(eq nil)
         expect squad_request().approved_at |> to(eq nil)
 
-        api_request(approve_squad_request_query(squad_request().id))
+        user() |> api_request(approve_squad_request_query(squad_request().id))
 
         request = Repo.get(SquadRequest, squad_request().id) |> Repo.preload(:approver)
         %{squad_member: approver} = user() |> Repo.preload(:squad_member)
