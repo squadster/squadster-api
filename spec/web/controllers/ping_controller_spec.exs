@@ -1,5 +1,6 @@
 defmodule Squadster.Web.PingControllerSpec do
-  use ESpec.Phoenix, controller: PingController, async: true
+  use ESpec.Phoenix, async: true
+  use ESpec.Phoenix.Extend, :controller
 
   describe "GET /api/ping" do
     let :response do

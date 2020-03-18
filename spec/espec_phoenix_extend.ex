@@ -14,7 +14,10 @@ defmodule ESpec.Phoenix.Extend do
 
   def controller do
     quote do
+      use Phoenix.ConnTest
+
       import SquadsterWeb.Router.Helpers
+      import Squadster.Support.Factory
       import Squadster.Support.RequestsHelper
       import Squadster.Support.RepoHelper
 

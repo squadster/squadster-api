@@ -11,7 +11,6 @@ defmodule Squadster.Web.ErrorViewSpec do
     end
   end
 
-
   describe "500.json" do
     let :content do
       render(SquadsterWeb.ErrorView, "500.json", [])
