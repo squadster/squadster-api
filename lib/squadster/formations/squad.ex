@@ -4,6 +4,8 @@ defmodule Squadster.Formations.Squad do
   import Ecto.Changeset
   import EctoEnum
 
+  alias Squadster.Repo
+
   defenum ClassDayEnum, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 7
 
   schema "squads" do
@@ -24,5 +26,11 @@ defmodule Squadster.Formations.Squad do
     struct
     |> cast(params, [:squad_number, :advertisment, :class_day])
     |> validate_required([:squad_number, :class_day])
+  end
+
+  def commander(squad) do
+    squad
+    |> Ecto.assoc(:members)
+    |> Repo.get_by(role: :commander)
   end
 end

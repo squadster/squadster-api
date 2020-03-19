@@ -59,13 +59,13 @@ defmodule Squadster.MixProject do
       {:dataloader, "~> 1.0.0"},
       {:timex, "~> 3.5"},
       {:quantum, "~> 3.0-rc"},
+      {:ex_machina, "~> 2.4"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 
       {:bypass, "~> 1.0", only: :test},
       {:espec, "~> 1.8.1", only: :test},
       {:espec_phoenix, "~> 0.7.1", only: :test},
-      {:ex_machina, "~> 2.4"}
     ]
   end
 
