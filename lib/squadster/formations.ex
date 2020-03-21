@@ -86,9 +86,7 @@ defmodule Squadster.Formations do
     end
   end
 
-  defp add_commander_to_squad(squad_response, user) do
-    {:ok, squad} = squad_response
-
+  defp add_commander_to_squad({:ok, squad} = squad_response, user) do
     %{role: :commander, user_id: user.id, squad_id: squad.id}
     |> SquadMember.changeset
     |> Repo.insert
