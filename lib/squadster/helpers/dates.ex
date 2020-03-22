@@ -25,6 +25,10 @@ defmodule Squadster.Helpers.Dates do
     Timex.now |> Timex.shift(days: -1)
   end
 
+  def tomorrow do
+    Timex.now |> Timex.shift(days: 1)
+  end
+
   def day_of_a_week(date) do
     {day_of_a_week, _remainder} =
       date

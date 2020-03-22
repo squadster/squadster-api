@@ -28,7 +28,7 @@ defmodule Squadster.MixProject do
   def application do
     [
       mod: {Squadster.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_vk, :absinthe_plug, :ex_machina]
+      extra_applications: [:logger, :runtime_tools, :ueberauth_vk, :absinthe_plug, :ex_machina, :httpoison]
     ]
   end
 
@@ -60,6 +60,7 @@ defmodule Squadster.MixProject do
       {:timex, "~> 3.5"},
       {:quantum, "~> 3.0-rc"},
       {:ex_machina, "~> 2.4"},
+      {:httpoison, "~> 1.6"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 
