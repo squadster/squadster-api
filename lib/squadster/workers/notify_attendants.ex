@@ -21,11 +21,11 @@ defmodule Squadster.Workers.NotifyAttendants do
     from(squad in Squad, where: squad.class_day == ^tomorrow)
     |> Repo.all
     |> Repo.preload(members: :user)
-    |> Enum.each fn %{members: members} ->
+    |> Enum.each(fn %{members: members} ->
       members
       |> Enum.filter(fn member -> member.queue_number == 1 end)
       |> Enum.each(&notify/1)
-    end
+    end)
   end
 
   defp notify(%{user: user}) do
