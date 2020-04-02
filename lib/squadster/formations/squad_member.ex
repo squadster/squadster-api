@@ -26,4 +26,13 @@ defmodule Squadster.Formations.SquadMember do
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:squad_id)
   end
+
+  def parse_role(role) do
+    {:ok, role} = RoleEnum.cast(role)
+    role
+  end
+
+  def serialize_role(role) do
+    Atom.to_string(role)
+  end
 end

@@ -90,7 +90,7 @@ defmodule Squadster.Schema do
     field :update_squad_member, type: :squad_member do
       arg :id, non_null(:id)
       arg :queue_number, :integer
-      arg :role, :integer
+      arg :role, :string
 
       resolve &FormationsResolver.update_squad_member/3
     end

@@ -89,7 +89,7 @@ defmodule Squadster.Formations do
   def update_squad_member(%{id: id} = args, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
       if Permissions.can_update?(user, squad_member) do
-        if {:ok, :commander} = SquadMember.RoleEnum.cast(args[:role]) do
+        if :commander == args[:role] do
           %{squad: squad} = squad_member |> Repo.preload(squad: :members)
           squad.members
           |> Enum.filter(fn member -> member.role == :commander end)
