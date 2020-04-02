@@ -162,7 +162,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
           expect(user() |> Permissions.can_update?(squad_member())) |> to(eq true)
         end
 
-        context "and this is not a target squad" do
+        context "and this is a member of another squad" do
           it "returns false" do
             expect(user() |> Permissions.can_update?(member_of_another_squad())) |> to(eq false)
           end
@@ -179,7 +179,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
           expect(user() |> Permissions.can_update?(squad_member())) |> to(eq false)
         end
 
-        context "and this is not a target squad" do
+        context "and this is a member of another squad" do
           it "returns false" do
             expect(user() |> Permissions.can_update?(member_of_another_squad())) |> to(eq false)
           end
@@ -196,7 +196,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
           expect(user() |> Permissions.can_update?(squad_member())) |> to(eq false)
         end
 
-        context "and this is not a target squad" do
+        context "and this is a member of another squad" do
           it "returns false" do
             expect(user() |> Permissions.can_update?(member_of_another_squad())) |> to(eq false)
           end
@@ -343,7 +343,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
           expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq true)
         end
 
-        context "and this is not a target squad" do
+        context "and this is a member of another squad" do
           it "returns false" do
             expect(user() |> Permissions.can_delete?(member_of_another_squad())) |> to(eq false)
           end
@@ -360,7 +360,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
           expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
         end
 
-        context "and this is not a target squad" do
+        context "and this is a member of another squad" do
           it "returns false" do
             expect(user() |> Permissions.can_delete?(member_of_another_squad())) |> to(eq false)
           end
@@ -377,7 +377,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
           expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
         end
 
-        context "and this is not a target squad" do
+        context "and this is a member of another squad" do
           it "returns false" do
             expect(user() |> Permissions.can_delete?(member_of_another_squad())) |> to(eq false)
           end
