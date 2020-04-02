@@ -1,7 +1,12 @@
 defmodule Squadster.Formations do
+  import Ecto.Query, only: [from: 2]
+
   alias Squadster.Repo
   alias Squadster.Helpers.Permissions
   alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
+
+  @commander_role 0
+  @student_role 3
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -89,18 +94,10 @@ defmodule Squadster.Formations do
   def update_squad_member(%{id: id} = args, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
       if Permissions.can_update?(user, squad_member) do
-        if :commander == args[:role] do
-          %{squad: squad} = squad_member |> Repo.preload(squad: :members)
-          squad.members
-          |> Enum.filter(fn member -> member.role == :commander end)
-          |> Enum.map(fn commander ->
-            commander
-            |> SquadMember.changeset(%{role: :student})
-            |> Repo.update
-          end)
-        end
+        if args[:role] == "commander", do: demote_all_commanders(squad_member)
 
-        squad_member
+        SquadMember
+        |> Repo.get(id)
         |> SquadMember.changeset(args)
         |> Repo.update
       else
@@ -124,5 +121,13 @@ defmodule Squadster.Formations do
     |> SquadMember.changeset
     |> Repo.insert
     squad_response
+  end
+
+  defp demote_all_commanders(squad_member) do
+    from(
+      member in SquadMember,
+      where: member.squad_id == ^squad_member.squad_id and member.role == @commander_role,
+      update: [set: [role: @student_role]]
+    ) |> Repo.update_all([])
   end
 end
