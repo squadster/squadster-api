@@ -98,7 +98,7 @@ defmodule Squadster.Formations do
     end
   end
 
-  def delete_squad(id, user) do
+  def delete_squad_member(id, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
       if Permissions.can_delete?(user, squad_member) do
         squad_member |> Repo.delete
