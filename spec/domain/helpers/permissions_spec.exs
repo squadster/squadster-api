@@ -167,6 +167,16 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
             expect(user() |> Permissions.can_update?(member_of_another_squad())) |> to(eq false)
           end
         end
+
+        context "and user tries to update himself" do
+          let :squad_member do
+            insert(:squad_member, user: user())
+          end
+
+          it "returns false" do
+            expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
+          end
+        end
       end
 
       context "if user is a deputy_commander of the squad" do
@@ -346,6 +356,16 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
         context "and this is a member of another squad" do
           it "returns false" do
             expect(user() |> Permissions.can_delete?(member_of_another_squad())) |> to(eq false)
+          end
+        end
+
+        context "and user tries to delete himself" do
+          let :squad_member do
+            insert(:squad_member, user: user())
+          end
+
+          it "returns false" do
+            expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
           end
         end
       end
