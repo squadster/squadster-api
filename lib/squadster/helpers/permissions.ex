@@ -1,7 +1,7 @@
 defmodule Squadster.Helpers.Permissions do
   alias Squadster.Repo
   alias Squadster.Accounts.User
-  alias Squadster.Formations.{Squad, SquadRequest}
+  alias Squadster.Formations.{Squad, SquadRequest, SquadMember}
 
   @doc "Check if user can update squad"
   def can_update?(%User{} = user, %Squad{} = squad) do
@@ -26,10 +26,15 @@ defmodule Squadster.Helpers.Permissions do
     end
   end
 
+  @doc "Check if user can update squad_member"
+  def can_update?(%User{} = user, %SquadMember{} = squad_member) do
+    %{squad: squad} = squad_member |> Repo.preload(:squad)
+    can_delete?(user, squad)
+  end
+
   @doc "Check if user can delete squad"
   def can_delete?(%User{} = user, %Squad{} = squad) do
-    %{squad_member: member} = user |> Repo.preload(:squad_member)
-    member = member |> Repo.preload(:squad)
+    %{squad_member: member} = user |> Repo.preload(squad_member: :squad)
 
     cond do
       is_nil(member) -> false
@@ -49,5 +54,11 @@ defmodule Squadster.Helpers.Permissions do
       member.role in [:commander, :deputy_commander, :journalist] and squad == member.squad -> true
       true -> false
     end
+  end
+
+  @doc "Check if user can delete squad_member"
+  def can_delete?(%User{} = user, %SquadMember{} = squad_member) do
+    %{squad: squad} = squad_member |> Repo.preload(:squad)
+    can_delete?(user, squad)
   end
 end

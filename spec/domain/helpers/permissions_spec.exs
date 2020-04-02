@@ -16,6 +16,15 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
     squad
   end
 
+  let :squad_member do
+    %{squad_member: %{squad: squad}} = user() |> Repo.preload(squad_member: :squad)
+    insert(:squad_member, squad: squad)
+  end
+
+  let :member_of_another_squad do
+    insert(:squad_member)
+  end
+
   let :another_squad do
     insert(:squad)
   end
@@ -76,7 +85,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
         end
       end
 
-      context "if user() is a student" do
+      context "if user is a student" do
         let :user do
           member = insert(:squad_member)
           insert(:user, squad_member: member)
@@ -143,6 +152,65 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
 
         it "returns false" do
           expect(user() |> Permissions.can_update?(request())) |> to(eq false)
+        end
+      end
+    end
+
+    context "when checking squad_member" do
+      context "if user is a commander of the squad" do
+        it "returns true" do
+          expect(user() |> Permissions.can_update?(squad_member())) |> to(eq true)
+        end
+
+        context "and this is a member of another squad" do
+          it "returns false" do
+            expect(user() |> Permissions.can_update?(member_of_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if user is a deputy_commander of the squad" do
+        let :user do
+          member = insert(:squad_member, role: :deputy_commander)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns false" do
+          expect(user() |> Permissions.can_update?(squad_member())) |> to(eq false)
+        end
+
+        context "and this is a member of another squad" do
+          it "returns false" do
+            expect(user() |> Permissions.can_update?(member_of_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if user is a journalist of the squad" do
+        let :user do
+          member = insert(:squad_member, role: :journalist)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns false" do
+          expect(user() |> Permissions.can_update?(squad_member())) |> to(eq false)
+        end
+
+        context "and this is a member of another squad" do
+          it "returns false" do
+            expect(user() |> Permissions.can_update?(member_of_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if user is a student" do
+        let :user do
+          member = insert(:squad_member)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns false" do
+          expect(user() |> Permissions.can_update?(squad_member())) |> to(eq false)
         end
       end
     end
@@ -265,6 +333,65 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
 
         it "returns true" do
           expect(user() |> Permissions.can_delete?(request())) |> to(eq true)
+        end
+      end
+    end
+
+    context "when checking squad_member" do
+      context "if user is a commander of the squad" do
+        it "returns true" do
+          expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq true)
+        end
+
+        context "and this is a member of another squad" do
+          it "returns false" do
+            expect(user() |> Permissions.can_delete?(member_of_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if user is a deputy_commander of the squad" do
+        let :user do
+          member = insert(:squad_member, role: :deputy_commander)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns false" do
+          expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
+        end
+
+        context "and this is a member of another squad" do
+          it "returns false" do
+            expect(user() |> Permissions.can_delete?(member_of_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if user is a journalist of the squad" do
+        let :user do
+          member = insert(:squad_member, role: :journalist)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns false" do
+          expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
+        end
+
+        context "and this is a member of another squad" do
+          it "returns false" do
+            expect(user() |> Permissions.can_delete?(member_of_another_squad())) |> to(eq false)
+          end
+        end
+      end
+
+      context "if user is a student" do
+        let :user do
+          member = insert(:squad_member)
+          insert(:user, squad_member: member)
+        end
+
+        it "returns false" do
+          expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
         end
       end
     end

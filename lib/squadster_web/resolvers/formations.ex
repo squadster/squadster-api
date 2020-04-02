@@ -56,7 +56,24 @@ defmodule SquadsterWeb.Resolvers.Formations do
     Formations.delete_squad_request(id, user)
   end
 
-  def delere_squad_request(_parent, _args, _resolution) do
+  def delete_squad_request(_parent, _args, _resolution) do
     {:error, "Access denied"}
   end
+
+  def update_squad_member(_parent, args, %{context: %{current_user: user}}) do
+    Formations.update_squad_member(args, user)
+  end
+
+  def update_squad_member(_parent, _args, _resolution) do
+    {:error, "Access denied"}
+  end
+
+  def delete_squad_member(_parent, %{id: id}, %{context: %{current_user: user}}) do
+    Formations.delete_squad_member(id, user)
+  end
+
+  def delete_squad_member(_parent, _args, _resolution) do
+    {:error, "Access denied"}
+  end
+
 end

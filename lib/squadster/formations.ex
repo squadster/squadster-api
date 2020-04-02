@@ -86,6 +86,28 @@ defmodule Squadster.Formations do
     end
   end
 
+  def update_squad_member(%{id: id} = args, user) do
+    with squad_member <- SquadMember |> Repo.get(id) do
+      if Permissions.can_update?(user, squad_member) do
+        squad_member
+        |> SquadMember.changeset(args)
+        |> Repo.update
+      else
+        {:error, "Not enough permissions"}
+      end
+    end
+  end
+
+  def delete_squad_member(id, user) do
+    with squad_member <- SquadMember |> Repo.get(id) do
+      if Permissions.can_delete?(user, squad_member) do
+        squad_member |> Repo.delete
+      else
+        {:error, "Not enough permissions"}
+      end
+    end
+  end
+
   defp add_commander_to_squad({:ok, squad} = squad_response, user) do
     %{role: :commander, user_id: user.id, squad_id: squad.id}
     |> SquadMember.changeset

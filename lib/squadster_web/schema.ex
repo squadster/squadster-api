@@ -85,6 +85,22 @@ defmodule Squadster.Schema do
 
       resolve &FormationsResolver.delete_squad_request/3
     end
+
+    @desc "Update a squad_member"
+    field :update_squad_member, type: :squad_member do
+      arg :id, non_null(:id)
+      arg :queue_number, :integer
+      arg :role, :integer
+
+      resolve &FormationsResolver.update_squad_member/3
+    end
+
+    @desc "Delete a squad_member"
+    field :delete_squad_member, type: :squad_member do
+      arg :id, non_null(:id)
+
+      resolve &FormationsResolver.delete_squad_member/3
+    end
   end
 
   def context(ctx) do
