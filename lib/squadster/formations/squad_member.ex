@@ -23,9 +23,16 @@ defmodule Squadster.Formations.SquadMember do
     struct
     |> cast(params, [:role, :queue_number, :user_id, :squad_id])
     |> validate_required([:role, :user_id, :squad_id])
+    |> reset_queue_number_if_commander
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:squad_id)
   end
+
+  def reset_queue_number_if_commander(%Ecto.Changeset{changes: %{role: :commander}} = changeset) do
+    changeset |> put_change(:queue_number, nil)
+  end
+
+  def reset_queue_number_if_commander(changeset), do: changeset
 
   def parse_role(role) do
     {:ok, role} = RoleEnum.cast(role)
