@@ -3,6 +3,8 @@ defmodule SquadsterWeb.Schema.FormationTypes do
 
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
+  alias Squadster.Formations.SquadMember
+
   object :squad_request do
     field :id, non_null(:id)
     field :user, :user, resolve: dataloader(Squadster.Accounts)
@@ -23,9 +25,14 @@ defmodule SquadsterWeb.Schema.FormationTypes do
 
   object :squad_member do
     field :id, non_null(:id)
-    field :role, :integer
+    field :role, :role
     field :queue_number, :integer
     field :user, :user, resolve: dataloader(Squadster.Accounts)
     field :squad, :squad, resolve: dataloader(Squadster.Formations)
+  end
+
+  scalar :role do
+    parse &SquadMember.parse_role/1
+    serialize &SquadMember.serialize_role/1
   end
 end
