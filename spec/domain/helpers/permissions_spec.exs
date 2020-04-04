@@ -174,7 +174,7 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
           end
 
           it "returns false" do
-            expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
+            expect(user() |> Permissions.can_update?(squad_member())) |> to(eq false)
           end
         end
       end
