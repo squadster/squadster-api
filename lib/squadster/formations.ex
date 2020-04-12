@@ -75,6 +75,10 @@ defmodule Squadster.Formations do
         squad_request
         |> SquadRequest.approve_changeset(%{approver_id: approver_id})
         |> Repo.update
+
+        %{user_id: user_id, squad_id: squad_id} = squad_request
+        SquadMember.changeset(%{user_id: user_id, squad_id: squad_id, role: :student})
+        |> Repo.insert
       else
         {:error, "Not enough permissions"}
       end

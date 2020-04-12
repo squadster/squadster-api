@@ -72,8 +72,8 @@ defmodule Squadster.Schema do
       resolve &FormationsResolver.create_squad_request/3
     end
 
-    @desc "Approve a squad_request"
-    field :approve_squad_request, type: :squad_request do
+    @desc "Delete/approve a squad_request"
+    field :approve_squad_request, type: :squad_member do
       arg :id, non_null(:id)
 
       resolve &FormationsResolver.approve_squad_request/3
