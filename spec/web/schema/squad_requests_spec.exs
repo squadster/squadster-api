@@ -108,6 +108,19 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
         expect request.approver |> to(eq approver)
         expect request.approved_at |> to_not(eq nil)
       end
+
+      it "creates new squad_member" do
+        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
+        expect squad_member |> to(eq nil)
+
+        user() |> api_request(approve_squad_request_query(squad_request().id))
+
+        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
+        %{squad_id: squad_id} = squad_member
+
+        expect squad_member |> to_not(eq nil)
+        expect squad_id |> to(eq squad().id)
+      end
     end
   end
 end
