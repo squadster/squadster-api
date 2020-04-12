@@ -75,6 +75,10 @@ defmodule Squadster.Formations do
         squad_request
         |> SquadRequest.approve_changeset(%{approver_id: approver_id})
         |> Repo.update
+
+        %{user_id: user_id, squad_id: squad_id} = squad_request
+        SquadMember.changeset(%{user_id: user_id, squad_id: squad_id, role: :student})
+        |> Repo.insert
       else
         {:error, "Not enough permissions"}
       end
@@ -107,8 +111,10 @@ defmodule Squadster.Formations do
   end
 
   def delete_squad_member(id, user) do
-    with squad_member <- SquadMember |> Repo.get(id) do
+    with squad_member <- SquadMember |> Repo.get(id),
+         %{user: %{squad_request: squad_request}} <- squad_member |> Repo.preload(user: :squad_request) do
       if Permissions.can_delete?(user, squad_member) do
+        squad_request |> Repo.delete
         squad_member |> Repo.delete
       else
         {:error, "Not enough permissions"}

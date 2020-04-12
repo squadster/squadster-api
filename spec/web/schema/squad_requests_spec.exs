@@ -29,7 +29,7 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
     """
       mutation approveSquadRequest($id: Int) {
         approveSquadRequest(id: $id) {
-          approvedAt
+          id
         }
       }
     """
@@ -40,12 +40,12 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
   let :squad, do: insert(:squad)
   let :user, do: insert(:user)
 
-  def delete_squad_request_query(squad_id) do
-    %{query: delete(), variables: %{id: squad_id}}
+  def delete_squad_request_query(id) do
+    %{query: delete(), variables: %{id: id}}
   end
 
-  def approve_squad_request_query(squad_id) do
-    %{query: approve(), variables: %{id: squad_id}}
+  def approve_squad_request_query(id) do
+    %{query: approve(), variables: %{id: id}}
   end
 
   describe "mutations" do
@@ -96,17 +96,30 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
 
       before do: squad_request()
 
-      it "approve existing squad_request and sets approved_at and approver" do
+      it "approves existing squad_request and sets approved_at and approver" do
         expect squad_request().approver |> to(eq nil)
         expect squad_request().approved_at |> to(eq nil)
 
         user() |> api_request(approve_squad_request_query(squad_request().id))
 
-        request = Repo.get(SquadRequest, squad_request().id) |> Repo.preload(:approver)
+        request = SquadRequest |> Repo.get(squad_request().id) |> Repo.preload(:approver)
         %{squad_member: approver} = user() |> Repo.preload(:squad_member)
 
         expect request.approver |> to(eq approver)
-        expect request.approver |> to_not(eq nil)
+        expect request.approved_at |> to_not(eq nil)
+      end
+
+      it "creates new squad_member" do
+        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
+        expect squad_member |> to(eq nil)
+
+        user() |> api_request(approve_squad_request_query(squad_request().id))
+
+        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
+        %{squad_id: squad_id} = squad_member
+
+        expect squad_member |> to_not(eq nil)
+        expect squad_id |> to(eq squad().id)
       end
     end
   end
