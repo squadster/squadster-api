@@ -27,13 +27,11 @@ defmodule Squadster.Workers.ShiftQueueNumbers do
 
   defp update_query(members) do
     members =
-      members
-      |> Enum.filter(fn member -> !is_nil(member.queue_number) end)
+      members |> Enum.filter(fn %{queue_number: queue_number} -> !is_nil(queue_number) end)
 
-    last_number = Enum.max_by(members, &(&1.queue_number)).queue_number
+    %{queue_number: last_number} = Enum.max_by(members, &(&1.queue_number))
 
-    members
-    |> Enum.each(fn member -> update_member(member, last_number) end)
+    members |> Enum.each(fn member -> update_member(member, last_number) end)
   end
 
   defp update_member(%SquadMember{queue_number: 1} = member, last_number) do
