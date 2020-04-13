@@ -76,6 +76,23 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
           expect new_id |> to_not(eq id)
         end
       end
+
+      context "when user has a squad" do
+        before do
+          insert(:squad_member, user: user(), squad: squad())
+        end
+
+        it "should not create request" do
+          initial_count = entities_count(SquadRequest)
+
+          %{"data" => %{"createSquadRequest" => nil}} =
+            user()
+            |> api_request(create_squad_request_query())
+            |> json_response(200)
+
+          expect entities_count(SquadRequest) |> to(eq initial_count)
+        end
+      end
     end
 
     context "delete_squad_request" do
