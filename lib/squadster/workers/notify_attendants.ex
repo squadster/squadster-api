@@ -1,13 +1,12 @@
 defmodule Squadster.Workers.NotifyAttendants do
   use Task
 
-  import HTTPoison
   import Ecto.Query
   import SquadsterWeb.Gettext
 
   alias Squadster.Repo
   alias Squadster.Helpers.Dates
-  alias Squadster.Formations.{Squad, SquadMember}
+  alias Squadster.Formations.Squad
 
   @bot_endpoint Application.fetch_env!(:squadster, :bot_url) <> "/message"
   @request_headers [{"content-type", "application/json"}]
