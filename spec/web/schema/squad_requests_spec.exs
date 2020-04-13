@@ -85,12 +85,20 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
         it "should not create request" do
           initial_count = entities_count(SquadRequest)
 
-          %{"data" => %{"createSquadRequest" => nil}} =
+          user()
+          |> api_request(create_squad_request_query())
+          |> json_response(200)
+
+          expect entities_count(SquadRequest) |> to(eq initial_count)
+        end
+
+        it "should return error with mwssage" do
+          %{"errors" => [%{"message" => message}]} =
             user()
             |> api_request(create_squad_request_query())
             |> json_response(200)
 
-          expect entities_count(SquadRequest) |> to(eq initial_count)
+          expect message |> to_not(be_nil())
         end
       end
     end
