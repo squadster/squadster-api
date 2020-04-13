@@ -60,12 +60,20 @@ defmodule Squadster.Formations do
   end
 
   def create_squad_request(squad_id, user) do
-    %{squad_request: squad_request} = user |> Repo.preload(:squad_request)
-    unless is_nil(squad_request), do: squad_request |> Repo.delete
+    %{squad_request: squad_request, squad_member: squad_member} =
+      user
+      |> Repo.preload(:squad_request)
+      |> Repo.preload(:squad_member)
 
-    %{user_id: user.id, squad_id: squad_id}
-    |> SquadRequest.changeset
-    |> Repo.insert
+    if is_nil(squad_member) do
+      unless is_nil(squad_request), do: squad_request |> Repo.delete
+
+      %{user_id: user.id, squad_id: squad_id}
+      |> SquadRequest.changeset
+      |> Repo.insert
+    else
+      {:error, "User already has squad"}
+    end
   end
 
   def approve_squad_request(id, approver) do
