@@ -9,7 +9,8 @@ defmodule Squadster.Workers.NotifyAttendants do
   alias Squadster.Formations.Squad
 
   @bot_endpoint Application.fetch_env!(:squadster, :bot_url) <> "/message"
-  @request_headers [{"content-type", "application/json"}]
+  @bot_token "ApiKey " <> Application.fetch_env!(:squadster, :bot_token)
+  @request_headers [{"content-type", "application/json"}, {"Authorization", @bot_token}]
 
   def start_link(args) do
     Task.start_link(__MODULE__, :run, [args])
