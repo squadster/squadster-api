@@ -45,31 +45,31 @@ for index <- (1..seeds_config[:squads]) do
 
   Repo.all(User)
   |> Enum.slice((index - 1) * seeds_config[:users_per_squad], seeds_config[:users_per_squad])
-  |> Enum.each fn user ->
+  |> Enum.each(fn user ->
     Repo.insert!(%SquadMember{
       role: :student,
       user: user,
       squad: squad
     })
-  end
+  end)
 end
 
 # mark first 3 members as main roles
 Repo.all(Squad)
 |> Repo.preload(:members)
-|> Enum.each fn squad ->
+|> Enum.each(fn squad ->
   for index <- (0..2) do
     squad.members
     |> Enum.at(index)
     |> Ecto.Changeset.change(%{role: index})
     |> Repo.update()
   end
-end
+end)
 
 # set queue numbers for all except commanders
 Repo.all(Squad)
 |> Repo.preload(:members)
-|> Enum.each fn squad ->
+|> Enum.each(fn squad ->
   members = from(m in SquadMember, where: m.squad_id == ^squad.id and m.role in [2, 3]) |> Repo.all()
   for index <- (0..Enum.count(members) - 1) do
     members
@@ -77,4 +77,4 @@ Repo.all(Squad)
     |> Ecto.Changeset.change(%{queue_number: index + 1})
     |> Repo.update()
   end
-end
+end)
