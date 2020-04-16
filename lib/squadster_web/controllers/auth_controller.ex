@@ -15,7 +15,7 @@ defmodule SquadsterWeb.AuthController do
     |> json(%{message: "Logged out"})
   end
 
-  def callback(%{assigns: %{ueberauth_failure: reason}} = conn, _params) do
+  def callback(%{assigns: %{ueberauth_failure: %{errors: [%{message: reason}]}}} = conn, _params) do
     send_auth_error(conn, reason)
   end
 
