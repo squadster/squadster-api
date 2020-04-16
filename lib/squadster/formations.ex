@@ -119,10 +119,10 @@ defmodule Squadster.Formations do
   end
 
   def delete_squad_member(id, user) do
-    with squad_member <- SquadMember |> Repo.get(id),
-         %{user: %{squad_request: squad_request}} <- squad_member |> Repo.preload(user: :squad_request) do
+    with squad_member <- SquadMember |> Repo.get(id) do
       if Permissions.can_delete?(user, squad_member) do
-        squad_request |> Repo.delete
+        %{user: %{squad_request: squad_request}} = squad_member |> Repo.preload(user: :squad_request)
+        unless is_nil(squad_request), do: squad_request |> Repo.delete
         squad_member |> Repo.delete
       else
         {:error, "Not enough permissions"}
