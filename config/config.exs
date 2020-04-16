@@ -3,7 +3,8 @@ use Mix.Config
 config :squadster,
   ecto_repos: [Squadster.Repo],
   frontend_url: System.get_env("FRONTEND_URL"),
-  bot_url: System.get_env("BOT_URL")
+  bot_url: System.get_env("BOT_URL"),
+  bot_token: System.get_env("BOT_TOKEN")
 
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,
