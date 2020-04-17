@@ -1,11 +1,8 @@
-defmodule Squadster.Domain.SquadRequestsSpec do
+defmodule Squadster.Domain.Formations.SquadRequestsSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :model
 
   alias Squadster.Formations.SquadRequest
-
-  let :user, do: insert(:user)
-  let! :squad, do: build(:squad) |> with_commander(user()) |> insert
 
   describe "changeset" do
     context "when params are valid" do

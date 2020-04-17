@@ -31,8 +31,6 @@ defmodule Squadster.Accounts.User do
     :mobile_phone,
     :university,
     :faculty,
-    :squad_request_id,
-    :squad_member_id
   ]
 
   schema "users" do
@@ -63,8 +61,6 @@ defmodule Squadster.Accounts.User do
     |> cast(params, @user_fields)
     |> validate_required([:first_name, :last_name])
     |> validate_format(:mobile_phone, ~r/^[-+()0-9]+$/)
-    |> foreign_key_constraint(:squad_member_id)
-    |> foreign_key_constraint(:squad_request_id)
   end
 
   def auth_changeset(params) do

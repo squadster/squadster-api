@@ -1,11 +1,8 @@
-defmodule Squadster.Domain.SquadsSpec do
+defmodule Squadster.Domain.Formations.SquadsSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :model
 
   alias Squadster.Formations.Squad
-
-  let :user, do: insert(:user)
-  let! :squad, do: build(:squad) |> with_commander(user()) |> insert
 
   describe "changeset" do
     context "when params are valid" do
@@ -31,6 +28,9 @@ defmodule Squadster.Domain.SquadsSpec do
   end
 
   describe "commander/1" do
+    let :user, do: insert(:user)
+    let! :squad, do: build(:squad) |> with_commander(user()) |> insert
+
     it "returns commander for given squad" do
       %{squad_member: commander} = user() |> Repo.preload(:squad_member)
       expect squad()
