@@ -2,7 +2,7 @@ defmodule Squadster.Support.Factory.UserFactory do
   defmacro __using__(_opts) do
     quote do
       def user_factory do
-        uid = Faker.Random.Elixir.random_between(100000000, 999999999) |> Integer.to_string
+        uid = (Enum.random(1..9) |> Integer.to_string) <> Faker.Util.format("%8d") # cannot start with zero
         %Squadster.Accounts.User{
           first_name: Faker.Name.first_name,
           last_name: Faker.Name.last_name,

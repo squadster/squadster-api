@@ -125,7 +125,9 @@ defmodule Squadster.Domain.AccountsSpec do
       end
 
       it "creates user" do
+        initial_count = entities_count(User)
         {:ok, user} = new_auth() |> Accounts.find_or_create_user()
+        expect initial_count |> to_not(eq entities_count(User))
         expect user.id |> to_not(eq user().id)
       end
     end
