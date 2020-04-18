@@ -12,17 +12,19 @@ defmodule Squadster.Domain.Formations.SquadRequestsSpec do
       end
     end
 
-    context "when squad is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{user_id: 1} |> SquadRequest.changeset
-        expect is_valid |> to(be false)
+    context "when params are invalid" do
+      context "when squad is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{user_id: 1} |> SquadRequest.changeset
+          expect is_valid |> to(be false)
+        end
       end
-    end
 
-    context "when user is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{squad_id: 1} |> SquadRequest.changeset
-        expect is_valid |> to(be false)
+      context "when user is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{squad_id: 1} |> SquadRequest.changeset
+          expect is_valid |> to(be false)
+        end
       end
     end
   end
@@ -42,24 +44,26 @@ defmodule Squadster.Domain.Formations.SquadRequestsSpec do
       end
     end
 
-    context "when squad is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{user_id: 1, approver_id: 2} |> SquadRequest.approve_changeset
-        expect is_valid |> to(be false)
+    context "when params are invalid" do
+      context "when squad is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{user_id: 1, approver_id: 2} |> SquadRequest.approve_changeset
+          expect is_valid |> to(be false)
+        end
       end
-    end
 
-    context "when user is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{squad_id: 1, approver_id: 2} |> SquadRequest.approve_changeset
-        expect is_valid |> to(be false)
+      context "when user is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{squad_id: 1, approver_id: 2} |> SquadRequest.approve_changeset
+          expect is_valid |> to(be false)
+        end
       end
-    end
 
-    context "when approver is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{user_id: 1, squad_id: 1} |> SquadRequest.approve_changeset
-        expect is_valid |> to(be false)
+      context "when approver is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{user_id: 1, squad_id: 1} |> SquadRequest.approve_changeset
+          expect is_valid |> to(be false)
+        end
       end
     end
   end

@@ -12,24 +12,26 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
       end
     end
 
-    context "when first_name is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{last_name: "Galt"} |> User.changeset
-        expect is_valid |> to(be false)
+    context "when params are invalid" do
+      context "when first_name is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{last_name: "Galt"} |> User.changeset
+          expect is_valid |> to(be false)
+        end
       end
-    end
 
-    context "when last_name is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{first_name: "John"} |> User.changeset
-        expect is_valid |> to(be false)
+      context "when last_name is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{first_name: "John"} |> User.changeset
+          expect is_valid |> to(be false)
+        end
       end
-    end
 
-    context "when mobile_phone contains illegal symbols" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{first_name: "John", last_name: "Galt", mobile_phone: "&123"} |> User.changeset
-        expect is_valid |> to(be false)
+      context "when mobile_phone contains illegal symbols" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{first_name: "John", last_name: "Galt", mobile_phone: "&123"} |> User.changeset
+          expect is_valid |> to(be false)
+        end
       end
     end
   end
@@ -42,24 +44,26 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
       end
     end
 
-    context "when first_name is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{uid: "123", last_name: "Galt"} |> User.auth_changeset
-        expect is_valid |> to(be false)
+    context "when params are invalid" do
+      context "when first_name is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{uid: "123", last_name: "Galt"} |> User.auth_changeset
+          expect is_valid |> to(be false)
+        end
       end
-    end
 
-    context "when last_name is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{uid: "123", first_name: "John"} |> User.auth_changeset
-        expect is_valid |> to(be false)
+      context "when last_name is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{uid: "123", first_name: "John"} |> User.auth_changeset
+          expect is_valid |> to(be false)
+        end
       end
-    end
 
-    context "when uid is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{first_name: "John", last_name: "Galt"} |> User.auth_changeset
-        expect is_valid |> to(be false)
+      context "when uid is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{first_name: "John", last_name: "Galt"} |> User.auth_changeset
+          expect is_valid |> to(be false)
+        end
       end
     end
   end

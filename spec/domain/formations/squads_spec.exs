@@ -12,17 +12,19 @@ defmodule Squadster.Domain.Formations.SquadsSpec do
       end
     end
 
-    context "when squad_member is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{class_day: :monday} |> Squad.changeset
-        expect is_valid |> to(be false)
+    context "when params are invalid" do
+      context "when squad_member is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{class_day: :monday} |> Squad.changeset
+          expect is_valid |> to(be false)
+        end
       end
-    end
 
-    context "when class_day is not set" do
-      it "is not valid" do
-        %{valid?: is_valid} = %{squad_number: "123456"} |> Squad.changeset
-        expect is_valid |> to(be false)
+      context "when class_day is not set" do
+        it "is not valid" do
+          %{valid?: is_valid} = %{squad_number: "123456"} |> Squad.changeset
+          expect is_valid |> to(be false)
+        end
       end
     end
   end
