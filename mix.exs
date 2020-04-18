@@ -33,7 +33,8 @@ defmodule Squadster.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "spec/support", "spec/factories"]
+  defp elixirc_paths(:test), do: ["lib", "spec/support"]
+  defp elixirc_paths(:dev), do: ["lib", "spec/support/factory", "spec/support/factory.ex"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.

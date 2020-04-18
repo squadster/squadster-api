@@ -1,1 +1,1 @@
-Code.eval_file "priv/repo/seeds.dev.exs"
+# Default factory-independent test data should be set here
