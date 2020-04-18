@@ -4,7 +4,7 @@ use Mix.Config
 config :squadster, Squadster.Repo,
   username: "postgres",
   password: "",
-  database: EnvHelper.safe_env("DB_BASE_NAME", "squadster" <> "_test",
+  database: EnvHelper.safe_env("DB_BASE_NAME", "squadster") <> "_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
