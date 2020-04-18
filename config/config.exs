@@ -1,5 +1,7 @@
 use Mix.Config
 
+require Logger
+
 defmodule EnvHelper do
   def safe_env(env, default \\ "", raise_for_prod \\ true) do
     value = System.get_env(env)
@@ -9,7 +11,7 @@ defmodule EnvHelper do
         raise "config error: required environment variable #{env} is unset"
       end
 
-      IO.puts("config warning: environment variable #{env} is unset, using default \"#{default}\"\n")
+      Logger.warn("environment variable #{env} is unset, using default \"#{default}\" for config")
 
       default
     else
