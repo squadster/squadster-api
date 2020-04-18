@@ -1,7 +1,7 @@
 # Ueberauth response mock for vk provider
 # insert/1 cannot be used with this factory as it's not in a database
 #
-defmodule Squadster.Support.Factory.UeberauthFactory do
+defmodule Squadster.Support.Factory.Accounts.UeberauthFactory do
   defmacro __using__(_opts) do
     quote do
       import Squadster.Helpers.Dates, only: [date_to_string: 1]
