@@ -34,95 +34,19 @@ defmodule Squadster.Domain.AccountsSpec do
   end
 
   describe "find_or_create_user/1" do
-    let :auth do
-      %Ueberauth.Auth{
-        credentials: %Ueberauth.Auth.Credentials{
-          expires: false,
-          expires_at: 1111111111,
-          other: %{},
-          refresh_token: nil,
-          scopes: [""],
-          secret: nil,
-          token: "token",
-          token_type: nil
-        },
-        extra: %Ueberauth.Auth.Extra{
-          raw_info: %{
-            token: %OAuth2.AccessToken{
-              access_token: "token",
-              expires_at: 1111111111,
-              other_params: %{"user_id" => String.to_integer(user().uid)},
-              refresh_token: nil,
-              token_type: "Bearer"
-            },
-            user: %{
-              "bdate" => "23.5.2000",
-              "domain" => "nickname",
-              "faculty" => 15785,
-              "faculty_name" => "Faculty of mems",
-              "first_name" => "John",
-              "graduation" => 0,
-              "id" => String.to_integer(user().uid),
-              "last_name" => "Galt",
-              "photo_100" => Faker.Avatar.image_url,
-              "photo_400" => Faker.Avatar.image_url,
-              "universities" => [
-                %{
-                  "chair" => 2033190,
-                  "chair_name" => "Intellegent memes",
-                  "city" => 282,
-                  "country" => 3,
-                  "faculty" => 15785,
-                  "faculty_name" => "Faculty of mems",
-                  "id" => 94448,
-                  "name" => "MEME university"
-                }
-              ],
-              "university" => 94448,
-              "university_name" => "БГУИР (бывш. МРТИ)"
-            }
-          }
-        },
-        info: %Ueberauth.Auth.Info{
-          birthday: nil,
-          description: nil,
-          email: nil,
-          first_name: "John",
-          image: Faker.Avatar.image_url,
-          last_name: "Galt",
-          location: nil,
-          name: "John Galt",
-          nickname: nil,
-          phone: "+375331234567",
-          urls: %{vk: "https://vk.com/id"}
-        },
-        provider: :vk,
-        strategy: Ueberauth.Strategy.VK,
-        uid: nil
-      }
-    end
+    let :auth, do: build(:ueberauth) |> with_uid(user().uid)
 
     context "when user with given uid present" do
       it "finds user by uid and updates it" do
         {:ok, user} = auth() |> Accounts.find_or_create_user()
 
         expect user.id |> to(eq user().id)
-        expect user.auth_token |> to(eq "token")
+        expect user.auth_token |> to(eq auth().credentials.token)
       end
     end
 
     context "when user with given uid does not present" do
-      let :new_auth do
-        %Ueberauth.Auth{
-          auth() | extra: %{
-            auth().extra | raw_info: %{
-              auth().extra.raw_info | user: %{
-                auth().extra.raw_info.user | "id" => 123
-              }
-            }
-          }
-        }
-      end
+      let :new_auth, do: build(:ueberauth) |> with_uid(123)
 
       it "creates user" do
         initial_count = entities_count(User)

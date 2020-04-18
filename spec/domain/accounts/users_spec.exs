@@ -65,77 +65,12 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
   end
 
   describe "auth functions" do
-    let :auth do
-      %Ueberauth.Auth{
-        credentials: %Ueberauth.Auth.Credentials{
-          expires: false,
-          expires_at: 1111111111,
-          other: %{},
-          refresh_token: nil,
-          scopes: [""],
-          secret: nil,
-          token: "token",
-          token_type: nil
-        },
-        extra: %Ueberauth.Auth.Extra{
-          raw_info: %{
-            token: %OAuth2.AccessToken{
-              access_token: "token",
-              expires_at: 1111111111,
-              other_params: %{"user_id" => 222222222},
-              refresh_token: nil,
-              token_type: "Bearer"
-            },
-            user: %{
-              "bdate" => "23.5.2000",
-              "domain" => "nickname",
-              "faculty" => 15785,
-              "faculty_name" => "Faculty of mems",
-              "first_name" => "John",
-              "graduation" => 0,
-              "id" => 222222222,
-              "last_name" => "Galt",
-              "photo_100" => Faker.Avatar.image_url,
-              "photo_400" => Faker.Avatar.image_url,
-              "universities" => [
-                %{
-                  "chair" => 2033190,
-                  "chair_name" => "Intellegent memes",
-                  "city" => 282,
-                  "country" => 3,
-                  "faculty" => 15785,
-                  "faculty_name" => "Faculty of mems",
-                  "id" => 94448,
-                  "name" => "MEME university"
-                }
-              ],
-              "university" => 94448,
-              "university_name" => "БГУИР (бывш. МРТИ)"
-            }
-          }
-        },
-        info: %Ueberauth.Auth.Info{
-          birthday: nil,
-          description: nil,
-          email: nil,
-          first_name: "John",
-          image: Faker.Avatar.image_url,
-          last_name: "Galt",
-          location: nil,
-          name: "John Galt",
-          nickname: nil,
-          phone: "+375331234567",
-          urls: %{vk: "https://vk.com/id"}
-        },
-        provider: :vk,
-        strategy: Ueberauth.Strategy.VK,
-        uid: nil
-      }
-    end
+    let :auth, do: build(:ueberauth)
 
     describe "data_from_auth/1" do
       it "returns map with data" do
         data = User.data_from_auth(auth())
+
         expect(data.first_name).to_not(be_nil())
         expect(data.last_name).to_not(be_nil())
         expect(data.birth_date).to_not(be_nil())
