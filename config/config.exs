@@ -1,15 +1,33 @@
 use Mix.Config
 
+defmodule EnvHelper do
+  def safe_env(env, default \\ "", raise_for_prod \\ true) do
+    value = System.get_env(env)
+
+    if is_nil(value) do
+      if Mix.env == :prod && raise_for_prod do
+        raise "config error: required environment variable #{env} is unset"
+      end
+
+      IO.puts("config warning: environment variable #{env} is unset, using default \"#{default}\"\n")
+
+      default
+    else
+      value
+    end
+  end
+end
+
 config :squadster,
   ecto_repos: [Squadster.Repo],
-  frontend_url: System.get_env("FRONTEND_URL"),
-  bot_url: System.get_env("BOT_URL"),
-  bot_token: System.get_env("BOT_TOKEN")
+  frontend_url: EnvHelper.safe_env("FRONTEND_URL", "squadster.wtf:3000"),
+  bot_url: EnvHelper.safe_env("BOT_URL", "squadster.wtf:5000"),
+  bot_token: EnvHelper.safe_env("BOT_TOKEN", "dummy bot token")
 
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,
-  url: [host: System.get_env("HOSTNAME") || "squadster.wtf"],
-  secret_key_base: System.get_env("SECRET_KEY_BASE") || "YwHUkFneakAZRdSvutrJqpOZZ2kogjIFMsZntnRE89BibSBDUDc+SjBnABMMcZhCTiJTLuY9JdYOsCtZ7DcX3VZ",
+  url: [host: EnvHelper.safe_env("HOSTNAME", "squadster.wtf")],
+  secret_key_base: EnvHelper.safe_env("SECRET_KEY_BASE", "dummy secret key"),
   render_errors: [view: SquadsterWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Squadster.PubSub, adapter: Phoenix.PubSub.PG2]
 
@@ -20,6 +38,7 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
 config :gettext, :default_locale, "ru"
 
 import_config "oauth.exs"
