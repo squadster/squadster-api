@@ -1,4 +1,5 @@
 import Ecto.Query
+import Squadster.Support.Factory
 
 alias Squadster.Repo
 
