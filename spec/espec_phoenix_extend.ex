@@ -1,6 +1,9 @@
 defmodule ESpec.Phoenix.Extend do
   def model do
     quote do
+      import Squadster.Support.Factory
+      import Squadster.Support.RepoHelper
+
       alias Squadster.Repo
     end
   end

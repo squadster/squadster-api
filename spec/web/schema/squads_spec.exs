@@ -89,14 +89,6 @@ defmodule Squadster.Web.Schema.SquadSpec do
 
         expect entities_count(Squad) |> to(eq previous_count + 1)
       end
-
-      it "sets creator as a commander" do
-        user() |> api_request(create_squad_query())
-
-        %{squad_member: member} = user() |> Repo.preload(:squad_member)
-
-        expect(Squad |> last |> Squad.commander) |> to(eq member)
-      end
     end
 
     context "delete_squad" do

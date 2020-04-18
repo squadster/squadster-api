@@ -1,8 +1,11 @@
-defmodule Squadster.Support.Factory.UserFactory do
+defmodule Squadster.Support.Factory.Accounts.UserFactory do
   defmacro __using__(_opts) do
     quote do
       def user_factory do
-        uid = Faker.Util.format("%9d")
+        # should be string, cannot start with zero
+        uid = Enum.random(100_000_000..999_999_999) |> Integer.to_string
+        avatar = Faker.Avatar.image_url
+
         %Squadster.Accounts.User{
           first_name: Faker.Name.first_name,
           last_name: Faker.Name.last_name,
@@ -12,8 +15,8 @@ defmodule Squadster.Support.Factory.UserFactory do
           faculty: "Faculty of " <> Faker.Industry.sub_sector,
           uid: uid,
           auth_token: Faker.String.base64(85),
-          small_image_url: Faker.Avatar.image_url,
-          image_url: Faker.Avatar.image_url,
+          small_image_url: avatar,
+          image_url: avatar,
           vk_url: "https://vk.com/id" <> uid,
         }
       end

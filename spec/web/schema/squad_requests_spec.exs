@@ -56,43 +56,12 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
         expect entities_count(SquadRequest) |> to(eq previous_count + 1)
       end
 
-      context "when user has another request" do
-        it "should delete old request and create new one" do
-          count = entities_count(SquadRequest)
-          %{"data" => %{"createSquadRequest" => %{"id" => id}}} =
-            user()
-            |> api_request(create_squad_request_query())
-            |> json_response(200)
-
-          expect entities_count(SquadRequest) |> to(eq count + 1)
-
-          count = entities_count(SquadRequest)
-          %{"data" => %{"createSquadRequest" => %{"id" => new_id}}} =
-            user()
-            |> api_request(create_squad_request_query())
-            |> json_response(200)
-
-          expect entities_count(SquadRequest) |> to(eq count)
-          expect new_id |> to_not(eq id)
-        end
-      end
-
       context "when user has a squad" do
         before do
           insert(:squad_member, user: user(), squad: squad())
         end
 
-        it "should not create request" do
-          initial_count = entities_count(SquadRequest)
-
-          user()
-          |> api_request(create_squad_request_query())
-          |> json_response(200)
-
-          expect entities_count(SquadRequest) |> to(eq initial_count)
-        end
-
-        it "should return error with mwssage" do
+        it "should return error with message" do
           %{"errors" => [%{"message" => message}]} =
             user()
             |> api_request(create_squad_request_query())
@@ -104,9 +73,7 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
     end
 
     context "delete_squad_request" do
-      let :squad_request, do: insert(:squad_request, user: user())
-
-      before do: squad_request()
+      let! :squad_request, do: insert(:squad_request, user: user())
 
       it "deletes existing squad_request" do
         previous_count = entities_count(SquadRequest)
@@ -116,35 +83,16 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
     end
 
     context "approve_squad_request" do
-      let :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
+      let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
       let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
-      before do: squad_request()
-
-      it "approves existing squad_request and sets approved_at and approver" do
-        expect squad_request().approver |> to(eq nil)
+      it "approves existing squad_request" do
         expect squad_request().approved_at |> to(eq nil)
 
         user() |> api_request(approve_squad_request_query(squad_request().id))
+        request = SquadRequest |> Repo.get(squad_request().id)
 
-        request = SquadRequest |> Repo.get(squad_request().id) |> Repo.preload(:approver)
-        %{squad_member: approver} = user() |> Repo.preload(:squad_member)
-
-        expect request.approver |> to(eq approver)
         expect request.approved_at |> to_not(eq nil)
-      end
-
-      it "creates new squad_member" do
-        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
-        expect squad_member |> to(eq nil)
-
-        user() |> api_request(approve_squad_request_query(squad_request().id))
-
-        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
-        %{squad_id: squad_id} = squad_member
-
-        expect squad_member |> to_not(eq nil)
-        expect squad_id |> to(eq squad().id)
       end
     end
   end
