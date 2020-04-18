@@ -28,7 +28,7 @@ cd squadster-api
 cp .env.sample .env
 ```
 
-Edit `.env` file and specify all variables marked as `# required`, others are optional, some heve default values.
+Then edit `.env` file and change variables if needed.
 
 Then install dependencies and create database:
 
