@@ -2,9 +2,9 @@ use Mix.Config
 
 # Configure your database
 config :squadster, Squadster.Repo,
-  username: System.get_env("DB_USERNAME") || "squadster",
-  password: System.get_env("DB_PASSWORD") || "squadster",
-  database: (System.get_env("DB_BASE_NAME") || "squadster") <> "_dev",
+  username: EnvHelper.safe_env("DB_USERNAME", "squadster"),
+  password: EnvHelper.safe_env("DB_PASSWORD", "squadster"),
+  database: EnvHelper.safe_env("DB_BASE_NAME", "squadster") <> "_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

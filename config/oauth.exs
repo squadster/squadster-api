@@ -7,6 +7,6 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.VK.OAuth,
-  client_id: System.get_env("VK_APP_ID"),
-  client_secret: System.get_env("VK_SECRET_KEY"),
-  base_redirect_url: System.get_env("FRONTEND_URL") <> "/auth_callback?"
+  client_id: EnvHelper.safe_env("VK_APP_ID", "dummy client id"),
+  client_secret: EnvHelper.safe_env("VK_SECRET_KEY", "dummy secret"),
+  base_redirect_url: EnvHelper.safe_env("FRONTEND_URL", "squadster.wtf:3000") <> "/auth_callback?"

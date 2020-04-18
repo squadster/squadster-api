@@ -8,17 +8,13 @@ defmodule Squadster.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Start the Ecto repository
-      Squadster.Repo,
-      # Start the endpoint when the application starts
-      SquadsterWeb.Endpoint,
-      # Start scheduler
-      Squadster.Workers
+      Squadster.Repo, # Start the Ecto repository
+      SquadsterWeb.Endpoint, # Start the endpoint when the application starts
+      Squadster.Workers # Start scheduler
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Squadster.Supervisor]
+
     Supervisor.start_link(children, opts)
   end
 
