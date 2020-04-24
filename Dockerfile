@@ -1,7 +1,7 @@
-FROM ubuntu
+FROM ubuntu:18.04
 
 RUN apt-get update && \
-    apt-get install -y libssl1.1 postgresql-client && \
+    apt-get install -y libssl1.0.0 postgresql-client && \
     apt-get autoclean
 
 RUN mkdir -p /app/_build
