@@ -1,6 +1,7 @@
+dist: bionic # Ubuntu 18.04
 language: elixir
 elixir: '1.9.0'
-otp_release: '20.1'
+otp_release: '20.3.8'
 
 notifications:
   email:
@@ -18,7 +19,7 @@ stages:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y libssl-dev postgresql-client
+  - sudo apt-get install -y libssl1.0.0 postgresql-client
   - sudo apt-get autoclean
 
 jobs:
