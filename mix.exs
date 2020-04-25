@@ -79,6 +79,7 @@ defmodule Squadster.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      "ecto.migrate": ["ecto.migrate", "ecto.dump"],
       "ecto.seed": ["run priv/repo/seeds.#{Mix.env()}.exs"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "ecto.seed"],
       "ecto.reset": ["ecto.drop", "ecto.setup"]
