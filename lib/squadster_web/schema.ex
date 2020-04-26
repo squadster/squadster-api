@@ -95,6 +95,13 @@ defmodule Squadster.Schema do
       resolve &FormationsResolver.update_squad_member/3
     end
 
+    @desc "Update a batch of squad_member"
+    field :update_squad_members, type: list_of(:squad_member) do
+      arg :batch, list_of(:squad_members_batch)
+
+      resolve &FormationsResolver.update_squad_members/3
+    end
+
     @desc "Delete a squad_member"
     field :delete_squad_member, type: :squad_member do
       arg :id, non_null(:id)

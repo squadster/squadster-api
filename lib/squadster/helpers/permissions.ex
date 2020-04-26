@@ -19,6 +19,11 @@ defmodule Squadster.Helpers.Permissions do
     member_user != user && (user |> can_delete?(squad))
   end
 
+  def can_update?(%User{} = user, squad_members) when is_list(squad_members) do
+    squad = user |> user_squad()
+    user |> has_commander_role_in?(squad) && from_squad?(squad_members, squad.members)
+  end
+
   def can_delete?(%User{} = user, %Squad{} = squad) do
     user |> has_commander_role_in?(squad)
   end
@@ -30,6 +35,17 @@ defmodule Squadster.Helpers.Permissions do
 
   def can_delete?(%User{} = user, %SquadMember{} = squad_member) do
     user |> can_update?(squad_member)
+  end
+
+  defp user_squad(user) do
+    ((user
+      |> Repo.preload(:squad_member)).squad_member
+      |> Repo.preload(:squad)).squad
+      |> Repo.preload(:members)
+  end
+
+  defp from_squad?(squad_members, all_members) do
+    MapSet.subset?(MapSet.new(squad_members), MapSet.new(all_members))
   end
 
   defp has_commander_role_in?(%User{} = user, %Squad{} = squad) do
