@@ -33,7 +33,6 @@ defmodule SquadsterWeb.Schema.FormationTypes do
 
   input_object :squad_members_batch do
     field :id, non_null(:id)
-    field :role, :role
     field :queue_number, :integer
   end
 
