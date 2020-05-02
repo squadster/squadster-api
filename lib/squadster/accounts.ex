@@ -9,9 +9,7 @@ defmodule Squadster.Accounts do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end
 
-  def query(queryable, _params) do
-    queryable
-  end
+  def query(queryable, _params), do: queryable
 
   def current_user(conn) do
     conn.assigns[:current_user]

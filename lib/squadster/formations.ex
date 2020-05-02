@@ -8,15 +8,13 @@ defmodule Squadster.Formations do
   @commander_role 0
   @student_role 3
 
-  def data() do
+  def data do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end
 
-  def query(queryable, _params) do
-    queryable
-  end
+  def query(queryable, _params), do: queryable
 
-  def list_squads() do
+  def list_squads do
     Repo.all(Squad)
   end
 
@@ -86,7 +84,7 @@ defmodule Squadster.Formations do
 
         %{user_id: user_id, squad_id: squad_id} = squad_request
         SquadMember.changeset(%{user_id: user_id, squad_id: squad_id, role: :student})
-        |> Repo.insert
+        |> SquadMember.insert
       else
         {:error, "Not enough permissions"}
       end
@@ -111,7 +109,7 @@ defmodule Squadster.Formations do
         SquadMember
         |> Repo.get(id)
         |> SquadMember.changeset(args)
-        |> Repo.update
+        |> SquadMember.update
       else
         {:error, "Not enough permissions"}
       end
@@ -123,7 +121,7 @@ defmodule Squadster.Formations do
       if Permissions.can_delete?(user, squad_member) do
         %{user: %{squad_request: squad_request}} = squad_member |> Repo.preload(user: :squad_request)
         unless is_nil(squad_request), do: squad_request |> Repo.delete
-        squad_member |> Repo.delete
+        squad_member |> SquadMember.delete
       else
         {:error, "Not enough permissions"}
       end
