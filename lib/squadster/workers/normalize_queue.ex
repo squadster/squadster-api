@@ -18,7 +18,7 @@ defmodule Squadster.Workers.NormalizeQueue do
     on_duty |> normalize_queue
   end
 
-  def remove_from_queue(members) do
+  defp remove_from_queue(members) do
     members
     |> Enum.reduce(Multi.new(), fn member, batch ->
       batch
@@ -27,7 +27,7 @@ defmodule Squadster.Workers.NormalizeQueue do
     |> Repo.transaction
   end
 
-  def normalize_queue(members) do
+  defp normalize_queue(members) do
     members
     |> Enum.sort_by(fn member -> member.queue_number end)
     |> Enum.with_index
