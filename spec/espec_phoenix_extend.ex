@@ -17,8 +17,10 @@ defmodule ESpec.Phoenix.Extend do
 
   def worker do
     quote do
-      alias Squadster.Repo
       import Squadster.Support.Factory
+
+      alias Squadster.Repo
+      alias Squadster.Workers
     end
   end
 
