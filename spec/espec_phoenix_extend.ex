@@ -15,6 +15,15 @@ defmodule ESpec.Phoenix.Extend do
     end
   end
 
+  def worker do
+    quote do
+      import Squadster.Support.Factory
+
+      alias Squadster.Repo
+      alias Squadster.Workers
+    end
+  end
+
   def controller do
     quote do
       use Phoenix.ConnTest
