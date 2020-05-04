@@ -107,7 +107,6 @@ defmodule Squadster.Formations do
     squad_members = all_members(ids)
     if Permissions.can_update?(user, squad_members) do
       Enum.reduce(squad_members, Multi.new(), fn member, batch ->
-        if member.role == "commander", do: demote_all_commanders(member)
         data = member_changes(args, member.id)
         batch |> Multi.update(
           member.id,
