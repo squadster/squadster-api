@@ -31,6 +31,11 @@ defmodule SquadsterWeb.Schema.FormationTypes do
     field :squad, :squad, resolve: dataloader(Squadster.Formations)
   end
 
+  input_object :squad_members_batch do
+    field :id, non_null(:id)
+    field :queue_number, :integer
+  end
+
   scalar :role do
     parse &SquadMember.parse_role/1
     serialize &SquadMember.serialize_role/1

@@ -60,6 +60,13 @@ defmodule SquadsterWeb.Resolvers.Formations do
     {:error, "Access denied"}
   end
 
+  def update_squad_members(_parent, %{batch: args}, %{context: %{current_user: user}}) do
+    case Formations.bulk_update_squad_members(args, user) do
+      {:ok, result} -> {:ok, Enum.map(result, fn {_index, element} -> element end)}
+      nil -> {:error, "Not enough permissions"}
+    end
+  end
+
   def update_squad_member(_parent, args, %{context: %{current_user: user}}) do
     Formations.update_squad_member(args, user)
   end

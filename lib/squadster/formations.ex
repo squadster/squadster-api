@@ -1,6 +1,7 @@
 defmodule Squadster.Formations do
   import Ecto.Query, only: [from: 2]
 
+  alias Ecto.Multi
   alias Squadster.Repo
   alias Squadster.Helpers.Permissions
   alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
@@ -101,6 +102,21 @@ defmodule Squadster.Formations do
     end
   end
 
+  def bulk_update_squad_members(args, user) do
+    ids = Enum.map(args, fn data -> data[:id] end)
+    squad_members = all_members(ids)
+    if Permissions.can_update?(user, squad_members) do
+      Enum.reduce(squad_members, Multi.new(), fn member, batch ->
+        data = member_changes(args, member.id)
+        batch |> Multi.update(
+          member.id,
+          member |> SquadMember.changeset(data)
+        )
+      end)
+      |> Repo.transaction
+    end
+  end
+
   def update_squad_member(%{id: id} = args, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
       if Permissions.can_update?(user, squad_member) do
@@ -126,6 +142,18 @@ defmodule Squadster.Formations do
         {:error, "Not enough permissions"}
       end
     end
+  end
+
+  defp all_members(ids) do
+    from(
+      member in SquadMember,
+      where: member.id in ^ids
+    )
+    |> Repo.all
+  end
+
+  defp member_changes(args, id) do
+    Enum.find(args, fn arg -> String.to_integer(arg[:id]) == id end)
   end
 
   defp add_commander_to_squad({:ok, squad} = squad_response, user) do

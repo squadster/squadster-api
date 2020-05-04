@@ -75,17 +75,17 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
       it "returns map with data" do
         data = User.data_from_auth(auth())
 
-        expect(data.first_name).to_not(be_nil())
-        expect(data.last_name).to_not(be_nil())
-        expect(data.birth_date).to_not(be_nil())
-        expect(data.mobile_phone).to_not(be_nil())
-        expect(data.university).to_not(be_nil())
-        expect(data.faculty).to_not(be_nil())
-        expect(data.small_image_url).to_not(be_nil())
-        expect(data.image_url).to_not(be_nil())
-        expect(data.uid).to_not(be_nil())
-        expect(data.vk_url).to_not(be_nil())
-        expect(data.auth_token).to_not(be_nil())
+        expect(data.first_name) |> to_not(be_nil())
+        expect(data.last_name) |> to_not(be_nil())
+        expect(data.birth_date) |> to_not(be_nil())
+        expect(data.mobile_phone) |> to_not(be_nil())
+        expect(data.university) |> to_not(be_nil())
+        expect(data.faculty) |> to_not(be_nil())
+        expect(data.small_image_url) |> to_not(be_nil())
+        expect(data.image_url) |> to_not(be_nil())
+        expect(data.uid) |> to_not(be_nil())
+        expect(data.vk_url) |> to_not(be_nil())
+        expect(data.auth_token) |> to_not(be_nil())
       end
     end
 
