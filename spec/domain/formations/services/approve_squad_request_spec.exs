@@ -2,8 +2,8 @@ defmodule Squadster.Domain.Services.ApproveSquadRequestSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :model
 
-  alias Squadster.Formations
   alias Squadster.Formations.SquadRequest
+  alias Squadster.Formations.Services.ApproveSquadRequest
 
   let :user, do: insert(:user)
 
@@ -12,7 +12,7 @@ defmodule Squadster.Domain.Services.ApproveSquadRequestSpec do
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
     it "approves an existing squad_request and sets approved_at and approver" do
-      Formations.approve_squad_request(squad_request().id, user())
+      ApproveSquadRequest.call(squad_request(), user())
 
       request = SquadRequest |> Repo.get(squad_request().id) |> Repo.preload(:approver)
       %{squad_member: approver} = user() |> Repo.preload(:squad_member)
@@ -22,7 +22,7 @@ defmodule Squadster.Domain.Services.ApproveSquadRequestSpec do
     end
 
     it "creates a new squad_member" do
-      Formations.approve_squad_request(squad_request().id, user())
+      ApproveSquadRequest.call(squad_request(), user())
       %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
       expect squad_member.squad_id |> to(eq squad().id)
     end

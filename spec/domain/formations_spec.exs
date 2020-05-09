@@ -19,34 +19,9 @@ defmodule Squadster.Domain.FormationsSpec do
   describe "create_squad/2" do
     let :create_params, do: %{squad_number: "123456", class_day: 3}
 
-    it "creates a new squad with valid attributes" do
-      previous_count = entities_count(Squad)
-
-      Formations.create_squad(create_params(), user())
-
-      expect entities_count(Squad) |> to(eq previous_count + 1)
-    end
-
-    it "sets creator as a commander" do
-      Formations.create_squad(create_params(), user())
-
-      %{squad_member: member} = user() |> Repo.preload(:squad_member)
-
-      expect(Squad |> last |> Squad.commander) |> to(eq member)
-    end
-
-    context "when creator has squad_request" do
-      before do
-        insert(:squad_request, user: user(), squad: insert(:squad))
-      end
-
-      it "removes request" do
-        Formations.create_squad(create_params(), user())
-
-        %{squad_request: request} = user() |> Repo.preload(:squad_request)
-
-        expect(request) |> to(eq nil)
-      end
+    it "returns new squad" do
+      {:ok, squad} = Formations.create_squad(create_params(), user())
+      expect(squad.__struct__) |> to(eq Squadster.Formations.Squad)
     end
   end
 
@@ -122,7 +97,7 @@ defmodule Squadster.Domain.FormationsSpec do
       end
     end
 
-    context "delete_squad_request/2" do
+    describe "delete_squad_request/2" do
       let! :squad_request, do: insert(:squad_request, user: user())
 
       it "deletes existing squad_request" do
@@ -132,7 +107,7 @@ defmodule Squadster.Domain.FormationsSpec do
       end
     end
 
-    context "approve_squad_request/2" do
+    describe "approve_squad_request/2" do
       let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
       let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
