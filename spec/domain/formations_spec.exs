@@ -93,4 +93,25 @@ defmodule Squadster.Domain.FormationsSpec do
       end
     end
   end
+
+  describe "delete_squad_member/2" do
+    let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
+    let :squad, do: build(:squad) |> with_commander(user()) |> insert
+
+    context "when user has enough permissions" do
+      it "deletes squad_member" do
+        {:ok, squad_member} = Formations.delete_squad_member(squad_member().id, user())
+        expect(squad_member.__struct__) |> to(eq Squadster.Formations.SquadMember)
+      end
+    end
+
+    context "when user does not have enough permissions" do
+      let :squad, do: insert(:squad)
+
+      it "returns error" do
+        {:error, message} = Formations.delete_squad_member(squad_member().id, user())
+        expect message |> to_not(be nil)
+      end
+    end
+  end
 end
