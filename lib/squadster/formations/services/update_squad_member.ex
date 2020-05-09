@@ -6,12 +6,16 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
   alias Squadster.Formations.SquadMember
 
   def call(squad_member, %{id: id} = args) do
-    if args[:role] == "commander", do: demote_extra_commanders(squad_member)
-
     SquadMember
     |> Repo.get(id)
     |> SquadMember.changeset(args)
     |> SquadMember.update
+    |> case do
+      {:ok, member} ->
+        if args[:role] == "commander", do: demote_commanders_except(squad_member)
+        {:ok, member}
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   def call(squad_members, args) when is_list(squad_members) do
@@ -26,10 +30,14 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
     |> Repo.transaction
   end
 
-  defp demote_extra_commanders(squad_member) do
+  # demote all commanders in squad except given one
+  defp demote_commanders_except(squad_member) do
     from(
       member in SquadMember,
-      where: member.squad_id == ^squad_member.squad_id and member.role == ^commander_role(),
+      where:
+        member.squad_id == ^squad_member.squad_id and
+        member.role == ^commander_role() and
+        member.id != ^squad_member.id,
       update: [set: [role: ^student_role()]]
     ) |> Repo.update_all([])
   end
