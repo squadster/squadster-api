@@ -4,7 +4,13 @@ defmodule Squadster.Formations do
   alias Squadster.Repo
   alias Squadster.Helpers.Permissions
   alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
-  alias Squadster.Formations.Services.{CreateSquad, CreateSquadRequest, ApproveSquadRequest, UpdateSquadMember}
+  alias Squadster.Formations.Services.{
+    CreateSquad,
+    CreateSquadRequest,
+    ApproveSquadRequest,
+    UpdateSquadMember,
+    DeleteSquadMember
+  }
 
   def data do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -90,13 +96,10 @@ defmodule Squadster.Formations do
     end
   end
 
-  # TODO
   def delete_squad_member(id, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
       if Permissions.can_delete?(user, squad_member) do
-        %{user: %{squad_request: squad_request}} = squad_member |> Repo.preload(user: :squad_request)
-        unless is_nil(squad_request), do: squad_request |> Repo.delete
-        squad_member |> SquadMember.delete
+        squad_member |> DeleteSquadMember.call
       else
         {:error, "Not enough permissions"}
       end
