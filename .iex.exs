@@ -5,8 +5,8 @@ alias Squadster.Repo
 
 alias Squadster.Workers
 alias Squadster.Workers.NormalizeQueue
-alias Squadster.Workers.NotifyAttendants
-alias Squadster.Workers.ShiftQueueNumbers
+alias Squadster.Workers.NotifyDuties
+alias Squadster.Workers.ShiftQueues
 
 alias Squadster.Accounts
 alias Squadster.Accounts.User
