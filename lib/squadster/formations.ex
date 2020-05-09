@@ -83,6 +83,8 @@ defmodule Squadster.Formations do
 
     if Permissions.can_update?(user, squad_members) do
       squad_members |> UpdateSquadMember.call(args)
+    else
+      {:error, "Not enough permissions"}
     end
   end
 

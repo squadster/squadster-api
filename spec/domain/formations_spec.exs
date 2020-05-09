@@ -94,6 +94,51 @@ defmodule Squadster.Domain.FormationsSpec do
     end
   end
 
+  describe "update_squad_member/2" do
+    let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
+    let :squad, do: build(:squad) |> with_commander(user()) |> insert
+    let :update_params, do: %{id: squad_member().id, role: :journalist}
+
+    context "when user has enough permissions" do
+      it "updates squad_member" do
+        {:ok, squad_member} = Formations.update_squad_member(update_params(), user())
+        expect(squad_member.__struct__) |> to(eq Squadster.Formations.SquadMember)
+      end
+    end
+
+    context "when user does not have enough permissions" do
+      let :squad, do: insert(:squad)
+
+      it "returns error" do
+        {:error, message} = Formations.update_squad_member(update_params(), user())
+        expect message |> to_not(be nil)
+      end
+    end
+  end
+
+  describe "bulk_update_squad_members/2" do
+    let! :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
+    let :squad, do: build(:squad) |> with_commander(user()) |> insert
+    let :update_params, do: [%{id: squad_member().id |> Integer.to_string, role: :journalist}]
+
+    context "when user has enough permissions" do
+      it "updates squad_members" do
+        {:ok, squad_members} = Formations.bulk_update_squad_members(update_params(), user())
+        expect(squad_members[squad_member().id].__struct__) |> to(eq Squadster.Formations.SquadMember)
+      end
+    end
+
+    context "when user does not have enough permissions" do
+      let :squad, do: insert(:squad)
+      let :user, do: insert(:user, squad_member: insert(:squad_member))
+
+      it "returns error" do
+        {:error, message} = Formations.bulk_update_squad_members(update_params(), user())
+        expect message |> to_not(be nil)
+      end
+    end
+  end
+
   describe "delete_squad_member/2" do
     let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
