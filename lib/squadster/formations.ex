@@ -5,7 +5,7 @@ defmodule Squadster.Formations do
   alias Squadster.Repo
   alias Squadster.Helpers.Permissions
   alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
-  alias Squadster.Formations.Services.{CreateSquad}
+  alias Squadster.Formations.Services.{CreateSquad, CreateSquadRequest}
 
   @commander_role 0
   @student_role 3
@@ -50,22 +50,8 @@ defmodule Squadster.Formations do
     end
   end
 
-  # TODO
   def create_squad_request(squad_id, user) do
-    %{squad_request: squad_request, squad_member: squad_member} =
-      user
-      |> Repo.preload(:squad_request)
-      |> Repo.preload(:squad_member)
-
-    if is_nil(squad_member) do
-      unless is_nil(squad_request), do: squad_request |> Repo.delete
-
-      %{user_id: user.id, squad_id: squad_id}
-      |> SquadRequest.changeset
-      |> Repo.insert
-    else
-      {:error, "User already has squad"}
-    end
+    CreateSquadRequest.call(squad_id, user)
   end
 
   # TODO
