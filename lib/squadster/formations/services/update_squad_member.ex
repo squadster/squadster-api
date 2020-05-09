@@ -6,20 +6,6 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
   alias Squadster.Formations.SquadMember
   alias Squadster.Workers.NormalizeQueue
 
-  def call(squad_member, %{id: id} = args) do
-    SquadMember
-    |> Repo.get(id)
-    |> SquadMember.changeset(args)
-    |> Repo.update
-    |> case do
-      {:ok, member} ->
-        if args[:role] == "commander", do: demote_commanders_except(squad_member)
-        schedule_queue_normalization(member)
-        {:ok, member}
-      {:error, reason} -> {:error, reason}
-    end
-  end
-
   def call(squad_members, args) when is_list(squad_members) do
     result = squad_members
       |> Enum.reduce(Multi.new(), fn member, batch ->
@@ -36,6 +22,19 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
     |> schedule_queue_normalization()
 
     result
+  end
+
+  def call(squad_member, args) do
+    squad_member
+    |> SquadMember.changeset(args)
+    |> Repo.update
+    |> case do
+      {:ok, member} ->
+        if args[:role] == "commander", do: demote_commanders_except(squad_member)
+        schedule_queue_normalization(member)
+        {:ok, member}
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   # demote all commanders in squad except given one

@@ -97,7 +97,7 @@ defmodule Squadster.Domain.FormationsSpec do
   describe "update_squad_member/2" do
     let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
-    let :update_params, do: %{id: squad_member().id, role: :journalist}
+    let :update_params, do: %{id: squad_member().id, role: "journalist"}
 
     context "when user has enough permissions" do
       it "updates squad_member" do
@@ -119,7 +119,7 @@ defmodule Squadster.Domain.FormationsSpec do
   describe "bulk_update_squad_members/2" do
     let! :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
-    let :update_params, do: [%{id: squad_member().id |> Integer.to_string, role: :journalist}]
+    let :update_params, do: [%{id: squad_member().id |> Integer.to_string, role: "journalist"}]
 
     context "when user has enough permissions" do
       it "updates squad_members" do
