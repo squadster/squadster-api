@@ -4,30 +4,38 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
   alias Ecto.Multi
   alias Squadster.Repo
   alias Squadster.Formations.SquadMember
+  alias Squadster.Workers.NormalizeQueue
 
   def call(squad_member, %{id: id} = args) do
     SquadMember
     |> Repo.get(id)
     |> SquadMember.changeset(args)
-    |> SquadMember.update
+    |> Repo.update
     |> case do
       {:ok, member} ->
         if args[:role] == "commander", do: demote_commanders_except(squad_member)
+        schedule_queue_normalization(member)
         {:ok, member}
       {:error, reason} -> {:error, reason}
     end
   end
 
   def call(squad_members, args) when is_list(squad_members) do
+    result = squad_members
+      |> Enum.reduce(Multi.new(), fn member, batch ->
+        data = member_changes(args, member.id)
+        batch |> Multi.update(
+          member.id,
+          member |> SquadMember.changeset(data)
+        )
+      end)
+      |> Repo.transaction
+
     squad_members
-    |> Enum.reduce(Multi.new(), fn member, batch ->
-      data = member_changes(args, member.id)
-      batch |> Multi.update(
-        member.id,
-        member |> SquadMember.changeset(data)
-      )
-    end)
-    |> Repo.transaction
+    |> Enum.at(0)
+    |> schedule_queue_normalization()
+
+    result
   end
 
   # demote all commanders in squad except given one
@@ -52,5 +60,10 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
 
   defp member_changes(args, id) do
     Enum.find(args, fn arg -> String.to_integer(arg[:id]) == id end)
+  end
+
+  defp schedule_queue_normalization(%{squad_id: squad_id}) do
+    # TODO: should be start_link, but need to fix tests
+    NormalizeQueue.run([squad_id: squad_id])
   end
 end
