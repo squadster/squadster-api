@@ -6,10 +6,9 @@ defmodule Squadster.Domain.Services.CreateSquadSpec do
   alias Squadster.Formations.Services.CreateSquad
 
   let :user, do: insert(:user)
+  let :create_params, do: %{squad_number: "123456", class_day: 3}
 
   describe "call/2" do
-    let :create_params, do: %{squad_number: "123456", class_day: 3}
-
     it "creates a new squad with valid attributes" do
       previous_count = entities_count(Squad)
 

@@ -6,10 +6,9 @@ defmodule Squadster.Domain.Services.CreateSquadRequestSpec do
   alias Squadster.Formations.Services.CreateSquadRequest
 
   let :user, do: insert(:user)
+  let :squad, do: insert(:squad)
 
   describe "call/2" do
-    let :squad, do: insert(:squad)
-
     it "creates a new squad_request" do
       previous_count = entities_count(SquadRequest)
       CreateSquadRequest.call(squad().id, user())

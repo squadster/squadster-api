@@ -6,11 +6,10 @@ defmodule Squadster.Domain.Services.ApproveSquadRequestSpec do
   alias Squadster.Formations.Services.ApproveSquadRequest
 
   let :user, do: insert(:user)
+  let :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
+  let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
   describe "call/2" do
-    let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
-    let :squad, do: build(:squad) |> with_commander(user()) |> insert
-
     it "approves an existing squad_request and sets approved_at and approver" do
       ApproveSquadRequest.call(squad_request(), user())
 
