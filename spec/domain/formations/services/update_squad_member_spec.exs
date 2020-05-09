@@ -20,7 +20,7 @@ defmodule Squadster.Domain.Services.UpdateSquadMemberSpec do
       end
 
       context "when updating role to commander" do
-        let :args, do: %{role: "commander"}
+        let :args, do: %{id: squad_member().id, role: "commander"}
 
         it "demotes old commander" do
           squad_member() |> UpdateSquadMember.call(args())
@@ -37,7 +37,24 @@ defmodule Squadster.Domain.Services.UpdateSquadMemberSpec do
     end
 
     context "when batch of squad_members given" do
+      let :first_member,  do: insert(:squad_member, user: insert(:user), squad: squad())
+      let :second_member, do: insert(:squad_member, user: insert(:user), squad: squad())
+      let :members, do: [first_member(), second_member()]
+      let :args do
+        [
+          %{id:  first_member().id |> Integer.to_string, queue_number: 1},
+          %{id: second_member().id |> Integer.to_string, queue_number: 2}
+        ]
+      end
 
+      it "updates the squad_members" do
+        members() |> UpdateSquadMember.call(args())
+
+        first  = SquadMember |> Repo.get(first_member().id)
+        second = SquadMember |> Repo.get(second_member().id)
+        expect(first.queue_number) |> to(eq 1)
+        expect(second.queue_number) |> to(eq 2)
+      end
     end
   end
 end
