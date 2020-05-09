@@ -5,6 +5,7 @@ defmodule Squadster.Formations do
   alias Squadster.Repo
   alias Squadster.Helpers.Permissions
   alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
+  alias Squadster.Formations.Services.{CreateSquad}
 
   @commander_role 0
   @student_role 3
@@ -24,17 +25,7 @@ defmodule Squadster.Formations do
   end
 
   def create_squad(args, user) do
-    user
-    |> Repo.preload(:squad_member)
-    |> case do
-      %{squad_member: nil} ->
-        args
-        |> Squad.changeset
-        |> Repo.insert
-        |> add_commander_to_squad(user)
-        |> remove_commander_squad_equest(user)
-      %{squad_member: _member} -> {:error, "Delete existing squad to create new one"}
-    end
+    CreateSquad.call(args, user)
   end
 
   def update_squad(%{id: id} = args, user) do
@@ -59,6 +50,7 @@ defmodule Squadster.Formations do
     end
   end
 
+  # TODO
   def create_squad_request(squad_id, user) do
     %{squad_request: squad_request, squad_member: squad_member} =
       user
@@ -76,6 +68,7 @@ defmodule Squadster.Formations do
     end
   end
 
+  # TODO
   def approve_squad_request(id, approver) do
     with squad_request <- SquadRequest |> Repo.get(id) do
       if Permissions.can_update?(approver, squad_request) do
@@ -103,6 +96,7 @@ defmodule Squadster.Formations do
     end
   end
 
+  # TODO
   def bulk_update_squad_members(args, user) do
     ids = Enum.map(args, fn data -> data[:id] end)
     squad_members = all_members(ids)
@@ -118,6 +112,7 @@ defmodule Squadster.Formations do
     end
   end
 
+  # TODO
   def update_squad_member(%{id: id} = args, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
       if Permissions.can_update?(user, squad_member) do
@@ -155,19 +150,6 @@ defmodule Squadster.Formations do
 
   defp member_changes(args, id) do
     Enum.find(args, fn arg -> String.to_integer(arg[:id]) == id end)
-  end
-
-  defp add_commander_to_squad({:ok, squad} = squad_response, user) do
-    %{role: :commander, user_id: user.id, squad_id: squad.id}
-    |> SquadMember.changeset
-    |> Repo.insert
-    squad_response
-  end
-
-  defp remove_commander_squad_equest({:ok, _squad} = squad_response, user) do
-    squad_request = SquadRequest |> Repo.get_by(user_id: user.id)
-    unless is_nil(squad_request), do: squad_request |> Repo.delete
-    squad_response
   end
 
   defp demote_all_commanders(squad_member) do
