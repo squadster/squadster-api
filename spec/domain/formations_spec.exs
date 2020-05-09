@@ -34,6 +34,20 @@ defmodule Squadster.Domain.FormationsSpec do
 
       expect(Squad |> last |> Squad.commander) |> to(eq member)
     end
+
+    context "when creator has squad_request" do
+      before do
+        insert(:squad_request, user: user(), squad: insert(:squad))
+      end
+
+      it "removes request" do
+        Formations.create_squad(create_params(), user())
+
+        %{squad_request: request} = user() |> Repo.preload(:squad_request)
+
+        expect(request) |> to(eq nil)
+      end
+    end
   end
 
   describe "delete_squad/2" do
