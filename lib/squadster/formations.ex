@@ -5,10 +5,7 @@ defmodule Squadster.Formations do
   alias Squadster.Repo
   alias Squadster.Helpers.Permissions
   alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
-  alias Squadster.Formations.Services.{CreateSquad, CreateSquadRequest, ApproveSquadRequest}
-
-  @commander_role 0
-  @student_role 3
+  alias Squadster.Formations.Services.{CreateSquad, CreateSquadRequest, ApproveSquadRequest, UpdateSquadMember}
 
   def data do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -54,7 +51,6 @@ defmodule Squadster.Formations do
     CreateSquadRequest.call(squad_id, user)
   end
 
-  # TODO
   def approve_squad_request(id, approver) do
     with squad_request <- SquadRequest |> Repo.get(id) do
       if Permissions.can_update?(approver, squad_request) do
@@ -95,12 +91,7 @@ defmodule Squadster.Formations do
   def update_squad_member(%{id: id} = args, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
       if Permissions.can_update?(user, squad_member) do
-        if args[:role] == "commander", do: demote_all_commanders(squad_member)
-
-        SquadMember
-        |> Repo.get(id)
-        |> SquadMember.changeset(args)
-        |> SquadMember.update
+        squad_member |> UpdateSquadMember.call(args, user)
       else
         {:error, "Not enough permissions"}
       end
@@ -129,13 +120,5 @@ defmodule Squadster.Formations do
 
   defp member_changes(args, id) do
     Enum.find(args, fn arg -> String.to_integer(arg[:id]) == id end)
-  end
-
-  defp demote_all_commanders(squad_member) do
-    from(
-      member in SquadMember,
-      where: member.squad_id == ^squad_member.squad_id and member.role == @commander_role,
-      update: [set: [role: @student_role]]
-    ) |> Repo.update_all([])
   end
 end
