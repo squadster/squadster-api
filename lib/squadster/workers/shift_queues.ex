@@ -3,6 +3,7 @@ defmodule Squadster.Workers.ShiftQueues do
 
   import Ecto.Query, only: [from: 2]
 
+  alias Ecto.Multi
   alias Squadster.Formations.{Squad, SquadMember}
   alias Squadster.Repo
   alias Squadster.Helpers.Dates
@@ -32,18 +33,18 @@ defmodule Squadster.Workers.ShiftQueues do
 
     %{queue_number: last_number} = Enum.max_by(members, &(&1.queue_number), fn -> %{queue_number: 1} end)
 
-    members |> Enum.each(fn member -> member |> update(last_number) end)
+    members
+    |> Enum.reduce(Multi.new(), fn member, batch ->
+      batch |> Multi.update(member.id, changeset(member, last_number))
+    end)
+    |> Repo.transaction
   end
 
-  defp update(%SquadMember{queue_number: 1} = member, last_number) do
-    member
-    |> SquadMember.changeset(%{queue_number: last_number})
-    |> Repo.update
+  defp changeset(%SquadMember{queue_number: 1} = member, last_number) do
+    member |> SquadMember.changeset(%{queue_number: last_number})
   end
 
-  defp update(member, _last_number) do
-    member
-    |> SquadMember.changeset(%{queue_number: member.queue_number - 1})
-    |> Repo.update
+  defp changeset(member, _last_number) do
+    member |> SquadMember.changeset(%{queue_number: member.queue_number - 1})
   end
 end
