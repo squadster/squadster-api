@@ -136,30 +136,20 @@ defmodule Squadster.Domain.FormationsSpec do
       let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
       let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
-      it "approves existing squad_request and sets approved_at and approver" do
-        expect squad_request().approver |> to(eq nil)
-        expect squad_request().approved_at |> to(eq nil)
-
-        Formations.approve_squad_request(squad_request().id, user())
-
-        request = SquadRequest |> Repo.get(squad_request().id) |> Repo.preload(:approver)
-        %{squad_member: approver} = user() |> Repo.preload(:squad_member)
-
-        expect request.approver |> to(eq approver)
-        expect request.approved_at |> to_not(eq nil)
+      context "when user has enough permissions" do
+        it "returns new squad_member" do
+          {:ok, squad_member} = Formations.approve_squad_request(squad_request().id, user())
+          expect(squad_member.__struct__) |> to(eq Squadster.Formations.SquadMember)
+        end
       end
 
-      it "creates new squad_member" do
-        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
-        expect squad_member |> to(eq nil)
+      context "when user does not have enough permissions" do
+        let :squad, do: insert(:squad)
 
-        Formations.approve_squad_request(squad_request().id, user())
-
-        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
-        %{squad_id: squad_id} = squad_member
-
-        expect squad_member |> to_not(eq nil)
-        expect squad_id |> to(eq squad().id)
+        it "returns error" do
+          {:error, message} = Formations.approve_squad_request(squad_request().id, user())
+          expect message |> to_not(be nil)
+        end
       end
     end
   end
