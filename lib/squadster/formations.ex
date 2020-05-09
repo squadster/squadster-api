@@ -32,6 +32,7 @@ defmodule Squadster.Formations do
         |> Squad.changeset
         |> Repo.insert
         |> add_commander_to_squad(user)
+        |> remove_commander_squad_equest(user)
       %{squad_member: _member} -> {:error, "Delete existing squad to create new one"}
     end
   end
@@ -160,6 +161,12 @@ defmodule Squadster.Formations do
     %{role: :commander, user_id: user.id, squad_id: squad.id}
     |> SquadMember.changeset
     |> Repo.insert
+    squad_response
+  end
+
+  defp remove_commander_squad_equest({:ok, _squad} = squad_response, user) do
+    squad_request = SquadRequest |> Repo.get_by(user_id: user.id)
+    unless is_nil(squad_request), do: squad_request |> Repo.delete
     squad_response
   end
 
