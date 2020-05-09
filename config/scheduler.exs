@@ -7,13 +7,13 @@ config :squadster, Squadster.Workers,
 
   jobs: [
     # shift duty queues every day at 01:00 am
-    shift_queue_numbers: [
+    shift_queues: [
       schedule: "0 1 * * *",
-      task: {Workers.ShiftQueueNumbers, :start, []}
+      task: {Workers.ShiftQueues, :start_link, []}
     ],
     # remind about duty every midday
-    notify_attendants: [
+    notify_duties: [
       schedule: "0 12 * * *",
-      task: {Workers.NotifyAttendants, :start, []}
+      task: {Workers.NotifyDuties, :start_link, []}
     ]
   ]

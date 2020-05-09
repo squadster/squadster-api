@@ -1,4 +1,4 @@
-defmodule Squadster.Workers.ShiftQueueNumbers do
+defmodule Squadster.Workers.ShiftQueues do
   use Task
 
   import Ecto.Query, only: [from: 2]
@@ -7,11 +7,11 @@ defmodule Squadster.Workers.ShiftQueueNumbers do
   alias Squadster.Repo
   alias Squadster.Helpers.Dates
 
-  def start_link(args) do
-    Task.start_link(__MODULE__, :run, [args])
+  def start_link do
+    Task.start_link(__MODULE__, :run, [])
   end
 
-  def run(_args) do
+  def run do
     class_day = yesterday()
     from(squad in Squad, where: squad.class_day == ^class_day)
     |> Repo.all()
