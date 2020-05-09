@@ -32,7 +32,7 @@ defmodule Squadster.Formations do
 
   def update_squad(%{id: id} = args, user) do
     with squad <- Squad |> Repo.get(id) do
-      if Permissions.can_update?(user, squad) do
+      if user |> Permissions.can_update?(squad) do
         squad
         |> Squad.changeset(args)
         |> Repo.update
@@ -44,7 +44,7 @@ defmodule Squadster.Formations do
 
   def delete_squad(id, user) do
     with squad <- Squad |> Repo.get(id) do
-      if Permissions.can_delete?(user, squad) do
+      if user |> Permissions.can_delete?(squad) do
         squad |> Repo.delete
       else
         {:error, "Not enough permissions"}
@@ -58,7 +58,7 @@ defmodule Squadster.Formations do
 
   def approve_squad_request(id, approver) do
     with squad_request <- SquadRequest |> Repo.get(id) do
-      if Permissions.can_update?(approver, squad_request) do
+      if approver |> Permissions.can_update?(squad_request) do
         squad_request |> ApproveSquadRequest.call(approver)
       else
         {:error, "Not enough permissions"}
@@ -68,7 +68,7 @@ defmodule Squadster.Formations do
 
   def delete_squad_request(id, user) do
     with squad_request <- SquadRequest |> Repo.get(id) do
-      if Permissions.can_delete?(user, squad_request) do
+      if user |> Permissions.can_delete?(squad_request) do
         squad_request |> Repo.delete
       else
         {:error, "Not enough permissions"}
@@ -81,7 +81,7 @@ defmodule Squadster.Formations do
       Enum.map(args, fn data -> data[:id] end)
       |> all_members
 
-    if Permissions.can_update?(user, squad_members) do
+    if user |> Permissions.can_update?(squad_members) do
       squad_members |> UpdateSquadMember.call(args)
     else
       {:error, "Not enough permissions"}
@@ -90,7 +90,7 @@ defmodule Squadster.Formations do
 
   def update_squad_member(%{id: id} = args, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
-      if Permissions.can_update?(user, squad_member) do
+      if user |> Permissions.can_update?(squad_member) do
         squad_member |> UpdateSquadMember.call(args)
       else
         {:error, "Not enough permissions"}
@@ -100,7 +100,7 @@ defmodule Squadster.Formations do
 
   def delete_squad_member(id, user) do
     with squad_member <- SquadMember |> Repo.get(id) do
-      if Permissions.can_delete?(user, squad_member) do
+      if user |> Permissions.can_delete?(squad_member) do
         squad_member |> DeleteSquadMember.call
       else
         {:error, "Not enough permissions"}
