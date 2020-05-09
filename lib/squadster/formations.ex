@@ -5,7 +5,7 @@ defmodule Squadster.Formations do
   alias Squadster.Repo
   alias Squadster.Helpers.Permissions
   alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
-  alias Squadster.Formations.Services.{CreateSquad, CreateSquadRequest}
+  alias Squadster.Formations.Services.{CreateSquad, CreateSquadRequest, ApproveSquadRequest}
 
   @commander_role 0
   @student_role 3
@@ -58,14 +58,7 @@ defmodule Squadster.Formations do
   def approve_squad_request(id, approver) do
     with squad_request <- SquadRequest |> Repo.get(id) do
       if Permissions.can_update?(approver, squad_request) do
-        %{squad_member: %{id: approver_id}} = approver |> Repo.preload(:squad_member)
-        squad_request
-        |> SquadRequest.approve_changeset(%{approver_id: approver_id})
-        |> Repo.update
-
-        %{user_id: user_id, squad_id: squad_id} = squad_request
-        SquadMember.changeset(%{user_id: user_id, squad_id: squad_id, role: :student})
-        |> SquadMember.insert
+        squad_request |> ApproveSquadRequest.call(approver)
       else
         {:error, "Not enough permissions"}
       end
