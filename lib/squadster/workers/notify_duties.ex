@@ -1,4 +1,4 @@
-defmodule Squadster.Workers.NotifyAttendants do
+defmodule Squadster.Workers.NotifyDuties do
   use Task
 
   import Ecto.Query
@@ -12,11 +12,11 @@ defmodule Squadster.Workers.NotifyAttendants do
   @bot_token "ApiKey " <> Application.fetch_env!(:squadster, :bot_token)
   @request_headers [{"content-type", "application/json"}, {"Authorization", @bot_token}]
 
-  def start_link(args) do
-    Task.start_link(__MODULE__, :run, [args])
+  def start_link do
+    Task.start_link(__MODULE__, :run, [])
   end
 
-  def run(_args) do
+  def run do
     tomorrow = Dates.tomorrow |> Dates.day_of_a_week
     from(squad in Squad, where: squad.class_day == ^tomorrow)
     |> Repo.all
