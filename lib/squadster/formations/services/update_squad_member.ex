@@ -17,9 +17,8 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
       end)
       |> Repo.transaction
 
-    squad_members
-    |> Enum.at(0)
-    |> schedule_queue_normalization()
+    %{squad_id: squad_id} = squad_members |> Enum.random
+    schedule_queue_normalization(squad_id)
 
     result
   end
@@ -31,7 +30,7 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
     |> case do
       {:ok, member} ->
         if args[:role] == "commander", do: demote_commanders_except(squad_member)
-        schedule_queue_normalization(member)
+        schedule_queue_normalization(member.squad_id)
         {:ok, member}
       {:error, reason} -> {:error, reason}
     end
@@ -61,7 +60,7 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
     Enum.find(args, fn arg -> String.to_integer(arg[:id]) == id end)
   end
 
-  defp schedule_queue_normalization(%{squad_id: squad_id}) do
+  defp schedule_queue_normalization(squad_id) do
     # TODO: should be start_link, but need to fix tests
     NormalizeQueue.run([squad_id: squad_id])
   end
