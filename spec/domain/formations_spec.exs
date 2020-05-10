@@ -19,20 +19,9 @@ defmodule Squadster.Domain.FormationsSpec do
   describe "create_squad/2" do
     let :create_params, do: %{squad_number: "123456", class_day: 3}
 
-    it "creates a new squad with valid attributes" do
-      previous_count = entities_count(Squad)
-
-      Formations.create_squad(create_params(), user())
-
-      expect entities_count(Squad) |> to(eq previous_count + 1)
-    end
-
-    it "sets creator as a commander" do
-      Formations.create_squad(create_params(), user())
-
-      %{squad_member: member} = user() |> Repo.preload(:squad_member)
-
-      expect(Squad |> last |> Squad.commander) |> to(eq member)
+    it "returns new squad" do
+      {:ok, squad} = Formations.create_squad(create_params(), user())
+      expect(squad.__struct__) |> to(eq Squadster.Formations.Squad)
     end
   end
 
@@ -68,84 +57,105 @@ defmodule Squadster.Domain.FormationsSpec do
   describe "create_squad_request/2" do
     let :squad, do: insert(:squad)
 
-    it "creates a new squad_request" do
+    it "returns new squad_request" do
+      {:ok, squad_request} = Formations.create_squad_request(squad().id, user())
+      expect(squad_request.__struct__) |> to(eq Squadster.Formations.SquadRequest)
+    end
+  end
+
+  describe "delete_squad_request/2" do
+    let! :squad_request, do: insert(:squad_request, user: user())
+
+    it "deletes existing squad_request" do
       previous_count = entities_count(SquadRequest)
-      Formations.create_squad_request(squad().id, user())
-      expect entities_count(SquadRequest) |> to(eq previous_count + 1)
+      Formations.delete_squad_request(squad_request().id, user())
+      expect entities_count(SquadRequest) |> to(eq previous_count - 1)
     end
+  end
 
-    context "when user has another request" do
-      it "should delete old request and create new one" do
-        count = entities_count(SquadRequest)
-        {:ok, %{id: id}} = Formations.create_squad_request(squad().id, user())
+  describe "approve_squad_request/2" do
+    let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
+    let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
-        expect entities_count(SquadRequest) |> to(eq count + 1)
-
-        count = entities_count(SquadRequest)
-        {:ok, %{id: new_id}} = Formations.create_squad_request(squad().id, user())
-
-        expect entities_count(SquadRequest) |> to(eq count)
-        expect new_id |> to_not(eq id)
+    context "when user has enough permissions" do
+      it "returns new squad_member" do
+        {:ok, squad_member} = Formations.approve_squad_request(squad_request().id, user())
+        expect(squad_member.__struct__) |> to(eq Squadster.Formations.SquadMember)
       end
     end
 
-    context "when user has a squad" do
-      before do
-        insert(:squad_member, user: user(), squad: squad())
+    context "when user does not have enough permissions" do
+      let :squad, do: insert(:squad)
+
+      it "returns error" do
+        {:error, message} = Formations.approve_squad_request(squad_request().id, user())
+        expect message |> to_not(be nil)
       end
+    end
+  end
 
-      it "should not create request" do
-        initial_count = entities_count(SquadRequest)
+  describe "update_squad_member/2" do
+    let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
+    let :squad, do: build(:squad) |> with_commander(user()) |> insert
+    let :update_params, do: %{id: squad_member().id, role: "journalist"}
 
-        Formations.create_squad_request(squad().id, user())
-
-        expect entities_count(SquadRequest) |> to(eq initial_count)
-      end
-
-      it "should return error with message" do
-        {:error, message} = Formations.create_squad_request(squad().id, user())
-        expect message |> to_not(be_nil())
+    context "when user has enough permissions" do
+      it "updates squad_member" do
+        {:ok, squad_member} = Formations.update_squad_member(update_params(), user())
+        expect(squad_member.__struct__) |> to(eq Squadster.Formations.SquadMember)
       end
     end
 
-    context "delete_squad_request/2" do
-      let! :squad_request, do: insert(:squad_request, user: user())
+    context "when user does not have enough permissions" do
+      let :squad, do: insert(:squad)
 
-      it "deletes existing squad_request" do
-        previous_count = entities_count(SquadRequest)
-        Formations.delete_squad_request(squad_request().id, user())
-        expect entities_count(SquadRequest) |> to(eq previous_count - 1)
+      it "returns error" do
+        {:error, message} = Formations.update_squad_member(update_params(), user())
+        expect message |> to_not(be nil)
+      end
+    end
+  end
+
+  describe "bulk_update_squad_members/2" do
+    let! :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
+    let :squad, do: build(:squad) |> with_commander(user()) |> insert
+    let :update_params, do: [%{id: squad_member().id |> Integer.to_string, role: "journalist"}]
+
+    context "when user has enough permissions" do
+      it "updates squad_members" do
+        {:ok, squad_members} = Formations.bulk_update_squad_members(update_params(), user())
+        expect(squad_members[squad_member().id].__struct__) |> to(eq Squadster.Formations.SquadMember)
       end
     end
 
-    context "approve_squad_request/2" do
-      let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
-      let :squad, do: build(:squad) |> with_commander(user()) |> insert
+    context "when user does not have enough permissions" do
+      let :squad, do: insert(:squad)
+      let :user, do: insert(:user, squad_member: insert(:squad_member))
 
-      it "approves existing squad_request and sets approved_at and approver" do
-        expect squad_request().approver |> to(eq nil)
-        expect squad_request().approved_at |> to(eq nil)
-
-        Formations.approve_squad_request(squad_request().id, user())
-
-        request = SquadRequest |> Repo.get(squad_request().id) |> Repo.preload(:approver)
-        %{squad_member: approver} = user() |> Repo.preload(:squad_member)
-
-        expect request.approver |> to(eq approver)
-        expect request.approved_at |> to_not(eq nil)
+      it "returns error" do
+        {:error, message} = Formations.bulk_update_squad_members(update_params(), user())
+        expect message |> to_not(be nil)
       end
+    end
+  end
 
-      it "creates new squad_member" do
-        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
-        expect squad_member |> to(eq nil)
+  describe "delete_squad_member/2" do
+    let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
+    let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
-        Formations.approve_squad_request(squad_request().id, user())
+    context "when user has enough permissions" do
+      it "deletes squad_member" do
+        {:ok, squad_member} = Formations.delete_squad_member(squad_member().id, user())
+        expect(squad_member.__struct__) |> to(eq Squadster.Formations.SquadMember)
+      end
+    end
 
-        %{user: %{squad_member: squad_member}} = squad_request() |> Repo.preload(user: :squad_member)
-        %{squad_id: squad_id} = squad_member
+    context "when user does not have enough permissions" do
+      let :squad, do: insert(:squad)
 
-        expect squad_member |> to_not(eq nil)
-        expect squad_id |> to(eq squad().id)
+      it "returns error" do
+        {:error, message} = Formations.delete_squad_member(squad_member().id, user())
+        expect message |> to_not(be nil)
       end
     end
   end
