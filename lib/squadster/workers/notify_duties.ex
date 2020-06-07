@@ -36,8 +36,7 @@ defmodule Squadster.Workers.NotifyDuties do
     """
       {
         "text": "#{gettext("You are on duty tomorrow!")}",
-        "target": #{user.id},
-        "types": ["text", "voice"]
+        "target": #{user.id}
       }
     """
   end

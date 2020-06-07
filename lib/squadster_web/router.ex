@@ -24,7 +24,6 @@ defmodule SquadsterWeb.Router do
       end
 
       get "/ping", PingController, :ping
-      get "/queue_number", QueueController, :queue_number # This should be removed
     end
   end
 end
