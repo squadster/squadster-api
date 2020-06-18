@@ -239,6 +239,20 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: squad_members_squad_id_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX squad_members_squad_id_user_id_index ON public.squad_members USING btree (squad_id, user_id);
+
+
+--
+-- Name: squad_requests_squad_id_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX squad_requests_squad_id_user_id_index ON public.squad_requests USING btree (squad_id, user_id);
+
+
+--
 -- Name: squad_members squad_members_squad_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -282,5 +296,5 @@ ALTER TABLE ONLY public.squad_requests
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502);
+INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200618212702);
 
