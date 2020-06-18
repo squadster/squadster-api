@@ -273,7 +273,7 @@ ALTER TABLE ONLY public.squad_members
 --
 
 ALTER TABLE ONLY public.squad_requests
-    ADD CONSTRAINT squad_requests_approver_id_fkey FOREIGN KEY (approver_id) REFERENCES public.squad_members(id);
+    ADD CONSTRAINT squad_requests_approver_id_fkey FOREIGN KEY (approver_id) REFERENCES public.squad_members(id) ON DELETE SET NULL;
 
 
 --
@@ -281,7 +281,7 @@ ALTER TABLE ONLY public.squad_requests
 --
 
 ALTER TABLE ONLY public.squad_requests
-    ADD CONSTRAINT squad_requests_squad_id_fkey FOREIGN KEY (squad_id) REFERENCES public.squads(id);
+    ADD CONSTRAINT squad_requests_squad_id_fkey FOREIGN KEY (squad_id) REFERENCES public.squads(id) ON DELETE CASCADE;
 
 
 --
