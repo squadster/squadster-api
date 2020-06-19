@@ -14,6 +14,7 @@ defmodule Squadster.Repo.Migrations.CreateUser do
       add :small_image_url, :string
       add :image_url, :string
       add :vk_url, :string
+
       timestamps()
     end
   end
