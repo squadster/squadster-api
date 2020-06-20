@@ -1,6 +1,17 @@
 defmodule Squadster.Helpers.Dates do
+  def date_from_string(%Absinthe.Blueprint.Input.String{value: value}) do
+    case String.match?(value, ~r/\d{1,2}\.\d{1,2}\.\d{4}/) do
+      true -> {:ok, parse(value)}
+      false -> :error
+    end
+  end
+
   def date_from_string(string_date) do
-    string_date
+    parse(string_date)
+  end
+
+  def parse(date) do
+    date
     |> Timex.parse!("%-d.%-m.%Y", :strftime)
     |> NaiveDateTime.to_date
   end
