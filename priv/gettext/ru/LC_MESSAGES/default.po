@@ -1,6 +1,6 @@
 # Duty notification text
 msgid "You are on duty tomorrow!"
-msgstr "Завтра ты назначен ответственным за лопату (дежурным)!"
+msgstr "Завтра ты назначен ответственным за лопату!"
 
 # Squad update notification text
 msgid "Squad info has been changed:"
