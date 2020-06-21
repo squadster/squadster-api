@@ -6,6 +6,7 @@ defmodule Squadster.Formations do
   alias Squadster.Formations.{Squad, SquadMember, SquadRequest}
   alias Squadster.Formations.Services.{
     CreateSquad,
+    UpdateSquad,
     CreateSquadRequest,
     ApproveSquadRequest,
     UpdateSquadMember,
@@ -33,9 +34,7 @@ defmodule Squadster.Formations do
   def update_squad(%{id: id} = args, user) do
     with squad <- Squad |> Repo.get(id) do
       if user |> Permissions.can_update?(squad) do
-        squad
-        |> Squad.changeset(args)
-        |> Repo.update
+        squad |> UpdateSquad.call(args, user)
       else
         {:error, "Not enough permissions"}
       end

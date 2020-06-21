@@ -1,5 +1,5 @@
 defmodule ESpec.Phoenix.Extend do
-  def model do
+  def domain do
     quote do
       import Squadster.Support.Factory
       import Squadster.Support.RepoHelper

@@ -1,6 +1,6 @@
 defmodule Squadster.Domain.Services.DeleteSquadMemberSpec do
   use ESpec.Phoenix, async: true
-  use ESpec.Phoenix.Extend, :model
+  use ESpec.Phoenix.Extend, :domain
 
   alias Squadster.Formations.{SquadMember, SquadRequest}
   alias Squadster.Formations.Services.DeleteSquadMember
