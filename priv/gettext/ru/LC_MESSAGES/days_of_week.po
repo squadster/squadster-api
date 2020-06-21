@@ -1,0 +1,20 @@
+msgid "monday"
+msgstr "понедельник"
+
+msgid "tuesday"
+msgstr "вторник"
+
+msgid "wednesday"
+msgstr "среда"
+
+msgid "thursday"
+msgstr "четверг"
+
+msgid "friday"
+msgstr "пятница"
+
+msgid "saturday"
+msgstr "суббота"
+
+msgid "sunday"
+msgstr "воскресенье"

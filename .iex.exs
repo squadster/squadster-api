@@ -1,5 +1,6 @@
 import Ecto.Query
 import Squadster.Support.Factory
+import SquadsterWeb.Gettext
 
 alias Squadster.Repo
 
@@ -18,7 +19,8 @@ alias Squadster.Formations.Services.{
   CreateSquad,
   CreateSquadRequest,
   DeleteSquadMember,
-  UpdateSquadMember
+  UpdateSquadMember,
+  UpdateSquad
 }
 
 alias Squadster.Helpers

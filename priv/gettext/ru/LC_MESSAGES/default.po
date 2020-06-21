@@ -1,2 +1,19 @@
+# Duty notification text
 msgid "You are on duty tomorrow!"
-msgstr "Завтра ты назначен ответственным за лопату!"
+msgstr "Завтра ты назначен ответственным за лопату (дежурным)!"
+
+# Squad update notification text
+msgid "Squad info has been changed:"
+msgstr "Ваш взвод был обновлён:"
+
+# Class day update notification text
+msgid "Class day has been updated to %{new_class_day}"
+msgstr "День занятий теперь %{new_class_day}"
+
+# New advertisment notification text
+msgid "New squad advertisment: %{advertisment}"
+msgstr "Новое объявление: '%{advertisment}'"
+
+# New squad_number notification text
+msgid "Squad number has been changed to %{new_squad_number}."
+msgstr "Номер вашего взвода теперь %{new_squad_number}."
