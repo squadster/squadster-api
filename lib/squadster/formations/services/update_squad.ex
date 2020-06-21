@@ -3,22 +3,15 @@ defmodule Squadster.Formations.Services.UpdateSquad do
 
   alias Squadster.Repo
   alias Squadster.Formations.Squad
-  alias Squadster.Helpers.Permissions
 
-  def call(%{id: id} = args, user) do
-    with squad <- Squad |> Repo.get(id) do
-      if user |> Permissions.can_update?(squad) do
-        changeset = squad |> Squad.changeset(args)
+  def call(args, squad) do
+    changeset = squad |> Squad.changeset(args)
 
-        case changeset |> Repo.update do
-          {:ok, squad} ->
-            changeset.changes |> notify_students(squad)
-            {:ok, squad}
-          {:error, reason} -> {:error, reason}
-        end
-      else
-        {:error, "Not enough permissions"}
-      end
+    case changeset |> Repo.update do
+      {:ok, squad} ->
+        changeset.changes |> notify_students(squad)
+        {:ok, squad}
+      {:error, reason} -> {:error, reason}
     end
   end
 
