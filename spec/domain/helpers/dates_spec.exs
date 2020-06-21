@@ -1,5 +1,6 @@
 defmodule Squadster.Domain.Helpers.DatesSpec do
   use ESpec.Phoenix, async: true
+  use ESpec.Phoenix.Extend, :helper
 
   alias Squadster.Helpers.Dates
 

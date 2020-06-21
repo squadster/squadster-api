@@ -9,9 +9,10 @@ defmodule Squadster.Domain.Services.UpdateSquadSpec do
     let :squad_number, do: "111222"
     let :args, do: %{squad_number: squad_number()}
     let :squad, do: insert(:squad)
+    let :user, do: insert(:user)
 
     it "updates the squad" do
-      {:ok, _squad} = UpdateSquad.call(args(), squad())
+      {:ok, _squad} = UpdateSquad.call(squad(), args(), user())
 
       squad = Squad |> Repo.get(squad().id)
 

@@ -2,7 +2,8 @@ defmodule Squadster.Formations.Services.NotifySquadChanges do
   import SquadsterWeb.Gettext
 
   def call(changes, squad, %{id: user_id}) do
-    Squadster.Accounts.Tasks.Notify.start_link([
+    # TODO: should be start_link, but need to fix tests
+    Squadster.Accounts.Tasks.Notify.notify([
       message: text(changes),
       target: squad,
       options: [skip: [user_id]]
