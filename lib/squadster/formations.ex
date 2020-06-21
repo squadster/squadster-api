@@ -34,7 +34,7 @@ defmodule Squadster.Formations do
   def update_squad(%{id: id} = args, user) do
     with squad <- Squad |> Repo.get(id) do
       if user |> Permissions.can_update?(squad) do
-        UpdateSquad.call(args, squad)
+        squad |> UpdateSquad.call(args, user)
       else
         {:error, "Not enough permissions"}
       end

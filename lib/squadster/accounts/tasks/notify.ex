@@ -26,12 +26,13 @@ defmodule Squadster.Accounts.Tasks.Notify do
   end
 
   defp send_to(message, %Squad{} = squad, options \\ []) do
-    defaults = [skip_commander: false, skip_deputy: false, skip_journalist: false]
+    defaults = [skip_commander: false, skip_deputy: false, skip_journalist: false, skip: []]
     options = Keyword.merge(defaults, options) |> Enum.into(%{})
 
     squad
     |> Ecto.assoc(:members)
     |> Repo.all
+    |> Enum.reject(fn member -> member.user_id in options[:skip] end)
     |> Enum.reject(fn member -> options[:skip_commander] && member.role == :commander end)
     |> Enum.reject(fn member -> options[:skip_deputy] && member.role == :deputy_commander end)
     |> Enum.reject(fn member -> options[:skip_journalist] && member.role == :journalist end)
