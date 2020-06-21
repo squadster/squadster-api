@@ -1,7 +1,7 @@
 defmodule Squadster.Formations.Services.ApproveSquadRequest do
   alias Squadster.Repo
   alias Squadster.Formations.{SquadRequest, SquadMember}
-  alias Squadster.Workers.NormalizeQueue
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   def call(squad_request, approver_user) do
     %{squad_member: approver} = approver_user |> Repo.preload(:squad_member)
