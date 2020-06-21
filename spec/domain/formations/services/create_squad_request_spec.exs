@@ -1,6 +1,6 @@
 defmodule Squadster.Domain.Services.CreateSquadRequestSpec do
   use ESpec.Phoenix, async: true
-  use ESpec.Phoenix.Extend, :model
+  use ESpec.Phoenix.Extend, :domain
 
   alias Squadster.Formations.SquadRequest
   alias Squadster.Formations.Services.CreateSquadRequest

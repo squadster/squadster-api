@@ -1,6 +1,6 @@
 defmodule Squadster.Formations.Tasks.NormalizeQueueSpec do
   use ESpec.Phoenix, async: true
-  use ESpec.Phoenix.Extend, :worker
+  use ESpec.Phoenix.Extend, :domain
 
   alias Squadster.Formations.Tasks.NormalizeQueue
 
