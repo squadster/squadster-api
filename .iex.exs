@@ -10,6 +10,7 @@ alias Squadster.Workers.ShiftQueues
 
 alias Squadster.Accounts
 alias Squadster.Accounts.User
+alias Squadster.Accounts.Tasks.Notify
 
 alias Squadster.Formations
 alias Squadster.Formations.{Squad, SquadRequest, SquadMember}
@@ -24,4 +25,4 @@ alias Squadster.Formations.Services.{
 }
 
 alias Squadster.Helpers
-alias Squadster.Helpers.{Dates, Permissions, Messages}
+alias Squadster.Helpers.{Dates, Permissions}

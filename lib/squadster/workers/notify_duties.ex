@@ -25,6 +25,9 @@ defmodule Squadster.Workers.NotifyDuties do
   end
 
   defp notify(%{user: user}) do
-    gettext("You are on duty tomorrow!") |> Squadster.Helpers.Messages.send_to(user)
+    Squadster.Accounts.Tasks.Notify.start_link([
+      message: gettext("You are on duty tomorrow!"),
+      target: user
+    ])
   end
 end

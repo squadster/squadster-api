@@ -23,9 +23,15 @@ defmodule Squadster.Formations.Services.UpdateSquad do
   end
 
   defp notify_students(changes, squad) do
-    changes
-    |> text
-    |> Squadster.Helpers.Messages.send_to(squad)
+    Squadster.Accounts.Tasks.Notify.start_link([
+      message: text(changes),
+      target: squad,
+      options: [
+        skip_commander: true,
+        skip_deputy: true,
+        skip_journalist: true
+      ]
+    ])
   end
 
   defp text(changes) do
