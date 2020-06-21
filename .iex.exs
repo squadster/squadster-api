@@ -18,9 +18,8 @@ alias Squadster.Formations.Services.{
   CreateSquad,
   CreateSquadRequest,
   DeleteSquadMember,
-  UpdateSquadMember,
-  UpdateSquad
+  UpdateSquadMember
 }
 
 alias Squadster.Helpers
-alias Squadster.Helpers.{Dates, Permissions}
+alias Squadster.Helpers.{Dates, Permissions, Messages}
