@@ -1,4 +1,4 @@
-defmodule Squadster.Workers.NormalizeQueue do
+defmodule Squadster.Formations.Tasks.NormalizeQueue do
   use Task
 
   alias Ecto.Multi

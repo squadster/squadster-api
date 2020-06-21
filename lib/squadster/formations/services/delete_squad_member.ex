@@ -1,6 +1,6 @@
 defmodule Squadster.Formations.Services.DeleteSquadMember do
   alias Squadster.Repo
-  alias Squadster.Workers.NormalizeQueue
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   def call(squad_member) do
     %{user: %{squad_request: squad_request}} = squad_member |> Repo.preload(user: :squad_request)

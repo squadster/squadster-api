@@ -4,7 +4,7 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
   alias Ecto.Multi
   alias Squadster.Repo
   alias Squadster.Formations.SquadMember
-  alias Squadster.Workers.NormalizeQueue
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   def call(squad_members, args) when is_list(squad_members) do
     result = squad_members
