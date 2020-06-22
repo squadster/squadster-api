@@ -1,4 +1,4 @@
-defmodule Squadster.Domain.Services.DeleteSquadMemberSpec do
+defmodule Squadster.Domain.Formations.Services.DeleteSquadMemberSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 

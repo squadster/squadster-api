@@ -34,7 +34,7 @@ defmodule Squadster.Accounts.Tasks.NotifySpec do
     end
 
     context "when the target is a squad" do
-      let :squad, do: insert(:squad) |> with_commander(user())
+      let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
       before do
         insert_list(5, :squad_member, squad: squad())

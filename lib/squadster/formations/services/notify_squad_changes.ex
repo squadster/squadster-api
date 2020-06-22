@@ -10,7 +10,7 @@ defmodule Squadster.Formations.Services.NotifySquadChanges do
     ])
   end
 
-  defp text(changes) do
+  def text(changes) do
     gettext("Squad info has been changed:") <> class_day(changes) <> squad_number(changes) <> advertisment(changes)
   end
 

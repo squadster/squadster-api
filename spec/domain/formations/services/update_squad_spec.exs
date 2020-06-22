@@ -1,4 +1,4 @@
-defmodule Squadster.Domain.Services.UpdateSquadSpec do
+defmodule Squadster.Domain.Formations.Services.UpdateSquadSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
