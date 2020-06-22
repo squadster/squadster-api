@@ -2,8 +2,11 @@ defmodule Squadster.Domain.FormationsSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
+  import Mockery
+
   alias Squadster.Formations
   alias Squadster.Formations.{Squad, SquadRequest}
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   let :user, do: insert(:user)
 
@@ -140,6 +143,10 @@ defmodule Squadster.Domain.FormationsSpec do
   end
 
   describe "delete_squad_member/2" do
+    before do
+      mock NormalizeQueue, :start_link
+    end
+
     let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
 

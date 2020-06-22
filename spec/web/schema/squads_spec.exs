@@ -2,7 +2,10 @@ defmodule Squadster.Web.Schema.SquadSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :controller
 
+  import Mockery
+
   alias Squadster.Formations.Squad
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   let :create do
     """
@@ -92,6 +95,10 @@ defmodule Squadster.Web.Schema.SquadSpec do
     end
 
     context "delete_squad" do
+      before do
+        mock NormalizeQueue, :start_link
+      end
+
       it "deletes a squad by id" do
         squad = build(:squad) |> with_commander(user()) |> insert
         previous_count = entities_count(Squad)

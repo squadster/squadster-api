@@ -7,6 +7,8 @@ defmodule Squadster.Domain.Services.UpdateSquadSpec do
 
   alias Squadster.Formations.Squad
   alias Squadster.Formations.Services.UpdateSquad
+  alias Squadster.Formations.Services.NotifySquadChanges
+
 
   describe "call/2" do
     let :squad_number, do: "111222"
@@ -15,7 +17,7 @@ defmodule Squadster.Domain.Services.UpdateSquadSpec do
     let :user, do: insert(:user)
 
     before do
-      mock Squadster.Formations.Services.NotifySquadChanges, call: 3
+      mock NotifySquadChanges, :call
     end
 
     it "updates the squad" do
@@ -29,7 +31,7 @@ defmodule Squadster.Domain.Services.UpdateSquadSpec do
     it "sends notifications to students" do
       {:ok, _squad} = UpdateSquad.call(squad(), args(), user())
 
-      assert_called Squadster.Formations.Services.NotifySquadChanges, call: 3
+      assert_called NotifySquadChanges, :call
     end
   end
 end
