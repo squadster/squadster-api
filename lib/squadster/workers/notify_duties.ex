@@ -3,6 +3,7 @@ defmodule Squadster.Workers.NotifyDuties do
 
   import Ecto.Query
   import SquadsterWeb.Gettext
+  import Mockery.Macro
 
   alias Squadster.Repo
   alias Squadster.Helpers.Dates
@@ -25,7 +26,7 @@ defmodule Squadster.Workers.NotifyDuties do
   end
 
   defp notify(%{user: user}) do
-    Squadster.Accounts.Tasks.Notify.start_link([
+    mockable(Squadster.Accounts.Tasks.Notify).start_link([
       message: gettext("You are on duty tomorrow!"),
       target: user
     ])
