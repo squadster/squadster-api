@@ -1,6 +1,6 @@
 defmodule Squadster.Domain.Services.UpdateUserSpec do
   use ESpec.Phoenix, async: true
-  use ESpec.Phoenix.Extend, :model
+  use ESpec.Phoenix.Extend, :domain
 
   alias Squadster.Accounts.User
   alias Squadster.Accounts.Services.UpdateUser
