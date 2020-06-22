@@ -1,4 +1,4 @@
-defmodule Squadster.Formations.Services.UpdateUser do
+defmodule Squadster.Accounts.Services.UpdateUser do
   alias Squadster.Repo
   alias Squadster.Accounts.User
 

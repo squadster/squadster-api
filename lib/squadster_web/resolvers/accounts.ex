@@ -23,4 +23,8 @@ defmodule SquadsterWeb.Resolvers.Accounts do
   def update_user(_parent, args, %{context: %{current_user: current_user}}) do
     Accounts.update_user(args, current_user)
   end
+
+  def update_user(_parent, _args, _resolution) do
+    {:error, "Not logged in"}
+  end
 end

@@ -5,7 +5,11 @@ defmodule Squadster.Domain.Helpers.DatesSpec do
   alias Squadster.Helpers.Dates
 
   let :date_string, do: "21.07.2000"
+  let :invalid_date_string, do: "12-123.1202"
   let :date, do: ~D[2000-07-21]
+  let :absinthe_object, do: %Absinthe.Blueprint.Input.String{value: date_string()}
+  let :absinthe_object_with_invalid_date, do: %Absinthe.Blueprint.Input.String{value: invalid_date_string()}
+
 
   let :datetime_string, do: "21.07.2000 12:15"
   let :datetime, do: ~U[2000-07-21 12:15:03.15Z]
@@ -14,15 +18,27 @@ defmodule Squadster.Domain.Helpers.DatesSpec do
   let :naive_datetime, do: ~N[2000-07-21 12:15:00]
 
   describe "date_from_string/1" do
-    it "parses Date from string with '%-d.%-m.%Y' format" do
-      expect Dates.date_from_string(date_string()) |> to(eq date())
+    context "when Absinthe object is passed" do
+      it "takes value and parses it from string with '%-d.%-m.%Y' format" do
+        expect Dates.date_from_string(absinthe_object()) |> to(eq {:ok, date()})
+      end
+
+      it "returns error if string does not match '%-d.%-m.%Y' format" do
+        expect Dates.date_from_string(absinthe_object_with_invalid_date()) |> to(eq :error)
+      end
     end
 
-    context "when one-digit date elements passed" do
-      let :one_digit_date_string, do: "21.7.2000"
+    context "when string is passed" do
+      it "parses Date from string with '%-d.%-m.%Y' format" do
+        expect Dates.date_from_string(date_string()) |> to(eq date())
+      end
 
-      it "parse date correctly" do
-        expect Dates.date_from_string(one_digit_date_string()) |> to(eq date())
+      context "when one-digit date elements passed" do
+        let :one_digit_date_string, do: "21.7.2000"
+
+        it "parse date correctly" do
+          expect Dates.date_from_string(one_digit_date_string()) |> to(eq date())
+        end
       end
     end
   end

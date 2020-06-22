@@ -41,7 +41,6 @@ defmodule Squadster.Schema do
   mutation do
     @desc "Update user"
     field :update_user, type: :user do
-      arg :id, non_null(:id)
       arg :first_name, :string
       arg :last_name, :string
       arg :birth_date, :date

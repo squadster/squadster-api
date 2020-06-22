@@ -5,10 +5,6 @@ defmodule Squadster.Helpers.Permissions do
 
   @management_roles [:commander, :deputy_commander, :journalist]
 
-  def can_update?(%User{} = current_user, %User{} = user) do
-    current_user.id == user.id
-  end
-
   def can_update?(%User{} = user, %Squad{} = squad) do
     user |> has_management_role_in?(squad)
   end

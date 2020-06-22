@@ -5,7 +5,7 @@ defmodule Squadster.Accounts do
   alias Squadster.Repo
   alias Squadster.Accounts.User
   alias Squadster.Helpers.Permissions
-  alias Squadster.Formations.Services.UpdateUser
+  alias Squadster.Accounts.Services.UpdateUser
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -54,13 +54,7 @@ defmodule Squadster.Accounts do
     end
   end
 
-  def update_user(%{id: id} = args, current_user) do
-    case find_user(id) do
-      nil  -> {:error, "User with id #{id} not found"}
-      user ->
-        if current_user |> Permissions.can_update?(user) do
-          user |> UpdateUser.call(args)
-        end
-    end
+  def update_user(args, user) do
+    user |> UpdateUser.call(args)
   end
 end
