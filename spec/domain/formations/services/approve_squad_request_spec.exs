@@ -2,14 +2,22 @@ defmodule Squadster.Domain.Services.ApproveSquadRequestSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
+  import Mockery
+  import Mockery.Assertions
+
   alias Squadster.Formations.SquadRequest
   alias Squadster.Formations.Services.ApproveSquadRequest
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   let :user, do: insert(:user)
   let :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
   let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
   describe "call/2" do
+    before do
+      mock NormalizeQueue, :start_link
+    end
+
     it "approves an existing squad_request and sets approved_at and approver" do
       ApproveSquadRequest.call(squad_request(), user())
 
@@ -18,6 +26,11 @@ defmodule Squadster.Domain.Services.ApproveSquadRequestSpec do
 
       expect request.approver |> to(eq approver)
       expect request.approved_at |> to_not(eq nil)
+    end
+
+    it "schedules queue normalization" do
+      ApproveSquadRequest.call(squad_request(), user())
+      assert_called NormalizeQueue, :start_link
     end
 
     it "creates a new squad_member" do

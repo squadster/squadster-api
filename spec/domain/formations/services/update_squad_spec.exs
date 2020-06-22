@@ -9,7 +9,6 @@ defmodule Squadster.Domain.Services.UpdateSquadSpec do
   alias Squadster.Formations.Services.UpdateSquad
   alias Squadster.Formations.Services.NotifySquadChanges
 
-
   describe "call/2" do
     let :squad_number, do: "111222"
     let :args, do: %{squad_number: squad_number()}

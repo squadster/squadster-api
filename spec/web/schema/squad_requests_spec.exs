@@ -2,7 +2,10 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :controller
 
+  import Mockery
+
   alias Squadster.Formations.SquadRequest
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   let :create do
     """
@@ -85,6 +88,10 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
     context "approve_squad_request" do
       let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
       let :squad, do: build(:squad) |> with_commander(user()) |> insert
+
+      before do
+        mock NormalizeQueue, :start_link
+      end
 
       it "approves existing squad_request" do
         expect squad_request().approved_at |> to(eq nil)
