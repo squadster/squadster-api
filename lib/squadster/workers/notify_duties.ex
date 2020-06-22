@@ -4,9 +4,9 @@ defmodule Squadster.Workers.NotifyDuties do
   import Ecto.Query
   import SquadsterWeb.Gettext
   import Mockery.Macro
+  import Squadster.Helpers.Dates
 
   alias Squadster.Repo
-  alias Squadster.Helpers.Dates
   alias Squadster.Formations.Squad
 
   def start_link do
@@ -14,7 +14,7 @@ defmodule Squadster.Workers.NotifyDuties do
   end
 
   def run do
-    tomorrow = Dates.tomorrow |> Dates.day_of_a_week
+    tomorrow = tomorrow |> day_of_a_week
     from(squad in Squad, where: squad.class_day == ^tomorrow)
     |> Repo.all
     |> Repo.preload(members: :user)
