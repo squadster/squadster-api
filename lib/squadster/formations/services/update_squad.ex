@@ -1,4 +1,6 @@
 defmodule Squadster.Formations.Services.UpdateSquad do
+  import Mockery.Macro
+
   alias Squadster.Repo
   alias Squadster.Formations.Squad
   alias Squadster.Formations.Services.NotifySquadChanges
@@ -8,7 +10,7 @@ defmodule Squadster.Formations.Services.UpdateSquad do
 
     case changeset |> Repo.update do
       {:ok, squad} ->
-        changeset.changes |> NotifySquadChanges.call(squad, user)
+        changeset.changes |> mockable(NotifySquadChanges).call(squad, user)
         {:ok, squad}
       {:error, reason} -> {:error, reason}
     end
