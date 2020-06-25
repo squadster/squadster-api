@@ -52,7 +52,7 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
   end
 
   describe "mutations" do
-    context "create_squad_request" do
+    describe "create_squad_request" do
       it "creates a new squad_request with valid attributes" do
         previous_count = entities_count(SquadRequest)
         api_request(create_squad_request_query())
@@ -75,7 +75,7 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
       end
     end
 
-    context "delete_squad_request" do
+    describe "delete_squad_request" do
       let! :squad_request, do: insert(:squad_request, user: user())
 
       it "deletes existing squad_request" do
@@ -85,7 +85,7 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
       end
     end
 
-    context "approve_squad_request" do
+    describe "approve_squad_request" do
       let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
       let :squad, do: build(:squad) |> with_commander(user()) |> insert
 

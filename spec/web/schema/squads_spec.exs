@@ -84,7 +84,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
   end
 
   describe "mutations" do
-    context "create_squad" do
+    describe "create_squad" do
       it "creates a new squad with valid attributes" do
         previous_count = entities_count(Squad)
 
@@ -94,7 +94,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
       end
     end
 
-    context "delete_squad" do
+    describe "delete_squad" do
       before do
         mock NormalizeQueue, :start_link
       end
@@ -109,7 +109,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
       end
     end
 
-    context "update_squad" do
+    describe "update_squad" do
       it "updates a squad by id" do
         squad = build(:squad) |> with_commander(user()) |> insert
 

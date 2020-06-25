@@ -48,7 +48,7 @@ defmodule Squadster.Web.Schema.UsersSpec do
   let :user, do: insert(:user)
 
   describe "mutations" do
-    context "update_user" do
+    describe "update_user" do
       it "updates user's attributes" do
         user() |> api_request(update_user())
 
