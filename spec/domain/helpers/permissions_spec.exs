@@ -364,8 +364,8 @@ defmodule Squadster.Domain.Helpers.PermissionsSpec do
             insert(:squad_member, user: user())
           end
 
-          it "returns false" do
-            expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq false)
+          it "returns true" do
+            expect(user() |> Permissions.can_delete?(squad_member())) |> to(eq true)
           end
         end
       end

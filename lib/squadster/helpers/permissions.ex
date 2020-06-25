@@ -34,7 +34,8 @@ defmodule Squadster.Helpers.Permissions do
   end
 
   def can_delete?(%User{} = user, %SquadMember{} = squad_member) do
-    user |> can_update?(squad_member)
+    %{squad: squad, user: member_user} = squad_member |> Repo.preload(:squad) |> Repo.preload(:user)
+    member_user.id == user.id || (user |> has_commander_role_in?(squad))
   end
 
   defp from_squad?(squad_members, all_members) do
