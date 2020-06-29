@@ -34,6 +34,36 @@ defmodule Squadster.Web.Schema.UsersSpec do
     """
   end
 
+  let :list_users do
+    """
+      query getUsers {
+        users {
+          id
+        }
+      }
+    """
+  end
+
+  let :get_user_by_id do
+    """
+      query getUser($id: Int) {
+        user(id: $id) {
+          id
+        }
+      }
+    """
+  end
+
+  let :get_current_user do
+    """
+      query getCurrentUser {
+        currentUser {
+          id
+        }
+      }
+    """
+  end
+
   let :params, do: %{
     first_name: Faker.Name.first_name,
     last_name: Faker.Name.last_name,
@@ -44,8 +74,52 @@ defmodule Squadster.Web.Schema.UsersSpec do
   }
 
   let :update_user, do: %{query: update(), variables: params()}
+  let :users, do: %{query: list_users()}
+  let :user_query, do: %{query: get_user_by_id(), variables: %{id: user().id}}
+  let :current_user, do: %{query: get_current_user()}
 
   let :user, do: insert(:user)
+
+  describe "queries" do
+    describe "users" do
+      let! :user, do: insert(:user)
+
+      it "returns a list of users" do
+        users_count = entities_count(User)
+        %{"data" => %{"users" => users_list}} = user()
+        |> api_request(users())
+        |> json_response(200)
+
+        expect users_list
+        |> Enum.count
+        |> to(eq users_count)
+      end
+    end
+
+    describe "user" do
+      it "returns a user by id" do
+        %{"data" => %{"user" => found_user}} = user()
+        |> api_request(user_query())
+        |> json_response(200)
+
+        expect found_user["id"]
+        |> String.to_integer
+        |> to(eq user().id)
+      end
+    end
+
+    describe "current_user" do
+      it "returns a current user" do
+        %{"data" => %{"currentUser" => found_user}} = user()
+        |> api_request(current_user())
+        |> json_response(200)
+
+        expect found_user["id"]
+        |> String.to_integer
+        |> to(eq user().id)
+      end
+    end
+  end
 
   describe "mutations" do
     describe "update_user" do
