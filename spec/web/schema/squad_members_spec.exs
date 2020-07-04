@@ -7,8 +7,6 @@ defmodule Squadster.Web.Schema.SquadMembersSpec do
   alias Squadster.Formations.SquadMember
   alias Squadster.Formations.Tasks.NormalizeQueue
 
-  #let :create_squad_request_query, do: %{query: create(), variables: %{squad_id: squad().id}}
-
   let :commander, do: insert(:user)
   let :squad, do: build(:squad) |> with_commander(commander()) |> insert
   let :user, do: insert(:user)
@@ -42,6 +40,7 @@ defmodule Squadster.Web.Schema.SquadMembersSpec do
     end
 
     describe "update_squad_member" do
+      let :update_params, do: %{id: nil, queue_number: 1, role: "journalist"}
       let :update_squad_member_mutation do
         """
           mutation updateSquadMember($id: Int, $queue_number: Int, $role: String) {
@@ -53,7 +52,6 @@ defmodule Squadster.Web.Schema.SquadMembersSpec do
           }
         """
       end
-      let :update_params, do: %{id: nil, queue_number: 1, role: "journalist"}
 
       def update_squad_member(id) do
         params = %{update_params() | id: id}
@@ -70,6 +68,41 @@ defmodule Squadster.Web.Schema.SquadMembersSpec do
     end
 
     describe "update_squad_members" do
+      let :first_member, do: squad_member()
+      let :second_user, do: insert(:user)
+      let :second_member, do: insert(:squad_member, user: second_user(), squad: squad())
+
+      let :update_params, do: %{first_id: nil, second_id: nil, first_queue_number: 1, second_queue_number: 2}
+      let :update_squad_members_mutation do
+        """
+          mutation updateSquadMembers(
+            $first_id: Int,
+            $second_id: Int,
+            $first_queue_number: Int,
+            $second_queue_number: Int
+          ) {
+            updateSquadMembers(batch: [
+              {id: $first_id, queueNumber: $first_queue_number},
+              {id: $second_id, queueNumber: $second_queue_number}
+            ]) {
+              id
+              queueNumber
+            }
+          }
+        """
+      end
+
+      def update_squad_members(first_id, second_id) do
+        params = %{update_params() | first_id: first_id, second_id: second_id}
+        %{query: update_squad_members_mutation(), variables: params}
+      end
+
+      it "updates queue_numbers for a batch of squad_members" do
+        commander() |> api_request(update_squad_members(squad_member().id, second_member().id))
+
+        expect Repo.get(SquadMember, first_member().id).queue_number  |> to(eq update_params().first_queue_number)
+        expect Repo.get(SquadMember, second_member().id).queue_number |> to(eq update_params().second_queue_number)
+      end
     end
   end
 end
