@@ -14,7 +14,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
       let :list_squads, do: %{query: list_squads_query()}
       let :list_squads_query do
         """
-          query getSquads {
+          query Squads {
             squads {
               id
               classDay
@@ -29,6 +29,31 @@ defmodule Squadster.Web.Schema.SquadSpec do
         expect json_response(api_request(list_squads()), 200)["data"]["squads"]
         |> Enum.count
         |> to(eq squads_count)
+      end
+    end
+
+    describe "squad" do
+      def get_squad(squad_number) do
+        %{query: squad_query(), variables: %{squad_number: squad_number}}
+      end
+
+      let :squad, do: insert(:squad)
+      let :squad_query do
+        """
+          query Squad($squad_number: String) {
+            squad(squadNumber: $squad_number) {
+              id
+              squadNumber
+            }
+          }
+        """
+      end
+
+      it "returns a squad by number" do
+        squad = json_response(api_request(get_squad(squad().squad_number)), 200)["data"]["squad"]
+
+        expect squad["id"] |> to(eq(squad().id |> Integer.to_string))
+        expect squad["squadNumber"] |> to(eq squad().squad_number)
       end
     end
   end
