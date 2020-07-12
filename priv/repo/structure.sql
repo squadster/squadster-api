@@ -26,7 +26,7 @@ CREATE TABLE public.lessons (
     id bigint NOT NULL,
     name character varying(255),
     teacher character varying(255),
-    index_number integer,
+    index integer,
     note character varying(255),
     timetable_id bigint,
     inserted_at timestamp(0) without time zone NOT NULL,

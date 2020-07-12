@@ -5,7 +5,7 @@ defmodule Squadster.Repo.Migrations.AddLessons do
     create table(:lessons) do
       add :name, :string
       add :teacher, :string
-      add :index_number, :integer
+      add :index, :integer
       add :note, :string
       add :timetable_id, references(:timetables, on_delete: :delete_all)
 

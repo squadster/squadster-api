@@ -8,7 +8,7 @@ defmodule Squadster.Domain.Schedules.LessonSpec do
     let :necessary_params do
       %{
         name: Faker.Industry.industry,
-        index_number: Enum.random(1..6),
+        index: Enum.random(1..6),
         timetable_id: Enum.random(1..100)
       }
     end
@@ -28,9 +28,9 @@ defmodule Squadster.Domain.Schedules.LessonSpec do
         end
       end
 
-      context "when index number is not set" do
+      context "when index is not set" do
         it "is invalid" do
-          %{valid?: is_valid} = necessary_params() |> Map.delete(:index_number) |> Lesson.changeset
+          %{valid?: is_valid} = necessary_params() |> Map.delete(:index) |> Lesson.changeset
           expect is_valid |> to(be_false())
         end
       end
