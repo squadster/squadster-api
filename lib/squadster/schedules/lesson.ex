@@ -1,4 +1,4 @@
-defmodule Squadster.Schedule.Lesson do
+defmodule Squadster.Schedules.Lesson do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -10,7 +10,7 @@ defmodule Squadster.Schedule.Lesson do
     field :teacher, :string
     field :index_number, :integer
     field :note, :string
-    belongs_to :timetable, Squadster.Schedule.Timetable
+    belongs_to :timetable, Squadster.Schedules.Timetable
 
     timestamps()
   end

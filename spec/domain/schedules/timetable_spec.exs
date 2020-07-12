@@ -1,8 +1,8 @@
-defmodule Squadster.Domain.Schedule.TimetableSpec do
+defmodule Squadster.Domain.Schedules.TimetableSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
-  alias Squadster.Schedule.Timetable
+  alias Squadster.Schedules.Timetable
 
   describe "changeset" do
     let :date, do: Faker.Date.forward(7)

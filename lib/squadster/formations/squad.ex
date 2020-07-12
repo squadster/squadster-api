@@ -14,7 +14,7 @@ defmodule Squadster.Formations.Squad do
     field :class_day, ClassDayEnum
     has_many :members, Squadster.Formations.SquadMember, on_delete: :delete_all
     has_many :requests, Squadster.Formations.SquadRequest, on_delete: :delete_all
-    has_many :timetables, Squadster.Schedule.Timetable, on_delete: :delete_all
+    has_many :timetables, Squadster.Schedules.Timetable, on_delete: :delete_all
 
     timestamps()
   end

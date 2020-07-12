@@ -1,3 +1,3 @@
-defmodule Squadster.Schedule do
+defmodule Squadster.Schedules do
   # TODO: implement CRUD
 end

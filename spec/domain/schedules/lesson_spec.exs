@@ -1,8 +1,8 @@
-defmodule Squadster.Domain.Schedule.LessonSpec do
+defmodule Squadster.Domain.Schedules.LessonSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
-  alias Squadster.Schedule.Lesson
+  alias Squadster.Schedules.Lesson
 
   describe "changeset" do
     let :necessary_params do

@@ -1,4 +1,4 @@
-defmodule Squadster.Schedule.Timetable do
+defmodule Squadster.Schedules.Timetable do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -7,7 +7,7 @@ defmodule Squadster.Schedule.Timetable do
 
   schema "timetables" do
     field :date, :date
-    has_many :lessons, Squadster.Schedule.Lesson, on_delete: :delete_all
+    has_many :lessons, Squadster.Schedules.Lesson, on_delete: :delete_all
     belongs_to :squad, Squadster.Formations.Squad
 
     timestamps()
