@@ -24,5 +24,8 @@ alias Squadster.Formations.Services.{
   UpdateSquad
 }
 
+alias Squadster.Schedule.Lesson
+alias Squadster.Schedule.Timetable
+
 alias Squadster.Helpers
 alias Squadster.Helpers.{Dates, Permissions}

@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
--- Dumped by pg_dump version 12.2 (Ubuntu 12.2-2.pgdg16.04+1)
+-- Dumped from database version 11.7 (Ubuntu 11.7-0ubuntu0.19.10.1)
+-- Dumped by pg_dump version 12.2 (Ubuntu 12.2-4)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,6 +17,41 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 SET default_tablespace = '';
+
+--
+-- Name: lessons; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.lessons (
+    id bigint NOT NULL,
+    name character varying(255),
+    teacher character varying(255),
+    index_number integer,
+    note character varying(255),
+    timetable_id bigint,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+--
+-- Name: lessons_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.lessons_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: lessons_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.lessons_id_seq OWNED BY public.lessons.id;
+
 
 --
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
@@ -39,7 +74,8 @@ CREATE TABLE public.squad_members (
     user_id bigint,
     squad_id bigint,
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL
+    updated_at timestamp(0) without time zone NOT NULL,
+    message_type character varying(255) DEFAULT 'text'::character varying
 );
 
 
@@ -130,6 +166,38 @@ ALTER SEQUENCE public.squads_id_seq OWNED BY public.squads.id;
 
 
 --
+-- Name: timetables; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.timetables (
+    id bigint NOT NULL,
+    date date,
+    squad_id bigint,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+--
+-- Name: timetables_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.timetables_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: timetables_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.timetables_id_seq OWNED BY public.timetables.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -147,7 +215,8 @@ CREATE TABLE public.users (
     image_url character varying(255),
     vk_url character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL
+    updated_at timestamp(0) without time zone NOT NULL,
+    message_type character varying(255) DEFAULT 'text'::character varying
 );
 
 
@@ -168,6 +237,13 @@ CREATE SEQUENCE public.users_id_seq
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: lessons id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.lessons ALTER COLUMN id SET DEFAULT nextval('public.lessons_id_seq'::regclass);
 
 
 --
@@ -192,10 +268,25 @@ ALTER TABLE ONLY public.squads ALTER COLUMN id SET DEFAULT nextval('public.squad
 
 
 --
+-- Name: timetables id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.timetables ALTER COLUMN id SET DEFAULT nextval('public.timetables_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: lessons lessons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.lessons
+    ADD CONSTRAINT lessons_pkey PRIMARY KEY (id);
 
 
 --
@@ -231,6 +322,14 @@ ALTER TABLE ONLY public.squads
 
 
 --
+-- Name: timetables timetables_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.timetables
+    ADD CONSTRAINT timetables_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -250,6 +349,14 @@ CREATE UNIQUE INDEX squad_members_squad_id_user_id_index ON public.squad_members
 --
 
 CREATE UNIQUE INDEX squad_requests_squad_id_user_id_index ON public.squad_requests USING btree (squad_id, user_id);
+
+
+--
+-- Name: lessons lessons_timetable_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.lessons
+    ADD CONSTRAINT lessons_timetable_id_fkey FOREIGN KEY (timetable_id) REFERENCES public.timetables(id) ON DELETE CASCADE;
 
 
 --
@@ -273,7 +380,7 @@ ALTER TABLE ONLY public.squad_members
 --
 
 ALTER TABLE ONLY public.squad_requests
-    ADD CONSTRAINT squad_requests_approver_id_fkey FOREIGN KEY (approver_id) REFERENCES public.squad_members(id) ON DELETE SET NULL;
+    ADD CONSTRAINT squad_requests_approver_id_fkey FOREIGN KEY (approver_id) REFERENCES public.squad_members(id);
 
 
 --
@@ -281,7 +388,7 @@ ALTER TABLE ONLY public.squad_requests
 --
 
 ALTER TABLE ONLY public.squad_requests
-    ADD CONSTRAINT squad_requests_squad_id_fkey FOREIGN KEY (squad_id) REFERENCES public.squads(id) ON DELETE CASCADE;
+    ADD CONSTRAINT squad_requests_squad_id_fkey FOREIGN KEY (squad_id) REFERENCES public.squads(id);
 
 
 --
@@ -293,8 +400,16 @@ ALTER TABLE ONLY public.squad_requests
 
 
 --
+-- Name: timetables timetables_squad_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.timetables
+    ADD CONSTRAINT timetables_squad_id_fkey FOREIGN KEY (squad_id) REFERENCES public.squads(id) ON DELETE CASCADE;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200618212702);
+INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200412222137), (20200412222817), (20200618212702), (20200711235358), (20200712000103);
 
