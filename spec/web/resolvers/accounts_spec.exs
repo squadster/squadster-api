@@ -1,6 +1,6 @@
-defmodule Squadster.Web.Resolvers.Accounts do
+defmodule Squadster.Web.Resolvers.AccountsSpec do
   use ESpec.Phoenix, async: true
-  use ESpec.Phoenix.Extend, :controller
+  use ESpec.Phoenix.Extend, :domain
 
   import Mockery.Assertions
 

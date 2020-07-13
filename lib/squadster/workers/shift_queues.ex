@@ -2,6 +2,7 @@ defmodule Squadster.Workers.ShiftQueues do
   use Task
 
   import Ecto.Query, only: [from: 2]
+  import Mockery.Macro
 
   alias Ecto.Multi
   alias Squadster.Formations.{Squad, SquadMember}
@@ -35,7 +36,7 @@ defmodule Squadster.Workers.ShiftQueues do
 
     members
     |> Enum.reduce(Multi.new(), fn member, batch ->
-      batch |> Multi.update(member.id, changeset(member, last_number))
+      batch |> mockable(Multi).update(member.id, changeset(member, last_number))
     end)
     |> Repo.transaction
   end
