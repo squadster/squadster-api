@@ -2,7 +2,6 @@ defmodule Squadster.Web.Resolvers.Accounts do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :controller
 
-  import Mockery
   import Mockery.Assertions
 
   alias SquadsterWeb.Resolvers.Accounts
@@ -57,13 +56,7 @@ defmodule Squadster.Web.Resolvers.Accounts do
     context "when the user is logged in" do
       let! :user, do: insert(:user)
 
-      it "updates user" do
-        {:ok, user} = Accounts.update_user(nil, %{first_name: "Salvador"}, %{context: %{current_user: user()}})
-        expect user.first_name |> to(eq "Salvador")
-      end
-
       it "calls Accounts.update_user/2" do
-        mock Squadster.Formations.Accounts, :update_user
         Accounts.update_user(nil, %{first_name: "Salvador"}, %{context: %{current_user: user()}})
         assert_called Squadster.Accounts, :update_user
       end
