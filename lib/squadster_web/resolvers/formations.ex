@@ -82,5 +82,4 @@ defmodule SquadsterWeb.Resolvers.Formations do
   def delete_squad_member(_parent, _args, _resolution) do
     {:error, "Access denied"}
   end
-
 end
