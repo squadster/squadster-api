@@ -21,24 +21,4 @@ defmodule Squadster.Domain.Formations.Services.NotifySquadChangesSpec do
       assert_called Notify, :start_link
     end
   end
-
-  describe "text/1" do
-    it "returns message text for given changes" do
-      text = NotifySquadChanges.text(%{})
-      expect(is_binary(text)) |> to(be true)
-    end
-
-    it "adds part of the message for every new change" do
-      first  = NotifySquadChanges.text(%{}) |> String.length
-      second = NotifySquadChanges.text(%{squad_number: "111222"}) |> String.length
-      third  = NotifySquadChanges.text(%{squad_number: "111222", class_day: :monday}) |> String.length
-      fourth = NotifySquadChanges.text(%{
-        squad_number: "111222",
-        class_day: :monday,
-        advertisment: "I'm a potato"
-      }) |> String.length
-
-      expect(fourth > third and third > second and second > first) |> to(be true)
-    end
-  end
 end
