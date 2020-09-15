@@ -3,8 +3,6 @@ defmodule Squadster.Schedules.Lesson do
 
   import Ecto.Changeset
 
-  alias Squadster.Repo
-
   schema "lessons" do
     field :name, :string
     field :teacher, :string

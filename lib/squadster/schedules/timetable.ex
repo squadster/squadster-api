@@ -3,8 +3,6 @@ defmodule Squadster.Schedules.Timetable do
 
   import Ecto.Changeset
 
-  alias Squadster.Repo
-
   schema "timetables" do
     field :date, :date
     has_many :lessons, Squadster.Schedules.Lesson, on_delete: :delete_all
