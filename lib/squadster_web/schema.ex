@@ -107,7 +107,7 @@ defmodule Squadster.Schema do
       resolve &FormationsResolver.update_squad_member/3
     end
 
-    @desc "Update a batch of squad_member"
+    @desc "Update a batch of squad_members"
     field :update_squad_members, type: list_of(:squad_member) do
       arg :batch, list_of(:squad_members_batch)
 

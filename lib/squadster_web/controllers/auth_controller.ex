@@ -1,6 +1,8 @@
 defmodule SquadsterWeb.AuthController do
   use SquadsterWeb, :controller
 
+  import Mockery.Macro
+
   plug Ueberauth when action not in [:destroy]
   plug SquadsterWeb.Plugs.Auth when action in [:destroy]
 
@@ -20,7 +22,7 @@ defmodule SquadsterWeb.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    case Accounts.find_or_create_user(auth) do
+    case mockable(Accounts).find_or_create_user(auth) do
       {:ok, user} -> redirect(conn, external: redirect_url(user: user))
       {:error, reason} -> send_auth_error(conn, reason)
     end

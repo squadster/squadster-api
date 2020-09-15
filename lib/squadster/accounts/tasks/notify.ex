@@ -1,6 +1,8 @@
 defmodule Squadster.Accounts.Tasks.Notify do
   use Task
 
+  import Mockery.Macro
+
   alias Squadster.Formations.Squad
   alias Squadster.Formations.SquadMember
   alias Squadster.Accounts.User
@@ -18,7 +20,7 @@ defmodule Squadster.Accounts.Tasks.Notify do
   def notify([message: message, target: target, options: options]), do: message |> send_to(target, options)
 
   defp send_to(message, %User{id: id}) do
-    HTTPoison.post @bot_endpoint, request_body(message, id), @request_headers
+    mockable(HTTPoison).post @bot_endpoint, request_body(message, id), @request_headers
   end
 
   defp send_to(message, %SquadMember{user_id: user_id}) do

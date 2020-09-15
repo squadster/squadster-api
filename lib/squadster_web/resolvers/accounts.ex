@@ -1,6 +1,8 @@
 defmodule SquadsterWeb.Resolvers.Accounts do
   alias Squadster.Accounts
 
+  import Mockery.Macro
+
   def find_user(_parent, %{id: id}, _resolution) do
     case Accounts.find_user(id) do
       nil  -> {:error, "user with id #{id} not found"}
@@ -21,7 +23,7 @@ defmodule SquadsterWeb.Resolvers.Accounts do
   end
 
   def update_user(_parent, args, %{context: %{current_user: current_user}}) do
-    Accounts.update_user(args, current_user)
+    mockable(Accounts).update_user(args, current_user)
   end
 
   def update_user(_parent, _args, _resolution) do

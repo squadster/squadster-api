@@ -62,6 +62,7 @@ defmodule Squadster.MixProject do
       {:quantum, "~> 3.0-rc"},
       {:ex_machina, "~> 2.4"},
       {:httpoison, "~> 1.6"},
+      {:mockery, "~> 2.3.0", runtime: false},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 

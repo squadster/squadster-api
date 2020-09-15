@@ -1,15 +1,23 @@
-defmodule Squadster.Domain.Services.UpdateSquadMemberSpec do
+defmodule Squadster.Domain.Formations.Services.UpdateSquadMemberSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
+  import Mockery
+  import Mockery.Assertions
+
   alias Squadster.Formations.SquadMember
   alias Squadster.Formations.Services.UpdateSquadMember
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   let :user, do: insert(:user)
   let :squad, do: build(:squad) |> with_commander(user()) |> insert
   let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
 
   describe "call/2" do
+    before do
+      mock NormalizeQueue, :start_link
+    end
+
     context "when one squad_member given" do
       let :args, do: %{role: "journalist"}
 
@@ -17,6 +25,11 @@ defmodule Squadster.Domain.Services.UpdateSquadMemberSpec do
         squad_member() |> UpdateSquadMember.call(args())
         updated = SquadMember |> Repo.get(squad_member().id)
         expect(updated.role) |> to(eq :journalist)
+      end
+
+      it "schedules queue normalization" do
+        squad_member() |> UpdateSquadMember.call(args())
+        assert_called NormalizeQueue, :start_link
       end
 
       context "when updating role to commander" do

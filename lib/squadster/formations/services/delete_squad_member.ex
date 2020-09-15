@@ -1,4 +1,6 @@
 defmodule Squadster.Formations.Services.DeleteSquadMember do
+  import Mockery.Macro
+
   alias Squadster.Repo
   alias Squadster.Formations.Tasks.NormalizeQueue
 
@@ -12,8 +14,7 @@ defmodule Squadster.Formations.Services.DeleteSquadMember do
   end
 
   defp schedule_queue_normalization({:ok, %{squad_id: squad_id}} = result) do
-    # TODO: should be start_link, but need to fix tests
-    NormalizeQueue.run([squad_id: squad_id])
+    mockable(NormalizeQueue).start_link([squad_id: squad_id])
     result
   end
 

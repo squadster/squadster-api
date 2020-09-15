@@ -1,9 +1,9 @@
 defmodule Squadster.Formations.Services.NotifySquadChanges do
   import SquadsterWeb.Gettext
+  import Mockery.Macro
 
   def call(changes, squad, %{id: user_id}) do
-    # TODO: should be start_link, but need to fix tests
-    Squadster.Accounts.Tasks.Notify.notify([
+    mockable(Squadster.Accounts.Tasks.Notify).start_link([
       message: text(changes),
       target: squad,
       options: [skip: [user_id]]

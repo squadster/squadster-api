@@ -2,8 +2,11 @@ defmodule Squadster.Domain.FormationsSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
+  import Mockery
+
   alias Squadster.Formations
   alias Squadster.Formations.{Squad, SquadRequest}
+  alias Squadster.Formations.Tasks.NormalizeQueue
 
   let :user, do: insert(:user)
 
@@ -77,6 +80,10 @@ defmodule Squadster.Domain.FormationsSpec do
     let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
 
+    before do
+      mock NormalizeQueue, :start_link
+    end
+
     context "when user has enough permissions" do
       it "returns new squad_member" do
         {:ok, squad_member} = Formations.approve_squad_request(squad_request().id, user())
@@ -98,6 +105,10 @@ defmodule Squadster.Domain.FormationsSpec do
     let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
     let :update_params, do: %{id: squad_member().id, role: "journalist"}
+
+    before do
+      mock NormalizeQueue, :start_link
+    end
 
     context "when user has enough permissions" do
       it "updates squad_member" do
@@ -121,6 +132,10 @@ defmodule Squadster.Domain.FormationsSpec do
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
     let :update_params, do: [%{id: squad_member().id |> Integer.to_string, role: "journalist"}]
 
+    before do
+      mock NormalizeQueue, :start_link
+    end
+
     context "when user has enough permissions" do
       it "updates squad_members" do
         {:ok, squad_members} = Formations.bulk_update_squad_members(update_params(), user())
@@ -140,6 +155,10 @@ defmodule Squadster.Domain.FormationsSpec do
   end
 
   describe "delete_squad_member/2" do
+    before do
+      mock NormalizeQueue, :start_link
+    end
+
     let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
 

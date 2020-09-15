@@ -1,5 +1,6 @@
 defmodule Squadster.Formations.Services.UpdateSquadMember do
   import Ecto.Query, only: [from: 2]
+  import Mockery.Macro
 
   alias Ecto.Multi
   alias Squadster.Repo
@@ -61,7 +62,6 @@ defmodule Squadster.Formations.Services.UpdateSquadMember do
   end
 
   defp schedule_queue_normalization(squad_id) do
-    # TODO: should be start_link, but need to fix tests
-    NormalizeQueue.run([squad_id: squad_id])
+    mockable(NormalizeQueue).start_link([squad_id: squad_id])
   end
 end

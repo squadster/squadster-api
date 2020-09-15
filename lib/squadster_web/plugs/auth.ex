@@ -14,16 +14,15 @@ defmodule SquadsterWeb.Plugs.Auth do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    token = case get_req_header(conn, "authorization") do
-      ["Bearer " <> token] -> token
+    case get_req_header(conn, "authorization") do
+      ["Bearer " <> token] ->
+        if current_user = Accounts.find_user_by_token(token) do
+          assign(conn, :current_user, current_user)
+        else
+          send_auth_error(conn, "Authorization token is invalid")
+        end
       [_token] -> send_auth_error(conn, "Authorization token must be prepended with type, e.g. Bearer")
       _ -> send_auth_error(conn, "Authorization token not provided")
-    end
-
-    if current_user = Accounts.find_user_by_token(token) do
-      assign(conn, :current_user, current_user)
-    else
-      send_auth_error(conn, "Authorization token is invalid")
     end
   end
 
