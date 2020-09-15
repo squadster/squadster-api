@@ -4,7 +4,6 @@ defmodule Squadster.Accounts do
   alias Ueberauth.Auth
   alias Squadster.Repo
   alias Squadster.Accounts.User
-  alias Squadster.Helpers.Permissions
   alias Squadster.Accounts.Services.UpdateUser
 
   def data() do

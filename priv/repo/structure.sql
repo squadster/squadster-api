@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.7 (Ubuntu 11.7-0ubuntu0.19.10.1)
--- Dumped by pg_dump version 12.2 (Ubuntu 12.2-4)
+-- Dumped from database version 12.4 (Ubuntu 12.4-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.4 (Ubuntu 12.4-0ubuntu0.20.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,6 +17,8 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 SET default_tablespace = '';
+
+SET default_table_access_method = heap;
 
 --
 -- Name: lessons; Type: TABLE; Schema: public; Owner: -
@@ -74,8 +76,7 @@ CREATE TABLE public.squad_members (
     user_id bigint,
     squad_id bigint,
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL,
-    message_type character varying(255) DEFAULT 'text'::character varying
+    updated_at timestamp(0) without time zone NOT NULL
 );
 
 
@@ -215,8 +216,7 @@ CREATE TABLE public.users (
     image_url character varying(255),
     vk_url character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL,
-    message_type character varying(255) DEFAULT 'text'::character varying
+    updated_at timestamp(0) without time zone NOT NULL
 );
 
 
@@ -380,7 +380,7 @@ ALTER TABLE ONLY public.squad_members
 --
 
 ALTER TABLE ONLY public.squad_requests
-    ADD CONSTRAINT squad_requests_approver_id_fkey FOREIGN KEY (approver_id) REFERENCES public.squad_members(id);
+    ADD CONSTRAINT squad_requests_approver_id_fkey FOREIGN KEY (approver_id) REFERENCES public.squad_members(id) ON DELETE SET NULL;
 
 
 --
@@ -388,7 +388,7 @@ ALTER TABLE ONLY public.squad_requests
 --
 
 ALTER TABLE ONLY public.squad_requests
-    ADD CONSTRAINT squad_requests_squad_id_fkey FOREIGN KEY (squad_id) REFERENCES public.squads(id);
+    ADD CONSTRAINT squad_requests_squad_id_fkey FOREIGN KEY (squad_id) REFERENCES public.squads(id) ON DELETE CASCADE;
 
 
 --
@@ -411,5 +411,5 @@ ALTER TABLE ONLY public.timetables
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200412222137), (20200412222817), (20200618212702), (20200711235358), (20200712000103);
+INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200618212702), (20200711235358), (20200712000103);
 

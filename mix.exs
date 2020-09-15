@@ -5,7 +5,7 @@ defmodule Squadster.MixProject do
     [
       app: :squadster,
       version: "0.1.0",
-      elixir: "~> 1.9.0",
+      elixir: "~> 1.9.0", # compiled with OTP 20
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -51,7 +51,7 @@ defmodule Squadster.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:poison, "~> 3.1"},
-      {:ueberauth_vk, "~> 0.3"},
+      {:ueberauth_vk, git: "https://github.com/ueberauth/ueberauth_vk.git", branch: :master}, # TODO: need to set it back to 0.4.0 when it will be released
       {:absinthe, "~> 1.4.0"},
       {:absinthe_plug, "~> 1.4.0"},
       {:cors_plug, "~> 2.0"},
