@@ -26,7 +26,7 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
         %{user | squad_request: squad_request}
       end
 
-      def with_squad_request_to_a_certain_squad(user, squad) do
+      def with_request_to_squad(user, squad) do
         squad_request = insert(:squad_request, user: user, squad: squad)
         %{user | squad_request: squad_request}
       end
