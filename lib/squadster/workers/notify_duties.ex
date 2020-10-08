@@ -14,7 +14,7 @@ defmodule Squadster.Workers.NotifyDuties do
   end
 
   def run do
-    tomorrow = tomorrow |> day_of_a_week
+    tomorrow = tomorrow() |> day_of_a_week
     from(squad in Squad, where: squad.class_day == ^tomorrow)
     |> Repo.all
     |> Repo.preload(members: :user)
