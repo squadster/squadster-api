@@ -6,6 +6,7 @@ defmodule Squadster.Support.Factory.Formations.SquadFactory do
           squad_number: "squad #{Faker.random_between(1, 1000)}",
           advertisment: Faker.Lorem.Shakespeare.as_you_like_it(),
           class_day: Faker.random_between(1, 7),
+          link_invitations_enabled: false,
         }
       end
 

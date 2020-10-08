@@ -20,7 +20,7 @@ defmodule Squadster.Formations.Services.CreateSquad do
       {:ok, squad} ->
         squad |> add_commander(user)
         remove_squad_request(user)
-        {:ok, squad}
+        {:ok, squad |> Squad.load}
     end
   end
 

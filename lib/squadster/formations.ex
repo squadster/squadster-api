@@ -19,12 +19,17 @@ defmodule Squadster.Formations do
 
   def query(queryable, _params), do: queryable
 
+  def find_squad_by_hash_id(hash_id) do
+    {:ok, id} = Squadster.Vault.decrypt(hash_id |> Base.url_decode64!)
+    Squad |> Repo.get(id) |> Squad.load
+  end
+
   def list_squads do
-    Repo.all(Squad)
+    Repo.all(Squad) |> Enum.map(&Squad.load/1)
   end
 
   def find_squad(number) do
-    Squad |> Repo.get_by(squad_number: number)
+    Squad |> Repo.get_by(squad_number: number) |> Squad.load
   end
 
   def create_squad(args, user) do
