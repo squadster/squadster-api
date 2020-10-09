@@ -144,7 +144,8 @@ CREATE TABLE public.squads (
     class_day integer,
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL,
-    link_invitations_enabled boolean DEFAULT false
+    link_invitations_enabled boolean DEFAULT false,
+    hash_id character varying(255)
 );
 
 
@@ -412,5 +413,5 @@ ALTER TABLE ONLY public.timetables
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200618212702), (20200711235358), (20200712000103), (20201008171100);
+INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200618212702), (20200711235358), (20200712000103), (20201008171100), (20201009202124);
 

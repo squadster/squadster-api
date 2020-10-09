@@ -21,15 +21,15 @@ defmodule Squadster.Formations do
 
   def find_squad_by_hash_id(hash_id) do
     {:ok, id} = Squadster.Vault.decrypt(hash_id |> Base.url_decode64!)
-    Squad |> Repo.get(id) |> Squad.load
+    Squad |> Repo.get(id)
   end
 
   def list_squads do
-    Repo.all(Squad) |> Enum.map(&Squad.load/1)
+    Repo.all(Squad)
   end
 
   def find_squad(number) do
-    Squad |> Repo.get_by(squad_number: number) |> Squad.load
+    Squad |> Repo.get_by(squad_number: number)
   end
 
   def create_squad(args, user) do

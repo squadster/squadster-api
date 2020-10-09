@@ -14,7 +14,7 @@ defmodule Squadster.Web.Resolvers.FormationsSpec do
 
       it "returns squad" do
         {:ok, squad} = Formations.find_squad(nil, %{squad_number: squad().squad_number}, nil)
-        expect %Squad{squad | hash_id: nil} |> to(eq squad())
+        expect squad |> to(eq squad())
       end
     end
 

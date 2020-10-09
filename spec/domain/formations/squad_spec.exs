@@ -40,24 +40,4 @@ defmodule Squadster.Domain.Formations.SquadSpec do
       |> to(eq commander)
     end
   end
-
-  describe "load/1" do
-    let :squad, do: insert(:squad)
-
-    it "loads hash_id of the given squad" do
-      expect squad()
-      |> Squad.load()
-      |> Map.get(:hash_id)
-      |> is_binary
-      |> to(be true)
-    end
-
-    context "when squad is nil" do
-      it "returns nil" do
-        expect nil
-        |> Squad.load()
-        |> to(be nil)
-      end
-    end
-  end
 end

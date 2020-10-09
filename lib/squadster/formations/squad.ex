@@ -9,7 +9,7 @@ defmodule Squadster.Formations.Squad do
   defenum ClassDayEnum, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 7
 
   schema "squads" do
-    field :hash_id, :string, virtual: true
+    field :hash_id, :string
     field :squad_number, :string
     field :advertisment, :string
     field :link_invitations_enabled, :boolean
@@ -29,21 +29,21 @@ defmodule Squadster.Formations.Squad do
     struct
     |> cast(params, [:squad_number, :advertisment, :class_day])
     |> validate_required([:squad_number, :class_day])
+    |> set_hash_id
   end
 
-  def load(nil), do: nil
-  def load(%__MODULE__{} = squad) do
-    squad |> struct(hash_id: squad |> hash_id)
+  def set_hash_id(%Ecto.Changeset{data: squad} = changeset) do
+    if squad.id && !squad.hash_id do
+      hash_id = Squadster.Vault.encrypt!(squad.id |> Integer.to_string) |> Base.url_encode64
+      changeset |> Ecto.Changeset.put_change(:hash_id, hash_id)
+    else
+      changeset
+    end
   end
 
   def commander(squad) do
     squad
     |> Ecto.assoc(:members)
     |> Repo.get_by(role: :commander)
-  end
-
-  defp hash_id(%__MODULE__{} = squad) do
-    {:ok, binary_hash_id} = Squadster.Vault.encrypt(squad.id |> Integer.to_string)
-    binary_hash_id |> Base.url_encode64
   end
 end

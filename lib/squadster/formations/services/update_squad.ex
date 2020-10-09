@@ -11,7 +11,7 @@ defmodule Squadster.Formations.Services.UpdateSquad do
     case changeset |> Repo.update do
       {:ok, squad} ->
         changeset.changes |> mockable(NotifySquadChanges).call(squad, user)
-        {:ok, squad |> Squad.load}
+        {:ok, squad}
       {:error, reason} -> {:error, reason}
     end
   end
