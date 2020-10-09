@@ -18,11 +18,19 @@ defmodule Squadster.Domain.Formations.Services.CreateSquadSpec do
     end
 
     it "sets creator as a commander" do
-      CreateSquad.call(create_params(), user())
+      {:ok, squad} = CreateSquad.call(create_params(), user())
 
       %{squad_member: member} = user() |> Repo.preload(:squad_member)
 
-      expect(Squad |> last |> Squad.commander) |> to(eq member)
+      expect(squad |> Squad.commander) |> to(eq member)
+    end
+
+    it "sets hash_id for a created squad" do
+      {:ok, squad} = CreateSquad.call(create_params(), user())
+
+      expect squad.hash_id
+      |> is_binary
+      |> to(eq true)
     end
 
     context "when creator has a squad_request" do
