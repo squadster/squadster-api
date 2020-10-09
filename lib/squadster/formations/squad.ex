@@ -31,6 +31,7 @@ defmodule Squadster.Formations.Squad do
     |> validate_required([:squad_number, :class_day])
   end
 
+  def load(nil), do: nil
   def load(%__MODULE__{} = squad) do
     squad |> struct(hash_id: squad |> hash_id)
   end
