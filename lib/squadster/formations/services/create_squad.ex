@@ -18,10 +18,7 @@ defmodule Squadster.Formations.Services.CreateSquad do
     |> case do
       {:error, reason} -> {:error, reason}
       {:ok, squad} ->
-        squad =
-          squad
-          |> add_commander(user)
-          |> set_hash_id
+        squad = squad |> add_commander(user)
         remove_squad_request(user)
         {:ok, squad}
     end
@@ -32,10 +29,6 @@ defmodule Squadster.Formations.Services.CreateSquad do
     |> SquadMember.changeset
     |> Repo.insert
     squad
-  end
-
-  defp set_hash_id(squad) do
-    squad |> Squad.changeset(%{}) |> Repo.update!
   end
 
   defp remove_squad_request(user) do

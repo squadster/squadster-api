@@ -10,8 +10,7 @@ defmodule Squadster.Application do
     children = [
       Squadster.Repo, # Start the Ecto repository
       SquadsterWeb.Endpoint, # Start the endpoint when the application starts
-      Squadster.Workers, # Start scheduler
-      Squadster.Vault # Encryption configuration
+      Squadster.Workers # Start scheduler
     ]
 
     opts = [strategy: :one_for_one, name: Squadster.Supervisor]

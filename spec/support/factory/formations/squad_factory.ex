@@ -7,6 +7,7 @@ defmodule Squadster.Support.Factory.Formations.SquadFactory do
           advertisment: Faker.Lorem.Shakespeare.as_you_like_it(),
           class_day: Faker.random_between(1, 7),
           link_invitations_enabled: false,
+          hash_id: :crypto.strong_rand_bytes(16) |> Base.url_encode64
         }
       end
 

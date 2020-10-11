@@ -33,9 +33,8 @@ defmodule Squadster.Formations.Squad do
   end
 
   def set_hash_id(%Ecto.Changeset{data: squad} = changeset) do
-    if squad.id && !squad.hash_id do
-      hash_id = Squadster.Vault.encrypt!(squad.id |> Integer.to_string) |> Base.url_encode64
-      changeset |> Ecto.Changeset.put_change(:hash_id, hash_id)
+    unless squad.hash_id do
+      changeset |> Ecto.Changeset.put_change(:hash_id, :crypto.strong_rand_bytes(16) |> Base.url_encode64)
     else
       changeset
     end

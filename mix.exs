@@ -63,7 +63,6 @@ defmodule Squadster.MixProject do
       {:ex_machina, "~> 2.4"},
       {:httpoison, "~> 1.6"},
       {:mockery, "~> 2.3.0", runtime: false},
-      {:cloak, "~> 1.0.2"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 

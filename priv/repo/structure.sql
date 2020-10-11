@@ -354,6 +354,13 @@ CREATE UNIQUE INDEX squad_requests_squad_id_user_id_index ON public.squad_reques
 
 
 --
+-- Name: squads_hash_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX squads_hash_id_index ON public.squads USING btree (hash_id);
+
+
+--
 -- Name: lessons lessons_timetable_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
