@@ -3,11 +3,11 @@ defmodule SquadsterWeb.Resolvers.Formations do
 
   import Mockery.Macro
 
-  def list_squads(_parent, _args, _resolution) do
+  def squads(_parent, _args, _resolution) do
     {:ok, Formations.list_squads}
   end
 
-  def find_squad(_parent, %{squad_number: number}, _resolution) do
+  def squad(_parent, %{squad_number: number}, _resolution) do
     case Formations.find_squad(number) do
       nil -> {:error, "squad with number #{number} does not exist"}
       squad -> {:ok, squad}
