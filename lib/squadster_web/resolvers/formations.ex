@@ -8,7 +8,7 @@ defmodule SquadsterWeb.Resolvers.Formations do
   end
 
   def squad(_parent, %{squad_number: number}, _resolution) do
-    case Formations.find_squad(number) do
+    case Formations.find_squad_by_number(number) do
       nil -> {:error, "squad with number #{number} does not exist"}
       squad -> {:ok, squad}
     end

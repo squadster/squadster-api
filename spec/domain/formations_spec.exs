@@ -19,11 +19,11 @@ defmodule Squadster.Domain.FormationsSpec do
     end
   end
 
-  describe "find_squad/1" do
+  describe "find_squad_by_number/1" do
     let! :squad, do: insert(:squad)
 
     it "finds squad by number" do
-      expect Formations.find_squad(squad().squad_number)
+      expect Formations.find_squad_by_number(squad().squad_number)
       |> to(eq squad())
     end
   end
