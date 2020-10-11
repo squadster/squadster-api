@@ -53,7 +53,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
 
         expect squad["id"] |> to(eq(squad().id |> Integer.to_string))
         expect squad["squadNumber"] |> to(eq squad().squad_number)
-        expect squad["hashId"] |> is_binary |> to(be true)
+        expect squad["hashId"] |> to(eq squad().hash_id)
       end
     end
   end

@@ -25,14 +25,6 @@ defmodule Squadster.Domain.Formations.Services.CreateSquadSpec do
       expect(squad |> Squad.commander) |> to(eq member)
     end
 
-    it "sets hash_id for a created squad" do
-      {:ok, squad} = CreateSquad.call(create_params(), user())
-
-      expect squad.hash_id
-      |> is_binary
-      |> to(eq true)
-    end
-
     context "when creator has a squad_request" do
       before do
         insert(:squad_request, user: user(), squad: insert(:squad))
