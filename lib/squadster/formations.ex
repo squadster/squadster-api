@@ -19,11 +19,13 @@ defmodule Squadster.Formations do
 
   def query(queryable, _params), do: queryable
 
-  def list_squads do
-    Repo.all(Squad)
+  def list_squads, do: Repo.all(Squad)
+
+  def find_squad_by_hash_id(hash_id) do
+    Squad |> Repo.get_by(hash_id: hash_id)
   end
 
-  def find_squad(number) do
+  def find_squad_by_number(number) do
     Squad |> Repo.get_by(squad_number: number)
   end
 

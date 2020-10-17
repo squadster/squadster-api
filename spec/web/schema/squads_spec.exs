@@ -17,8 +17,6 @@ defmodule Squadster.Web.Schema.SquadSpec do
           query Squads {
             squads {
               id
-              classDay
-              squadNumber
             }
           }
         """
@@ -43,6 +41,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
           query Squad($squad_number: String) {
             squad(squadNumber: $squad_number) {
               id
+              hashId
               squadNumber
             }
           }
@@ -54,6 +53,7 @@ defmodule Squadster.Web.Schema.SquadSpec do
 
         expect squad["id"] |> to(eq(squad().id |> Integer.to_string))
         expect squad["squadNumber"] |> to(eq squad().squad_number)
+        expect squad["hashId"] |> to(eq squad().hash_id)
       end
     end
   end

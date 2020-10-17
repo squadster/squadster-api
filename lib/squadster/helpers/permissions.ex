@@ -16,7 +16,7 @@ defmodule Squadster.Helpers.Permissions do
 
   def can_update?(%User{} = user, %SquadMember{} = squad_member) do
     %{squad: squad, user: member_user} = squad_member |> Repo.preload(:squad) |> Repo.preload(:user)
-    member_user.id != user.id && (user |> can_delete?(squad))
+    member_user.id != user.id && (user |> has_commander_role_in?(squad))
   end
 
   def can_update?(%User{} = user, squad_members) when is_list(squad_members) do

@@ -10,6 +10,24 @@ defmodule Squadster.Domain.FormationsSpec do
 
   let :user, do: insert(:user)
 
+  describe "find_squad_by_hash_id/1" do
+    let! :squad, do: insert(:squad)
+
+    it "finds squad by it's hash_id" do
+      expect Formations.find_squad_by_hash_id(squad().hash_id)
+      |> to(eq squad())
+    end
+  end
+
+  describe "find_squad_by_number/1" do
+    let! :squad, do: insert(:squad)
+
+    it "finds squad by number" do
+      expect Formations.find_squad_by_number(squad().squad_number)
+      |> to(eq squad())
+    end
+  end
+
   describe "list_squads/0" do
     it "returns list of squads" do
       squads_count = entities_count(Squad)

@@ -18,16 +18,17 @@ defmodule Squadster.Formations.Services.CreateSquad do
     |> case do
       {:error, reason} -> {:error, reason}
       {:ok, squad} ->
-        squad |> add_commander(user)
+        squad = squad |> add_commander(user)
         remove_squad_request(user)
         {:ok, squad}
     end
   end
 
-  defp add_commander(%{id: squad_id}, %{id: user_id}) do
+  defp add_commander(%{id: squad_id} = squad, %{id: user_id}) do
     %{role: :commander, user_id: user_id, squad_id: squad_id}
     |> SquadMember.changeset
     |> Repo.insert
+    squad
   end
 
   defp remove_squad_request(user) do

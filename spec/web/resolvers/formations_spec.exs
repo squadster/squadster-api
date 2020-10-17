@@ -8,29 +8,29 @@ defmodule Squadster.Web.Resolvers.FormationsSpec do
   alias SquadsterWeb.Resolvers.Formations
   alias Squadster.Formations.Squad
 
-  describe "find_squad/3" do
+  describe "squad/3" do
     context "when the squad exists" do
       let! :squad, do: insert(:squad)
 
       it "returns squad" do
-        {:ok, squad} = Formations.find_squad(nil, %{squad_number: squad().squad_number}, nil)
+        {:ok, squad} = Formations.squad(nil, %{squad_number: squad().squad_number}, nil)
         expect squad |> to(eq squad())
       end
     end
 
     context "when the squad does not exist" do
       it "returns error" do
-        {:error, message} = Formations.find_squad(nil, %{squad_number: "123456"}, nil)
+        {:error, message} = Formations.squad(nil, %{squad_number: "123456"}, nil)
         expect is_binary(message) |> to(be true)
       end
     end
   end
 
-  describe "list_squads/3" do
+  describe "squads/3" do
     let! :squads, do: insert_list(3, :squad)
 
     it "returns squads" do
-      {:ok, squads} = Formations.list_squads(nil, nil, nil)
+      {:ok, squads} = Formations.squads(nil, nil, nil)
       expect Enum.count(squads) |> to(eq entities_count(Squad))
     end
   end

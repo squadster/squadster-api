@@ -143,7 +143,9 @@ CREATE TABLE public.squads (
     advertisment text,
     class_day integer,
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL
+    updated_at timestamp(0) without time zone NOT NULL,
+    link_invitations_enabled boolean DEFAULT false,
+    hash_id character varying(255)
 );
 
 
@@ -352,6 +354,13 @@ CREATE UNIQUE INDEX squad_requests_squad_id_user_id_index ON public.squad_reques
 
 
 --
+-- Name: squads_hash_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX squads_hash_id_index ON public.squads USING btree (hash_id);
+
+
+--
 -- Name: lessons lessons_timetable_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -411,5 +420,5 @@ ALTER TABLE ONLY public.timetables
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200618212702), (20200711235358), (20200712000103);
+INSERT INTO public."schema_migrations" (version) VALUES (20190630112212), (20200213154100), (20200213154344), (20200219194502), (20200618212702), (20200711235358), (20200712000103), (20201008171100), (20201009202124);
 
