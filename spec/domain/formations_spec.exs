@@ -130,6 +130,19 @@ defmodule Squadster.Domain.FormationsSpec do
     end
   end
 
+  describe "create_squad_member/2" do
+    let :squad, do: insert(:squad)
+
+    before do
+      mock NormalizeQueue, :start_link
+    end
+
+    it "returns new squad_member" do
+      {:ok, squad_member} = Formations.create_squad_member(user(), squad())
+      expect(squad_member.__struct__) |> to(eq Squadster.Formations.SquadMember)
+    end
+  end
+
   describe "update_squad_member/2" do
     let :squad_member, do: insert(:squad_member, user: insert(:user), squad: squad())
     let :squad, do: build(:squad) |> with_commander(user()) |> insert
