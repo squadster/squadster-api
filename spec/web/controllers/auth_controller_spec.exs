@@ -37,10 +37,10 @@ defmodule Squadster.Web.AuthControllerSpec do
 
             it "redirects to front-end with user info" do
               redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-              expect(redirect_url =~ "last_name")
-              expect(redirect_url =~ "uid")
-              expect(redirect_url =~ "auth_token")
-              expect(redirect_url =~ "image_url")
+              expect(redirect_url =~ "last_name") |> to(be true)
+              expect(redirect_url =~ "uid") |> to(be true)
+              expect(redirect_url =~ "auth_token") |> to(be true)
+              expect(redirect_url =~ "image_url") |> to(be true)
             end
           end
 
@@ -53,16 +53,16 @@ defmodule Squadster.Web.AuthControllerSpec do
 
             it "redirects to front-end with user info" do
               redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-              expect(redirect_url =~ "last_name")
-              expect(redirect_url =~ "uid")
-              expect(redirect_url =~ "auth_token")
-              expect(redirect_url =~ "image_url")
+              expect(redirect_url =~ "last_name") |> to(be true)
+              expect(redirect_url =~ "uid") |> to(be true)
+              expect(redirect_url =~ "auth_token") |> to(be true)
+              expect(redirect_url =~ "image_url") |> to(be true)
             end
           end
         end
 
         context "when user serch/creation failed" do
-          let :message, do: "Bad things happened!"
+          let :message, do: "Bad_things_happened"
 
           before do
             mock Squadster.Accounts, :find_or_create_user, {:error, message()}
@@ -70,22 +70,71 @@ defmodule Squadster.Web.AuthControllerSpec do
 
           it "redirects to front-end with error message" do
             redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-            expect(redirect_url =~ "Error")
-            expect(redirect_url =~ message())
+            expect(redirect_url =~ "Error") |> to(be true)
+            expect(redirect_url =~ message()) |> to(be true)
+          end
+        end
+
+        context "when there is state param included" do
+          context "and when it has hash_id" do
+            context "and when there is a squad with this hash_id and link invitations enabled" do
+              let :hash_id, do: "YFuzkbC6ONC4pEM3AhIBhA=="
+              let! :squad, do: insert(:squad, hash_id: hash_id(), link_invitations_enabled: true)
+
+              it "redirects to front-end with user info" do
+                redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=#{hash_id()}"}) |> redirected_to(302)
+                expect(redirect_url =~ "last_name") |> to(be true)
+                expect(redirect_url =~ "uid") |> to(be true)
+                expect(redirect_url =~ "auth_token") |> to(be true)
+                expect(redirect_url =~ "image_url") |> to(be true)
+              end
+            end
+
+            context "and when there in no squad with such hash_id and link invitations enabled" do
+              it "redirects to front-end with user info" do
+                redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=123"}) |> redirected_to(302)
+                expect(redirect_url =~ "last_name") |> to(be true)
+                expect(redirect_url =~ "uid") |> to(be true)
+                expect(redirect_url =~ "auth_token") |> to(be true)
+                expect(redirect_url =~ "image_url") |> to(be true)
+              end
+
+              it "includes warning message that indicates that the hash_id is invalid" do
+                redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=123"}) |> redirected_to(302)
+                expect(redirect_url =~ "warnings") |> to(be true)
+                expect(redirect_url =~ "Invalid+hash_id") |> to(be true)
+              end
+            end
+          end
+
+          context "and when there is no hash_id" do
+            it "redirects to front-end with user info" do
+              redirect_url = success_conn() |> AuthController.callback(%{"state" => "hello"}) |> redirected_to(302)
+              expect(redirect_url =~ "last_name") |> to(be true)
+              expect(redirect_url =~ "uid") |> to(be true)
+              expect(redirect_url =~ "auth_token") |> to(be true)
+              expect(redirect_url =~ "image_url") |> to(be true)
+            end
+
+            it "includes warning message that indicates that the state is invalid" do
+              redirect_url = success_conn() |> AuthController.callback(%{"state" => "hello"}) |> redirected_to(302)
+              expect(redirect_url =~ "warnings") |> to(be true)
+              expect(redirect_url =~ "Invalid+state") |> to(be true)
+            end
           end
         end
       end
 
       context "when auth failure accured" do
-        let :message, do: "No token provided"
+        let :message, do: "No_token_provided"
         let :failure_conn do
           %{build_conn() | assigns: %{ueberauth_failure: %{errors: [%{message: message()}]}}}
         end
 
         it "redirects to front-end with error message" do
           redirect_url = failure_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-          expect(redirect_url =~ "Error")
-          expect(redirect_url =~ message())
+          expect(redirect_url =~ "Error") |> to(be true)
+          expect(redirect_url =~ message()) |> to(be true)
         end
       end
     end
