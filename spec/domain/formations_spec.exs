@@ -11,11 +11,22 @@ defmodule Squadster.Domain.FormationsSpec do
   let :user, do: insert(:user)
 
   describe "find_squad_by_hash_id/1" do
-    let! :squad, do: insert(:squad)
+    context "when squad has link_invitations_enabled set to true" do
+      let! :squad, do: insert(:squad, link_invitations_enabled: true)
 
-    it "finds squad by it's hash_id" do
-      expect Formations.find_squad_by_hash_id(squad().hash_id)
-      |> to(eq squad())
+      it "finds squad by it's hash_id" do
+        expect Formations.find_squad_by_hash_id(squad().hash_id)
+        |> to(eq squad())
+      end
+    end
+
+    context "when squad has link_invitations_enabled set to false" do
+      let! :squad, do: insert(:squad, link_invitations_enabled: false)
+
+      it "returns nil" do
+        expect Formations.find_squad_by_hash_id(squad().hash_id)
+        |> to(eq nil)
+      end
     end
   end
 
