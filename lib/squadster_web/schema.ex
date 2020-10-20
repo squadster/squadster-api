@@ -3,9 +3,10 @@ defmodule Squadster.Schema do
 
   alias SquadsterWeb.Resolvers.Accounts, as: AccountsResolver
   alias SquadsterWeb.Resolvers.Formations, as: FormationsResolver
-  alias Squadster.{Accounts, Formations}
+  alias SquadsterWeb.Resolvers.Schedules, as: SchedulesResolver
+  alias Squadster.{Accounts, Formations, Schedules}
 
-  import_types SquadsterWeb.Schema.{SharedTypes, AccountTypes, FormationTypes}
+  import_types SquadsterWeb.Schema.{SharedTypes, AccountTypes, FormationTypes, SchedulesTypes}
 
   query do
     @desc "Get current user"
@@ -17,6 +18,13 @@ defmodule Squadster.Schema do
     @desc "Get a list of squads"
     field :squads, list_of(:squad) do
       resolve &FormationsResolver.squads/3
+    end
+
+    @desc "Get a timetable by id"
+    field :timetables, list_of(:timetable) do
+      arg :squad_number, non_null(:string)
+
+      resolve &SchedulesResolver.find_timetables/3
     end
   end
 
@@ -104,6 +112,29 @@ defmodule Squadster.Schema do
 
       resolve &FormationsResolver.delete_squad_member/3
     end
+
+    @desc "Create a timetable"
+    field :create_timetable, type: :timetable do
+      arg :date, type: :date
+      arg :squad_id, non_null(:id)
+
+      resolve &SchedulesResolver.create_timetable/3
+    end
+
+    @desc "Delete timetable"
+    field :delete_timetable, type: :timetable do
+      arg :timetable_id, non_null(:id)
+
+      resolve &SchedulesResolver.delete_timetable/3
+    end
+
+    @desc "Update existing timetable"
+    field :update_timetable, type: :timetable do
+      arg :timetable_id, non_null(:id)
+      arg :date, type: :date
+
+      resolve &SchedulesResolver.update_timetable/3
+    end
   end
 
   def context(ctx) do
@@ -111,6 +142,7 @@ defmodule Squadster.Schema do
       Dataloader.new
       |> Dataloader.add_source(Accounts, Accounts.data())
       |> Dataloader.add_source(Formations, Formations.data())
+      |> Dataloader.add_source(Schedules, Schedules.data())
 
     Map.put(ctx, :loader, loader)
   end
