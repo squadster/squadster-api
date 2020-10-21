@@ -7,6 +7,7 @@ defmodule Squadster.Domain.FormationsSpec do
   alias Squadster.Formations
   alias Squadster.Formations.{Squad, SquadRequest}
   alias Squadster.Formations.Tasks.NormalizeQueue
+  alias Squadster.Formations.Services.NotifySquadChanges
 
   let :user, do: insert(:user)
 
@@ -77,6 +78,10 @@ defmodule Squadster.Domain.FormationsSpec do
       class_day: 4,
       link_invitations_enabled: true
     }
+
+    before do
+      mock NotifySquadChanges, :call
+    end
 
     it "updates a squad by id" do
       Formations.update_squad(update_params(), user())
