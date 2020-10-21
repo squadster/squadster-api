@@ -74,15 +74,18 @@ defmodule Squadster.Domain.FormationsSpec do
       id: squad().id,
       squad_number: "123456",
       advertisment: "~\-o-/~  <  wub-wub-wub",
-      class_day: 4
+      class_day: 4,
+      link_invitations_enabled: true
     }
 
     it "updates a squad by id" do
       Formations.update_squad(update_params(), user())
 
-      expect Repo.get(Squad, squad().id).advertisment |> to(eq update_params().advertisment)
-      expect {:ok, Repo.get(Squad, squad().id).class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
-      expect Repo.get(Squad, squad().id).squad_number |> to(eq update_params().squad_number)
+      updated_squad = Repo.get(Squad, squad().id)
+      expect updated_squad.advertisment |> to(eq update_params().advertisment)
+      expect {:ok, updated_squad.class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
+      expect updated_squad.squad_number |> to(eq update_params().squad_number)
+      expect updated_squad.link_invitations_enabled |> to(eq update_params().link_invitations_enabled)
     end
   end
 

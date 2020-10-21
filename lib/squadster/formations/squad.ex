@@ -27,7 +27,7 @@ defmodule Squadster.Formations.Squad do
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, [:squad_number, :advertisment, :class_day])
+    |> cast(params, [:squad_number, :advertisment, :class_day, :link_invitations_enabled])
     |> validate_required([:squad_number, :class_day])
     |> set_hash_id
   end
