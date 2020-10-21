@@ -12,8 +12,8 @@ defmodule Squadster.Support.Factory.Accounts.UeberauthFactory do
         token = Faker.String.base64(85)
         expires_at = Enum.random(100_000_000_0..999_999_999_9)
 
-        first_name = Faker.Name.first_name
-        last_name = Faker.Name.last_name
+        first_name = Faker.Person.first_name
+        last_name = Faker.Person.last_name
         avatar = Faker.Avatar.image_url
 
         faculty_id = Enum.random(1..100_000)

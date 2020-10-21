@@ -7,8 +7,8 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
         avatar = Faker.Avatar.image_url
 
         %Squadster.Accounts.User{
-          first_name: Faker.Name.first_name,
-          last_name: Faker.Name.last_name,
+          first_name: Faker.Person.first_name,
+          last_name: Faker.Person.last_name,
           birth_date: Faker.Date.date_of_birth(17..20),
           mobile_phone: "+375" <> uid,
           university: "University of " <> Faker.Industry.sector,

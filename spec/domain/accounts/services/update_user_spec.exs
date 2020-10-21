@@ -7,8 +7,8 @@ defmodule Squadster.Domain.Services.UpdateUserSpec do
 
   let :user, do: insert(:user)
   let :update_params, do: %{
-    first_name: Faker.Name.first_name,
-    last_name: Faker.Name.last_name,
+    first_name: Faker.Person.first_name,
+    last_name: Faker.Person.last_name,
     birth_date: Faker.Date.date_of_birth,
     mobile_phone: "+375" <> Integer.to_string(Enum.random(100_000_000..999_999_999)),
     university: Faker.Industry.sector,

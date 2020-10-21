@@ -1,6 +1,6 @@
 defmodule Squadster.Support.RequestsHelper do
-  use Phoenix.ConnTest
-
+  import Plug.Conn
+  import Phoenix.ConnTest
   import Squadster.Support.Factory
 
   alias Squadster.Accounts.User

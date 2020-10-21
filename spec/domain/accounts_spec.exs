@@ -1,7 +1,9 @@
 defmodule Squadster.Domain.AccountsSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
-  use Phoenix.ConnTest
+
+  import Plug.Conn
+  import Phoenix.ConnTest
 
   alias Squadster.Accounts
   alias Squadster.Accounts.User

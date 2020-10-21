@@ -10,7 +10,8 @@ defmodule Squadster.Application do
     children = [
       Squadster.Repo, # Start the Ecto repository
       SquadsterWeb.Endpoint, # Start the endpoint when the application starts
-      Squadster.Workers # Start scheduler
+      Squadster.Workers, # Start scheduler
+      {Phoenix.PubSub, [name: Squadster.PubSub, adapter: Phoenix.PubSub.PG2]} # pubsub configuration
     ]
 
     opts = [strategy: :one_for_one, name: Squadster.Supervisor]
