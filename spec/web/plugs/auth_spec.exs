@@ -47,9 +47,5 @@ defmodule Squadster.Web.Plugs.AuthSpec do
         end
       end
     end
-
-    it "pings!" do
-      #expect response().resp_body |> to(match(~r/Pong!/))
-    end
   end
 end

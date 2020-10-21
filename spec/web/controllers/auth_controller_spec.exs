@@ -76,6 +76,10 @@ defmodule Squadster.Web.AuthControllerSpec do
         end
 
         context "when there is state param included" do
+          before do
+            mock NormalizeQueue, :start_link
+          end
+
           context "and when it has hash_id" do
             context "and when there is a squad with this hash_id and link invitations enabled" do
               let :hash_id, do: "YFuzkbC6ONC4pEM3AhIBhA=="
