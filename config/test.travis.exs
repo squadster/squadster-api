@@ -14,8 +14,5 @@ config :squadster, SquadsterWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-# configure bypass to work with espec
-config :bypass, test_framework: :espec
-
 # Print only warnings and errors during test
 config :logger, level: :warn

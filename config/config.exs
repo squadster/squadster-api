@@ -31,7 +31,7 @@ config :squadster, SquadsterWeb.Endpoint,
   url: [host: EnvHelper.safe_env("HOSTNAME", "squadster.wtf")],
   secret_key_base: EnvHelper.safe_env("SECRET_KEY_BASE", "dummy secret key"),
   render_errors: [view: SquadsterWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Squadster.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: Squadster.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,
