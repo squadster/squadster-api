@@ -1,7 +1,7 @@
-dist: bionic # Ubuntu 18.04
+dist: focal # Ubuntu 20.04
 language: elixir
-elixir: '1.9.0'
-otp_release: '20.3.8' # https://docs.travis-ci.com/user/languages/erlang/#otprelease-versions
+elixir: '1.9.4'
+otp_release: '22.3' # https://docs.travis-ci.com/user/languages/erlang/#otprelease-versions
 
 notifications:
   email:
