@@ -56,6 +56,7 @@ defmodule Squadster.Schema do
       arg :squad_number, non_null(:string)
       arg :advertisment, :string
       arg :class_day, non_null(:integer)
+      arg :link_invitations_enabled, :boolean
 
       resolve &FormationsResolver.create_squad/3
     end
@@ -66,6 +67,7 @@ defmodule Squadster.Schema do
       arg :squad_number, :string
       arg :advertisment, :string
       arg :class_day, :integer
+      arg :link_invitations_enabled, :boolean
 
       resolve &FormationsResolver.update_squad/3
     end

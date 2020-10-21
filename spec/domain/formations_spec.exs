@@ -7,15 +7,27 @@ defmodule Squadster.Domain.FormationsSpec do
   alias Squadster.Formations
   alias Squadster.Formations.{Squad, SquadRequest}
   alias Squadster.Formations.Tasks.NormalizeQueue
+  alias Squadster.Formations.Services.NotifySquadChanges
 
   let :user, do: insert(:user)
 
   describe "find_squad_by_hash_id/1" do
-    let! :squad, do: insert(:squad)
+    context "when squad has link_invitations_enabled set to true" do
+      let! :squad, do: insert(:squad, link_invitations_enabled: true)
 
-    it "finds squad by it's hash_id" do
-      expect Formations.find_squad_by_hash_id(squad().hash_id)
-      |> to(eq squad())
+      it "finds squad by it's hash_id" do
+        expect Formations.find_squad_by_hash_id(squad().hash_id)
+        |> to(eq squad())
+      end
+    end
+
+    context "when squad has link_invitations_enabled set to false" do
+      let! :squad, do: insert(:squad, link_invitations_enabled: false)
+
+      it "returns nil" do
+        expect Formations.find_squad_by_hash_id(squad().hash_id)
+        |> to(eq nil)
+      end
     end
   end
 
@@ -63,15 +75,22 @@ defmodule Squadster.Domain.FormationsSpec do
       id: squad().id,
       squad_number: "123456",
       advertisment: "~\-o-/~  <  wub-wub-wub",
-      class_day: 4
+      class_day: 4,
+      link_invitations_enabled: true
     }
+
+    before do
+      mock NotifySquadChanges, :call
+    end
 
     it "updates a squad by id" do
       Formations.update_squad(update_params(), user())
 
-      expect Repo.get(Squad, squad().id).advertisment |> to(eq update_params().advertisment)
-      expect {:ok, Repo.get(Squad, squad().id).class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
-      expect Repo.get(Squad, squad().id).squad_number |> to(eq update_params().squad_number)
+      updated_squad = Repo.get(Squad, squad().id)
+      expect updated_squad.advertisment |> to(eq update_params().advertisment)
+      expect {:ok, updated_squad.class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
+      expect updated_squad.squad_number |> to(eq update_params().squad_number)
+      expect updated_squad.link_invitations_enabled |> to(eq update_params().link_invitations_enabled)
     end
   end
 
@@ -116,6 +135,19 @@ defmodule Squadster.Domain.FormationsSpec do
         {:error, message} = Formations.approve_squad_request(squad_request().id, user())
         expect message |> to_not(be nil)
       end
+    end
+  end
+
+  describe "create_squad_member/2" do
+    let :squad, do: insert(:squad)
+
+    before do
+      mock NormalizeQueue, :start_link
+    end
+
+    it "returns new squad_member" do
+      {:ok, squad_member} = Formations.create_squad_member(user(), squad())
+      expect(squad_member.__struct__) |> to(eq Squadster.Formations.SquadMember)
     end
   end
 

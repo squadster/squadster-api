@@ -9,6 +9,7 @@ defmodule Squadster.Formations do
     UpdateSquad,
     CreateSquadRequest,
     ApproveSquadRequest,
+    CreateSquadMember,
     UpdateSquadMember,
     DeleteSquadMember
   }
@@ -22,7 +23,7 @@ defmodule Squadster.Formations do
   def list_squads, do: Repo.all(Squad)
 
   def find_squad_by_hash_id(hash_id) do
-    Squad |> Repo.get_by(hash_id: hash_id)
+    Squad |> Repo.get_by(hash_id: hash_id, link_invitations_enabled: true)
   end
 
   def find_squad_by_number(number) do
@@ -75,6 +76,10 @@ defmodule Squadster.Formations do
         {:error, "Not enough permissions"}
       end
     end
+  end
+
+  def create_squad_member(user, squad) do
+    user |> CreateSquadMember.call(squad)
   end
 
   def bulk_update_squad_members(args, user) do

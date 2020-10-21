@@ -23,10 +23,9 @@ defmodule Squadster.Formations.Services.ApproveSquadRequest do
     |> schedule_queue_normalization
   end
 
+  defp schedule_queue_normalization({:error, _} = result), do: result
   defp schedule_queue_normalization({:ok, %{squad_id: squad_id}} = result) do
     mockable(NormalizeQueue).start_link([squad_id: squad_id])
     result
   end
-
-  defp schedule_queue_normalization({:error, _} = result), do: result
 end
