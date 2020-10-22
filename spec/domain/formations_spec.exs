@@ -76,7 +76,7 @@ defmodule Squadster.Domain.FormationsSpec do
       squad_number: "123456",
       advertisment: "~\-o-/~  <  wub-wub-wub",
       class_day: 4,
-      link_invitations_enabled: true
+      link_invitations_enabled: false
     }
 
     before do
