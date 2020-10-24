@@ -98,7 +98,7 @@ defmodule Squadster.Schedules do
       |> Repo.preload([:squad, :lessons])
 
     if user_squad_number == timetable.squad.squad_number do
-      {:ok, timetable.lessons}
+      {:ok, timetable.lessons |> Enum.sort_by(fn lesson -> lesson.index end)}
     else
       {:error, "Permission denied"}
     end
