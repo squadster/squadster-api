@@ -62,9 +62,9 @@ defmodule Squadster.Schedules do
   end
 
   def create_lesson(%{timetable_id: timetable_id} = args, user) do
-    %{squad: squad} = Timetable |> Repo.get(timetable_id) |> Repo.preload(:squad)
-    if user |> Permissions.can_update?(squad) do
-       CreateLesson.call(args)
+    timetable = Timetable |> Repo.get(timetable_id) |> Repo.preload([:squad, :lessons])
+    if user |> Permissions.can_update?(timetable.squad) do
+       CreateLesson.call(timetable, args)
     else
       {:error, "Not enough permissions"}
     end
