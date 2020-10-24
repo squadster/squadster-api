@@ -26,6 +26,13 @@ defmodule Squadster.Schema do
 
       resolve &SchedulesResolver.find_timetables/3
     end
+
+    @desc "Show lessons for a timetable"
+    field :lessons, list_of(:lesson) do
+      arg :timetable_id, non_null(:id)
+
+      resolve &SchedulesResolver.show_lessons/3
+    end
   end
 
   mutation do
@@ -134,6 +141,37 @@ defmodule Squadster.Schema do
       arg :date, type: :date
 
       resolve &SchedulesResolver.update_timetable/3
+    end
+
+    @desc "Create a lesson"
+    field :create_lesson, type: :lesson do
+      arg :timetable_id, non_null(:id)
+      arg :name, :string
+      arg :teacher, :string
+      arg :index, :integer
+      arg :note, :string
+
+      resolve &SchedulesResolver.create_lesson/3
+    end
+
+    @desc "Delete a lesson"
+    field :delete_lesson, type: :lesson do
+      arg :index, non_null(:integer)
+      arg :timetable_id, non_null(:id)
+
+      resolve &SchedulesResolver.delete_lesson/3
+    end
+
+    @desc "Update a lesson"
+    field :update_lesson, type: :lesson do
+      arg :timetable_id, non_null(:id)
+      arg :current_index, non_null(:integer)
+      arg :name, :string
+      arg :teacher, :string
+      arg :index, :integer
+      arg :note, :string
+
+      resolve &SchedulesResolver.update_lesson/3
     end
   end
 

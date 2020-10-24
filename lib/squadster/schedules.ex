@@ -7,7 +7,10 @@ defmodule Squadster.Schedules do
   alias Squadster.Schedules.Timetable
   alias Squadster.Schedules.Services.{
     CreateTimetable,
-    UpdateTimetable
+    UpdateTimetable,
+    CreateLesson,
+    DeleteLesson,
+    UpdateLesson
   }
 
   def data do
@@ -55,6 +58,49 @@ defmodule Squadster.Schedules do
     case Squad |> Repo.get_by(squad_number: squad_number) |> Repo.preload(:timetables) do
       %{timetables: timetables} -> {:ok, timetables}
       nil -> {:error, "There is no timetables in this squad"}
+    end
+  end
+
+  def create_lesson(%{timetable_id: timetable_id} = args, user) do
+    %{squad: squad} = Timetable |> Repo.get(timetable_id) |> Repo.preload(:squad)
+    if user |> Permissions.can_update?(squad) do
+       CreateLesson.call(args)
+    else
+      {:error, "Not enough permissions"}
+    end
+  end
+
+  def delete_lesson(%{timetable_id: timetable_id, index: index}, user) do
+    timetable = Timetable |> Repo.get(timetable_id) |> Repo.preload([:squad, :lessons])
+    if user |> Permissions.can_update?(timetable.squad) do
+       DeleteLesson.call(timetable, index)
+    else
+      {:error, "Not enough permissions"}
+    end
+  end
+
+  def update_lesson(%{timetable_id: timetable_id} = args, user) do
+    timetable = Timetable |> Repo.get(timetable_id) |> Repo.preload([:squad, :lessons])
+    if user |> Permissions.can_update?(timetable.squad) do
+      UpdateLesson.call(timetable, args)
+    else
+      {:error, "Not enough permissions"}
+    end
+  end
+
+  def show_lessons(timetable_id, user) do
+    %{squad_member: %{squad: %{squad_number: user_squad_number}}} =
+      user
+      |> Repo.preload(squad_member: :squad)
+    timetable =
+      Timetable
+      |> Repo.get(timetable_id)
+      |> Repo.preload([:squad, :lessons])
+
+    if user_squad_number == timetable.squad.squad_number do
+      {:ok, timetable.lessons}
+    else
+      {:error, "Permission denied"}
     end
   end
 end
