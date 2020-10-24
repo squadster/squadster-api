@@ -60,5 +60,6 @@ defmodule SquadsterWeb.AuthController do
     end
   end
 
+  defp create_squad_member(nil, _), do: {:ok, nil}
   defp create_squad_member(_, _), do: {:error, "Invalid state"}
 end
