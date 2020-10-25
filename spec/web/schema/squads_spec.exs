@@ -138,9 +138,11 @@ defmodule Squadster.Web.Schema.SquadSpec do
 
         user() |> api_request(update_squad(squad.id))
 
-        expect Repo.get(Squad, squad.id).advertisment |> to(eq update_params().advertisment)
-        expect {:ok, Repo.get(Squad, squad.id).class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
-        expect Repo.get(Squad, squad.id).squad_number |> to(eq update_params().squad_number)
+        squad = reload(squad)
+
+        expect squad.advertisment |> to(eq update_params().advertisment)
+        expect {:ok, squad.class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
+        expect squad.squad_number |> to(eq update_params().squad_number)
       end
     end
   end

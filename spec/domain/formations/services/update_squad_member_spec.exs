@@ -5,7 +5,6 @@ defmodule Squadster.Domain.Formations.Services.UpdateSquadMemberSpec do
   import Mockery
   import Mockery.Assertions
 
-  alias Squadster.Formations.SquadMember
   alias Squadster.Formations.Services.UpdateSquadMember
   alias Squadster.Formations.Tasks.NormalizeQueue
 
@@ -23,8 +22,7 @@ defmodule Squadster.Domain.Formations.Services.UpdateSquadMemberSpec do
 
       it "updates the squad_member" do
         squad_member() |> UpdateSquadMember.call(args())
-        updated = SquadMember |> Repo.get(squad_member().id)
-        expect(updated.role) |> to(eq :journalist)
+        expect(reload(squad_member()).role) |> to(eq :journalist)
       end
 
       it "schedules queue normalization" do
@@ -43,8 +41,7 @@ defmodule Squadster.Domain.Formations.Services.UpdateSquadMemberSpec do
 
         it "updates the squad_member" do
           squad_member() |> UpdateSquadMember.call(args())
-          updated = SquadMember |> Repo.get(squad_member().id)
-          expect(updated.role) |> to(eq :commander)
+          expect(reload(squad_member()).role) |> to(eq :commander)
         end
       end
     end
@@ -63,8 +60,8 @@ defmodule Squadster.Domain.Formations.Services.UpdateSquadMemberSpec do
       it "updates the squad_members" do
         members() |> UpdateSquadMember.call(args())
 
-        first  = SquadMember |> Repo.get(first_member().id)
-        second = SquadMember |> Repo.get(second_member().id)
+        first  = reload(first_member())
+        second = reload(second_member())
         expect(first.queue_number) |> to(eq 1)
         expect(second.queue_number) |> to(eq 2)
       end

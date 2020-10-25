@@ -5,7 +5,6 @@ defmodule Squadster.Domain.Formations.Services.ApproveSquadRequestSpec do
   import Mockery
   import Mockery.Assertions
 
-  alias Squadster.Formations.SquadRequest
   alias Squadster.Formations.Services.ApproveSquadRequest
   alias Squadster.Formations.Tasks.NormalizeQueue
 
@@ -21,7 +20,7 @@ defmodule Squadster.Domain.Formations.Services.ApproveSquadRequestSpec do
     it "approves an existing squad_request and sets approved_at and approver" do
       ApproveSquadRequest.call(squad_request(), user())
 
-      request = SquadRequest |> Repo.get(squad_request().id) |> Repo.preload(:approver)
+      request = squad_request() |> reload |> Repo.preload(:approver)
       %{squad_member: approver} = user() |> Repo.preload(:squad_member)
 
       expect request.approver |> to(eq approver)

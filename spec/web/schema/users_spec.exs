@@ -2,7 +2,6 @@ defmodule Squadster.Web.Schema.UsersSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :controller
 
-  alias Squadster.Accounts.User
   alias Squadster.Helpers.Dates
 
   let :user, do: insert(:user)
@@ -78,7 +77,7 @@ defmodule Squadster.Web.Schema.UsersSpec do
       it "updates user's attributes" do
         user() |> api_request(update_current_user())
 
-        user = User |> Repo.get(user().id)
+        user = reload(user())
 
         expect user.first_name |> to(eq params().first_name)
         expect user.last_name |> to(eq params().last_name)

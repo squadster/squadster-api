@@ -159,7 +159,7 @@ defmodule Squadster.Web.AuthControllerSpec do
 
     it "sets current_user token to nil" do
       login_as(user()) |> delete_request()
-      user = User |> Repo.get(user().id)
+      user = reload(user())
       expect user.auth_token |> to(eq nil)
     end
 

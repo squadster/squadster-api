@@ -10,4 +10,8 @@ defmodule Squadster.Support.RepoHelper do
   def last(struct) do
     Repo.one(from s in struct, order_by: [desc: s.id], limit: 1)
   end
+
+  def reload(struct) do
+    struct.__struct__ |> Repo.get(struct.id)
+  end
 end

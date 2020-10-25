@@ -2,7 +2,6 @@ defmodule Squadster.Domain.Services.UpdateUserSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
-  alias Squadster.Accounts.User
   alias Squadster.Accounts.Services.UpdateUser
 
   let :user, do: insert(:user)
@@ -19,7 +18,7 @@ defmodule Squadster.Domain.Services.UpdateUserSpec do
     it "updates user info" do
       UpdateUser.call(user(), update_params())
 
-      user = User |> Repo.get(user().id)
+      user = reload(user())
 
       expect user.first_name |> to(eq update_params().first_name)
       expect user.last_name |> to(eq update_params().last_name)
