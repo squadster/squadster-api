@@ -5,34 +5,6 @@ defmodule Squadster.Web.Resolvers.AccountsSpec do
   import Mockery.Assertions
 
   alias SquadsterWeb.Resolvers.Accounts
-  alias Squadster.Accounts.User
-
-  describe "user/3" do
-    context "when the user exists" do
-      let! :user, do: insert(:user)
-
-      it "returns user" do
-        {:ok, user} = Accounts.user(nil, %{id: user().id}, nil)
-        expect user |> to(eq user())
-      end
-    end
-
-    context "when the user does not exist" do
-      it "returns error" do
-        {:error, message} = Accounts.user(nil, %{id: 1}, nil)
-        expect is_binary(message) |> to(be true)
-      end
-    end
-  end
-
-  describe "users/3" do
-    let! :users, do: insert_list(3, :user)
-
-    it "returns users" do
-      {:ok, users} = Accounts.users(nil, nil, nil)
-      expect Enum.count(users) |> to(eq entities_count(User))
-    end
-  end
 
   describe "current_user/3" do
     context "when the user is logged in" do

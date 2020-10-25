@@ -27,14 +27,6 @@ defmodule Squadster.Accounts do
     |> Repo.update
   end
 
-  def list_users do
-    Repo.all(User)
-  end
-
-  def find_user(id) do
-    User |> Repo.get_by(id: id)
-  end
-
   def find_user_by_token(token) do
     User |> Repo.get_by(auth_token: token)
   end
@@ -54,6 +46,7 @@ defmodule Squadster.Accounts do
   end
 
   def update_user(args, user) do
+    # TODO: permissions
     user |> UpdateUser.call(args)
   end
 end

@@ -8,28 +8,18 @@ defmodule Squadster.Schema do
   import_types SquadsterWeb.Schema.{SharedTypes, AccountTypes, FormationTypes}
 
   query do
-    @desc "Get a list of users"
-    field :users, list_of(:user) do
-      resolve &AccountsResolver.users/3
-    end
-
-    @desc "Find a user by id"
-    field :user, :user do
-      arg :id, non_null(:id)
-
-      resolve &AccountsResolver.user/3
-    end
-
     @desc "Get current user"
     field :current_user, :user do
       resolve &AccountsResolver.current_user/3
     end
 
+    # TODO: needs permissions
     @desc "Get a list of squads"
     field :squads, list_of(:squad) do
       resolve &FormationsResolver.squads/3
     end
 
+    # TODO: unused, remove?
     @desc "Get a squad by number"
     field :squad, :squad do
       arg :squad_number, non_null(:string)

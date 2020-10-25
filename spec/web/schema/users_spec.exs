@@ -8,54 +8,6 @@ defmodule Squadster.Web.Schema.UsersSpec do
   let :user, do: insert(:user)
 
   describe "queries" do
-    describe "users" do
-      let! :user, do: insert(:user)
-      let :users, do: %{query: users_query()}
-      let :users_query do
-        """
-          query getUsers {
-            users {
-              id
-            }
-          }
-        """
-      end
-
-      it "returns a list of users" do
-        users_count = entities_count(User)
-        %{"data" => %{"users" => users_list}} = user()
-        |> api_request(users())
-        |> json_response(200)
-
-        expect users_list
-        |> Enum.count
-        |> to(eq users_count)
-      end
-    end
-
-    describe "user" do
-      let :user_params, do: %{query: user_query(), variables: %{id: user().id}}
-      let :user_query do
-        """
-          query getUser($id: Int) {
-            user(id: $id) {
-              id
-            }
-          }
-        """
-      end
-
-      it "returns a user by id" do
-        %{"data" => %{"user" => found_user}} = user()
-        |> api_request(user_params())
-        |> json_response(200)
-
-        expect found_user["id"]
-        |> String.to_integer
-        |> to(eq user().id)
-      end
-    end
-
     describe "current_user" do
       let :current_user, do: %{query: current_user_query()}
       let :current_user_query do

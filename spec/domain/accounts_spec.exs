@@ -10,23 +10,6 @@ defmodule Squadster.Domain.AccountsSpec do
 
   let :user, do: insert(:user)
 
-  describe "list_users/0" do
-    it "returns list of users" do
-      users_count = entities_count(User)
-      expect Accounts.list_users()
-      |> Enum.count
-      |> to(eq users_count)
-    end
-  end
-
-  describe "find_user/1" do
-    it "finds user by id" do
-      expect user().id
-      |> Accounts.find_user()
-      |> to(eq user())
-    end
-  end
-
   describe "find_user_by_token/1" do
     it "finds user by token" do
       expect user().auth_token
