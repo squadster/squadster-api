@@ -33,11 +33,11 @@ defmodule Squadster.Web.Schema.UsersSpec do
   end
 
   describe "mutations" do
-    describe "update_user" do
-      let :update_user, do: %{query: update_user_mutation(), variables: params()}
-      let :update_user_mutation do
+    describe "update_current_user" do
+      let :update_current_user, do: %{query: update_current_user_mutation(), variables: params()}
+      let :update_current_user_mutation do
         """
-          mutation updateUser(
+          mutation updateCurrentUser(
             $first_name:   String,
             $last_name:    String,
             $birth_date:   Date,
@@ -45,7 +45,7 @@ defmodule Squadster.Web.Schema.UsersSpec do
             $faculty:      String,
             $mobile_phone: String
           ) {
-            updateUser(
+            updateCurrentUser(
               firstName:   $first_name,
               lastName:    $last_name,
               birthDate:   $birth_date,
@@ -76,7 +76,7 @@ defmodule Squadster.Web.Schema.UsersSpec do
       end
 
       it "updates user's attributes" do
-        user() |> api_request(update_user())
+        user() |> api_request(update_current_user())
 
         user = User |> Repo.get(user().id)
 

@@ -29,8 +29,8 @@ defmodule Squadster.Schema do
   end
 
   mutation do
-    @desc "Update user"
-    field :update_user, type: :user do
+    @desc "Update current user"
+    field :update_current_user, type: :user do
       arg :first_name, :string
       arg :last_name, :string
       arg :birth_date, :date
@@ -38,7 +38,7 @@ defmodule Squadster.Schema do
       arg :university, :string
       arg :faculty, :string
 
-      resolve &AccountsResolver.update_user/3
+      resolve &AccountsResolver.update_current_user/3
     end
 
     @desc "Create a squad"

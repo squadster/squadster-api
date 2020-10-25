@@ -46,7 +46,6 @@ defmodule Squadster.Accounts do
   end
 
   def update_user(args, user) do
-    # TODO: permissions
     user |> UpdateUser.call(args)
   end
 end
