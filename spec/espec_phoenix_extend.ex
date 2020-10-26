@@ -43,6 +43,7 @@ defmodule ESpec.Phoenix.Extend do
   def view do
     quote do
       import SquadsterWeb.Router.Helpers
+      import Squadster.Support.Factory
     end
   end
 
