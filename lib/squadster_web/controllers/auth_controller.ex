@@ -26,7 +26,7 @@ defmodule SquadsterWeb.AuthController do
     case mockable(Accounts).find_or_create_user(auth) do
       {:ok, user} ->
         if mobile?(params["state"]) do
-          conn |> render(SquadsterWeb.AuthView, "callback.json", user: user)
+          conn |> render("callback.json", user: user)
         else
           warnings = case create_squad_member(params["state"], user) do
             {:ok, _member} -> []

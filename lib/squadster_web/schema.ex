@@ -13,7 +13,7 @@ defmodule Squadster.Schema do
       resolve &AccountsResolver.current_user/3
     end
 
-    # TODO: needs permissions
+    # TODO: rebuild permissions
     @desc "Get a list of squads"
     field :squads, list_of(:squad) do
       resolve &FormationsResolver.squads/3

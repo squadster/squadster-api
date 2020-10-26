@@ -104,7 +104,11 @@ defmodule Squadster.Web.AuthControllerSpec do
               end
 
               it "includes warning message that indicates that the hash_id is invalid" do
-                redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=123"}) |> redirected_to(302)
+                redirect_url =
+                  success_conn()
+                  |> AuthController.callback(%{"state" => "hash_id=123"})
+                  |> redirected_to(302)
+
                 expect(redirect_url =~ "warnings") |> to(be true)
                 expect(redirect_url =~ "Invalid+hash_id") |> to(be true)
               end
@@ -112,7 +116,11 @@ defmodule Squadster.Web.AuthControllerSpec do
 
             context "and when it is 'mobile=ture'" do
               it "should render json instead of redirect" do
-                response = success_conn() |> AuthController.callback(%{"state" => "mobile=true"})
+                response =
+                  success_conn()
+                  |> Phoenix.Controller.put_view(SquadsterWeb.AuthView)
+                  |> AuthController.callback(%{"state" => "mobile=true"})
+
                 expect response.status |> to(eq 200)
                 expect response |> get_resp_header("content-type") |> to(eq ["application/json; charset=utf-8"])
               end
