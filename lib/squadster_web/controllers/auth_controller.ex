@@ -26,13 +26,13 @@ defmodule SquadsterWeb.AuthController do
     case mockable(Accounts).find_or_create_user(auth) do
       {:ok, user} ->
         if mobile?(params["state"]) do
-          render(conn, "callback.json", user: user)
+          conn |> render(SquadsterWeb.AuthView, "callback.json", user: user)
         else
           warnings = case create_squad_member(params["state"], user) do
             {:ok, _member} -> []
             {:error, message} -> [message]
           end
-          redirect(conn, external: redirect_url(user: user, warnings: warnings))
+          conn |> redirect(external: redirect_url(user: user, warnings: warnings))
         end
       {:error, reason} -> send_auth_error(conn, reason)
     end
