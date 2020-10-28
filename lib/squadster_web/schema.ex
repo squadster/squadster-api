@@ -18,14 +18,6 @@ defmodule Squadster.Schema do
     field :squads, list_of(:squad) do
       resolve &FormationsResolver.squads/3
     end
-
-    # TODO: unused, remove?
-    @desc "Get a squad by number"
-    field :squad, :squad do
-      arg :squad_number, non_null(:string)
-
-      resolve &FormationsResolver.squad/3
-    end
   end
 
   mutation do
