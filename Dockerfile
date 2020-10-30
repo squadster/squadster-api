@@ -6,7 +6,6 @@ RUN apt-get update && \
 
 RUN mkdir -p /app/_build
 COPY _build/prod/rel/squadster ./app
-COPY scripts/wait-for-it.sh ./app
 COPY scripts/entrypoint.sh ./app
 
 WORKDIR /app
