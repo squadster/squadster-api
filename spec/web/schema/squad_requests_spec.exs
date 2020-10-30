@@ -92,11 +92,8 @@ defmodule Squadster.Web.Schema.SquadRequestSpec do
 
       it "approves existing squad_request" do
         expect squad_request().approved_at |> to(eq nil)
-
         user() |> api_request(approve_squad_request(squad_request().id))
-        request = SquadRequest |> Repo.get(squad_request().id)
-
-        expect request.approved_at |> to_not(eq nil)
+        expect reload(squad_request()).approved_at |> to_not(eq nil)
       end
     end
   end

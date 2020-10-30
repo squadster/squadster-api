@@ -1,5 +1,6 @@
 defmodule Squadster.Web.ErrorViewSpec do
   use ESpec.Phoenix, async: true, view: ErrorView
+  use ESpec.Phoenix.Extend, :view
 
   describe "404.json" do
     let :content do

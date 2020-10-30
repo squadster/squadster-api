@@ -59,8 +59,4 @@ defmodule Squadster.Helpers.Permissions do
       true -> false
     end
   end
-
-  defp has_role_in?(%User{} = user, %Squad{} = squad, role) do
-    user |> has_role_in?(squad, [role])
-  end
 end

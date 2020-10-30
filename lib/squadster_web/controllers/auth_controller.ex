@@ -25,11 +25,15 @@ defmodule SquadsterWeb.AuthController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, params) do
     case mockable(Accounts).find_or_create_user(auth) do
       {:ok, user} ->
-        warnings = case create_squad_member(params["state"], user) do
-                     {:ok, _member} -> []
-                     {:error, message} -> [message]
-                   end
-        redirect(conn, external: redirect_url(user: user, warnings: warnings))
+        if mobile?(params["state"]) do
+          conn |> render("callback.json", user: user)
+        else
+          warnings = case create_squad_member(params["state"], user) do
+            {:ok, _member} -> []
+            {:error, message} -> [message]
+          end
+          conn |> redirect(external: redirect_url(user: user, warnings: warnings))
+        end
       {:error, reason} -> send_auth_error(conn, reason)
     end
   end
@@ -60,6 +64,9 @@ defmodule SquadsterWeb.AuthController do
     end
   end
 
-  defp create_squad_member(nil, _), do: {:ok, nil}
-  defp create_squad_member(_, _), do: {:error, "Invalid state"}
+  defp create_squad_member(nil, _user),    do: {:ok, nil}
+  defp create_squad_member(_state, _user), do: {:error, "Invalid state"}
+
+  defp mobile?("mobile=true"), do: true
+  defp mobile?(_state),        do: false
 end

@@ -76,11 +76,11 @@ defmodule Squadster.Web.AuthControllerSpec do
         end
 
         context "when there is state param included" do
-          before do
-            mock NormalizeQueue, :start_link
-          end
-
           context "and when it has hash_id" do
+            before do
+              mock NormalizeQueue, :start_link
+            end
+
             context "and when there is a squad with this hash_id and link invitations enabled" do
               let :hash_id, do: "YFuzkbC6ONC4pEM3AhIBhA=="
               let! :squad, do: insert(:squad, hash_id: hash_id(), link_invitations_enabled: true)
@@ -104,9 +104,25 @@ defmodule Squadster.Web.AuthControllerSpec do
               end
 
               it "includes warning message that indicates that the hash_id is invalid" do
-                redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=123"}) |> redirected_to(302)
+                redirect_url =
+                  success_conn()
+                  |> AuthController.callback(%{"state" => "hash_id=123"})
+                  |> redirected_to(302)
+
                 expect(redirect_url =~ "warnings") |> to(be true)
                 expect(redirect_url =~ "Invalid+hash_id") |> to(be true)
+              end
+            end
+
+            context "and when it is 'mobile=ture'" do
+              it "should render json instead of redirect" do
+                response =
+                  success_conn()
+                  |> Phoenix.Controller.put_view(SquadsterWeb.AuthView)
+                  |> AuthController.callback(%{"state" => "mobile=true"})
+
+                expect response.status |> to(eq 200)
+                expect response |> get_resp_header("content-type") |> to(eq ["application/json; charset=utf-8"])
               end
             end
           end
@@ -159,7 +175,7 @@ defmodule Squadster.Web.AuthControllerSpec do
 
     it "sets current_user token to nil" do
       login_as(user()) |> delete_request()
-      user = User |> Repo.get(user().id)
+      user = reload(user())
       expect user.auth_token |> to(eq nil)
     end
 

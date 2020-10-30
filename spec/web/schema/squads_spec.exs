@@ -29,33 +29,6 @@ defmodule Squadster.Web.Schema.SquadSpec do
         |> to(eq squads_count)
       end
     end
-
-    describe "squad" do
-      def get_squad(squad_number) do
-        %{query: squad_query(), variables: %{squad_number: squad_number}}
-      end
-
-      let :squad, do: insert(:squad)
-      let :squad_query do
-        """
-          query Squad($squad_number: String) {
-            squad(squadNumber: $squad_number) {
-              id
-              hashId
-              squadNumber
-            }
-          }
-        """
-      end
-
-      it "returns a squad by number" do
-        squad = json_response(api_request(get_squad(squad().squad_number)), 200)["data"]["squad"]
-
-        expect squad["id"] |> to(eq(squad().id |> Integer.to_string))
-        expect squad["squadNumber"] |> to(eq squad().squad_number)
-        expect squad["hashId"] |> to(eq squad().hash_id)
-      end
-    end
   end
 
   describe "mutations" do
@@ -138,9 +111,11 @@ defmodule Squadster.Web.Schema.SquadSpec do
 
         user() |> api_request(update_squad(squad.id))
 
-        expect Repo.get(Squad, squad.id).advertisment |> to(eq update_params().advertisment)
-        expect {:ok, Repo.get(Squad, squad.id).class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
-        expect Repo.get(Squad, squad.id).squad_number |> to(eq update_params().squad_number)
+        squad = reload(squad)
+
+        expect squad.advertisment |> to(eq update_params().advertisment)
+        expect {:ok, squad.class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
+        expect squad.squad_number |> to(eq update_params().squad_number)
       end
     end
   end

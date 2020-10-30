@@ -87,4 +87,3 @@ defmodule Squadster.Accounts.Tasks.NotifySpec do
     end
   end
 end
-

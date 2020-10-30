@@ -8,39 +8,21 @@ defmodule Squadster.Schema do
   import_types SquadsterWeb.Schema.{SharedTypes, AccountTypes, FormationTypes}
 
   query do
-    @desc "Get a list of users"
-    field :users, list_of(:user) do
-      resolve &AccountsResolver.users/3
-    end
-
-    @desc "Find a user by id"
-    field :user, :user do
-      arg :id, non_null(:id)
-
-      resolve &AccountsResolver.user/3
-    end
-
     @desc "Get current user"
     field :current_user, :user do
       resolve &AccountsResolver.current_user/3
     end
 
+    # TODO: rebuild permissions
     @desc "Get a list of squads"
     field :squads, list_of(:squad) do
       resolve &FormationsResolver.squads/3
     end
-
-    @desc "Get a squad by number"
-    field :squad, :squad do
-      arg :squad_number, non_null(:string)
-
-      resolve &FormationsResolver.squad/3
-    end
   end
 
   mutation do
-    @desc "Update user"
-    field :update_user, type: :user do
+    @desc "Update current user"
+    field :update_current_user, type: :user do
       arg :first_name, :string
       arg :last_name, :string
       arg :birth_date, :date
@@ -48,7 +30,7 @@ defmodule Squadster.Schema do
       arg :university, :string
       arg :faculty, :string
 
-      resolve &AccountsResolver.update_user/3
+      resolve &AccountsResolver.update_current_user/3
     end
 
     @desc "Create a squad"

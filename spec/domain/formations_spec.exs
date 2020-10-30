@@ -86,7 +86,7 @@ defmodule Squadster.Domain.FormationsSpec do
     it "updates a squad by id" do
       Formations.update_squad(update_params(), user())
 
-      updated_squad = Repo.get(Squad, squad().id)
+      updated_squad = reload(squad())
       expect updated_squad.advertisment |> to(eq update_params().advertisment)
       expect {:ok, updated_squad.class_day} |> to(eq Squad.ClassDayEnum.cast(update_params().class_day))
       expect updated_squad.squad_number |> to(eq update_params().squad_number)

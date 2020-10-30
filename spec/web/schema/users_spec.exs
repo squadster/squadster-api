@@ -2,60 +2,11 @@ defmodule Squadster.Web.Schema.UsersSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :controller
 
-  alias Squadster.Accounts.User
   alias Squadster.Helpers.Dates
 
   let :user, do: insert(:user)
 
   describe "queries" do
-    describe "users" do
-      let! :user, do: insert(:user)
-      let :users, do: %{query: users_query()}
-      let :users_query do
-        """
-          query getUsers {
-            users {
-              id
-            }
-          }
-        """
-      end
-
-      it "returns a list of users" do
-        users_count = entities_count(User)
-        %{"data" => %{"users" => users_list}} = user()
-        |> api_request(users())
-        |> json_response(200)
-
-        expect users_list
-        |> Enum.count
-        |> to(eq users_count)
-      end
-    end
-
-    describe "user" do
-      let :user_params, do: %{query: user_query(), variables: %{id: user().id}}
-      let :user_query do
-        """
-          query getUser($id: Int) {
-            user(id: $id) {
-              id
-            }
-          }
-        """
-      end
-
-      it "returns a user by id" do
-        %{"data" => %{"user" => found_user}} = user()
-        |> api_request(user_params())
-        |> json_response(200)
-
-        expect found_user["id"]
-        |> String.to_integer
-        |> to(eq user().id)
-      end
-    end
-
     describe "current_user" do
       let :current_user, do: %{query: current_user_query()}
       let :current_user_query do
@@ -81,11 +32,11 @@ defmodule Squadster.Web.Schema.UsersSpec do
   end
 
   describe "mutations" do
-    describe "update_user" do
-      let :update_user, do: %{query: update_user_mutation(), variables: params()}
-      let :update_user_mutation do
+    describe "update_current_user" do
+      let :update_current_user, do: %{query: update_current_user_mutation(), variables: params()}
+      let :update_current_user_mutation do
         """
-          mutation updateUser(
+          mutation updateCurrentUser(
             $first_name:   String,
             $last_name:    String,
             $birth_date:   Date,
@@ -93,7 +44,7 @@ defmodule Squadster.Web.Schema.UsersSpec do
             $faculty:      String,
             $mobile_phone: String
           ) {
-            updateUser(
+            updateCurrentUser(
               firstName:   $first_name,
               lastName:    $last_name,
               birthDate:   $birth_date,
@@ -124,9 +75,9 @@ defmodule Squadster.Web.Schema.UsersSpec do
       end
 
       it "updates user's attributes" do
-        user() |> api_request(update_user())
+        user() |> api_request(update_current_user())
 
-        user = User |> Repo.get(user().id)
+        user = reload(user())
 
         expect user.first_name |> to(eq params().first_name)
         expect user.last_name |> to(eq params().last_name)

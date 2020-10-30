@@ -61,9 +61,9 @@ defmodule Squadster.Web.Schema.SquadMembersSpec do
       it "updates a squad_member" do
         commander() |> api_request(update_squad_member(squad_member().id))
 
-        expect Repo.get(SquadMember, squad_member().id).queue_number |> to(eq update_params().queue_number)
-        expect {:ok, Repo.get(SquadMember, squad_member().id).role}
-        |> to(eq SquadMember.RoleEnum.cast(update_params().role))
+        squad_member = reload(squad_member())
+        expect squad_member.queue_number |> to(eq update_params().queue_number)
+        expect {:ok, squad_member.role} |> to(eq SquadMember.RoleEnum.cast(update_params().role))
       end
     end
 
@@ -100,8 +100,8 @@ defmodule Squadster.Web.Schema.SquadMembersSpec do
       it "updates queue_numbers for a batch of squad_members" do
         commander() |> api_request(update_squad_members(squad_member().id, second_member().id))
 
-        expect Repo.get(SquadMember, first_member().id).queue_number  |> to(eq update_params().first_queue_number)
-        expect Repo.get(SquadMember, second_member().id).queue_number |> to(eq update_params().second_queue_number)
+        expect reload(first_member()).queue_number  |> to(eq update_params().first_queue_number)
+        expect reload(second_member()).queue_number |> to(eq update_params().second_queue_number)
       end
     end
   end

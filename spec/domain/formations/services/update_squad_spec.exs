@@ -5,7 +5,6 @@ defmodule Squadster.Domain.Formations.Services.UpdateSquadSpec do
   import Mockery
   import Mockery.Assertions
 
-  alias Squadster.Formations.Squad
   alias Squadster.Formations.Services.UpdateSquad
   alias Squadster.Formations.Services.NotifySquadChanges
 
@@ -21,15 +20,12 @@ defmodule Squadster.Domain.Formations.Services.UpdateSquadSpec do
 
     it "updates the squad" do
       {:ok, _squad} = UpdateSquad.call(squad(), args(), user())
-
-      squad = Squad |> Repo.get(squad().id)
-
+      squad = reload(squad())
       expect squad.squad_number |> to(eq squad_number())
     end
 
     it "sends notifications to students" do
       {:ok, _squad} = UpdateSquad.call(squad(), args(), user())
-
       assert_called NotifySquadChanges, :call
     end
   end
