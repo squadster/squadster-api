@@ -1,16 +1,18 @@
 # Squadster
 
-Application for squads management in university military departments.
+![Logo](https://github.com/squadster/squadster-api/blob/master/logo.png "Hello :)")
+
+Application for facilitation military departments studies.
 
 ## The problem it \*will\* solve
 
-No one wants to go to army, that's why students attends to military departments in universities, and no one wants to learn something and care about it because there is completely useless information.
+No one wants to go to a conscript army, to avoid it students have to attend to military departments in their universities, and no one wants to learn something and care about it because there is completely useless for their life.
 
 But unfortunately if student do nothing he can be expelled from the department or have some problems there.
 
 This application helps students to minimalize care about military studying.
 
-🌸 **Make love, not war** 🌸
+We are against the conscription: 🌸 **Make labs, not war** 🌸
 
 ## Installation guides
 
