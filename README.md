@@ -1,6 +1,6 @@
 # Squadster
 
-![Logo](https://github.com/squadster/squadster-api/blob/master/logo.png "Hello :)")
+![Logo](https://github.com/squadster/squadster-api/blob/master/logo.png =250x250 "Hello :)")
 
 Application for facilitation military departments studies.
 
