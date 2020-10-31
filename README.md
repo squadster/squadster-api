@@ -1,8 +1,8 @@
 # Squadster
 
-![Logo](https://github.com/squadster/squadster-api/blob/master/logo.png "Hello :)")
-
 Application for facilitation military departments studies.
+
+![Logo](https://github.com/squadster/squadster-api/blob/master/logo.png "Hello :)")
 
 ## The problem it \*will\* solve
 
