@@ -1,6 +1,4 @@
 defmodule Squadster.Accounts do
-  import Ecto.Changeset
-
   alias Ueberauth.Auth
   alias Squadster.Repo
   alias Squadster.Accounts.User
@@ -35,7 +33,6 @@ defmodule Squadster.Accounts do
     if user = User |> Repo.get_by(uid: User.uid_from_auth(auth)) do
       user
       |> User.auth_changeset(User.data_from_auth(auth))
-      |> delete_change(:uid)
       |> Repo.update
       |> case do
         {:ok, user}      -> {:found, user}
