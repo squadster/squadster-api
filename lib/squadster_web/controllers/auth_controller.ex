@@ -24,17 +24,17 @@ defmodule SquadsterWeb.AuthController do
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, params) do
     case mockable(Accounts).find_or_create_user(auth) do
-      {:ok, user} ->
+      {:error, reason} -> send_auth_error(conn, reason)
+      {status, user} ->
         if mobile?(params["state"]) do
-          conn |> render("callback.json", user: user)
+          conn |> render("callback.json", user: user, show_info: show_info?(status))
         else
           warnings = case create_squad_member(params["state"], user) do
             {:ok, _member} -> []
             {:error, message} -> [message]
           end
-          conn |> redirect(external: redirect_url(user: user, warnings: warnings))
+          conn |> redirect(external: redirect_url(user: user, warnings: warnings, show_info: show_info?(status)))
         end
-      {:error, reason} -> send_auth_error(conn, reason)
     end
   end
 
@@ -46,12 +46,13 @@ defmodule SquadsterWeb.AuthController do
     @base_redirect_url <> URI.encode_query(%{message: "Error", reason: reason})
   end
 
-  defp redirect_url(user: user, warnings: warnings) do
+  defp redirect_url(user: user, warnings: warnings, show_info: show_info) do
     user_data = Map.take(user, Accounts.User.user_fields)
     @base_redirect_url <> URI.encode_query(%{
       message: "Logged in",
       warnings: Poison.encode(warnings) |> elem(1),
-      user: Poison.encode(user_data) |> elem(1)
+      user: Poison.encode(user_data) |> elem(1),
+      show_info: show_info
     })
   end
 
@@ -69,4 +70,7 @@ defmodule SquadsterWeb.AuthController do
 
   defp mobile?("mobile=true"), do: true
   defp mobile?(_state),        do: false
+
+  defp show_info?(:created), do: true
+  defp show_info?(:found),   do: false
 end
