@@ -31,9 +31,9 @@ defmodule Squadster.Web.AuthControllerSpec do
           expect(conn |> redirected_to(302) =~ "squadster") |> to(eq true)
         end
 
-        describe "user creation logic" do
-          context "when user with provided token already exists" do
-            let! :user, do: insert(:user, auth_token: ueberauth().credentials.token)
+        describe "user creation/search logic" do
+          context "when user with provided uid already exists" do
+            let! :user, do: insert(:user, uid: ueberauth().extra.raw_info.user["id"] |> Integer.to_string)
 
             it "redirects to front-end with user info" do
               redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
@@ -41,6 +41,17 @@ defmodule Squadster.Web.AuthControllerSpec do
               expect(redirect_url =~ "uid") |> to(be true)
               expect(redirect_url =~ "auth_token") |> to(be true)
               expect(redirect_url =~ "image_url") |> to(be true)
+            end
+
+            it "should not create user" do
+              initial_count = entities_count(User)
+              success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
+              expect(entities_count(User)) |> to(eq(initial_count))
+            end
+
+            it "includes show_info: false" do
+              redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
+              expect(redirect_url =~ "show_info=false") |> to(be true)
             end
           end
 
@@ -57,6 +68,11 @@ defmodule Squadster.Web.AuthControllerSpec do
               expect(redirect_url =~ "uid") |> to(be true)
               expect(redirect_url =~ "auth_token") |> to(be true)
               expect(redirect_url =~ "image_url") |> to(be true)
+            end
+
+            it "includes show_info: true" do
+              redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
+              expect(redirect_url =~ "show_info=true") |> to(be true)
             end
           end
         end

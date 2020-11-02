@@ -36,7 +36,8 @@ defmodule Squadster.Accounts.User do
   @vk_priority_fields [
     :vk_url,
     :small_image_url,
-    :image_url
+    :image_url,
+    :auth_token
   ]
 
   schema "users" do
@@ -59,7 +60,7 @@ defmodule Squadster.Accounts.User do
   def user_fields, do: [:id | @auth_fields]
 
   def changeset(params) do
-     changeset(%__MODULE__{}, params)
+    changeset(%__MODULE__{}, params)
   end
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
@@ -70,7 +71,7 @@ defmodule Squadster.Accounts.User do
   end
 
   def auth_changeset(params) do
-     auth_changeset(%__MODULE__{}, params)
+    auth_changeset(%__MODULE__{}, params)
   end
 
   def auth_changeset(%__MODULE__{} = struct, params \\ %{}) do
