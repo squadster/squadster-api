@@ -22,7 +22,7 @@ defmodule Squadster.Schedules do
   def create_timetable(%{squad_id: id} = args, user) do
     with squad <- Squad |> Repo.get(id) do
       if user |> Permissions.can_update?(squad) do
-        CreateTimetable.call(args, user, squad)
+        CreateTimetable.call(args)
       else
         {:error, "Not enough permissions"}
       end
@@ -54,13 +54,6 @@ defmodule Squadster.Schedules do
     end
   end
 
-  def find_timetables(squad_number) do
-    case Squad |> Repo.get_by(squad_number: squad_number) |> Repo.preload(:timetables) do
-      %{timetables: timetables} -> {:ok, timetables}
-      nil -> {:error, "There is no timetables in this squad"}
-    end
-  end
-
   def create_lesson(%{timetable_id: timetable_id} = args, user) do
     timetable = Timetable |> Repo.get(timetable_id) |> Repo.preload([:squad, :lessons])
     if user |> Permissions.can_update?(timetable.squad) do
@@ -85,22 +78,6 @@ defmodule Squadster.Schedules do
       UpdateLesson.call(timetable, args)
     else
       {:error, "Not enough permissions"}
-    end
-  end
-
-  def show_lessons(timetable_id, user) do
-    %{squad_member: %{squad: %{squad_number: user_squad_number}}} =
-      user
-      |> Repo.preload(squad_member: :squad)
-    timetable =
-      Timetable
-      |> Repo.get(timetable_id)
-      |> Repo.preload([:squad, :lessons])
-
-    if user_squad_number == timetable.squad.squad_number do
-      {:ok, timetable.lessons |> Enum.sort_by(fn lesson -> lesson.index end)}
-    else
-      {:error, "Permission denied"}
     end
   end
 end

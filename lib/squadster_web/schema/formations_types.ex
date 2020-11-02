@@ -22,6 +22,7 @@ defmodule SquadsterWeb.Schema.FormationTypes do
     field :advertisment, :string
     field :class_day, :integer
     field :members, list_of(:squad_member), resolve: dataloader(Squadster.Formations)
+    field :timetables, list_of(:timetable), resolve: dataloader(Squadster.Schedules)
     field :requests, list_of(:squad_request), resolve: dataloader(Squadster.Formations)
   end
 

@@ -19,20 +19,6 @@ defmodule Squadster.Schema do
     field :squads, list_of(:squad) do
       resolve &FormationsResolver.squads/3
     end
-
-    @desc "Get a timetable by id"
-    field :timetables, list_of(:timetable) do
-      arg :squad_number, non_null(:string)
-
-      resolve &SchedulesResolver.find_timetables/3
-    end
-
-    @desc "Show lessons for a timetable"
-    field :lessons, list_of(:lesson) do
-      arg :timetable_id, non_null(:id)
-
-      resolve &SchedulesResolver.show_lessons/3
-    end
   end
 
   mutation do

@@ -11,7 +11,11 @@ defmodule Squadster.Schedules.Services.CreateLesson do
     end
   end
 
-  def call(timetable, args), do: create(Map.merge(args, %{index: get_last_index(timetable.lessons)}))
+  def call(timetable, args) do
+    args
+    |> Map.merge(%{index: get_last_index(timetable.lessons)})
+    |> create
+  end
 
   defp get_last_index(lessons) do
     (lessons |> Enum.map(fn el -> el.index end) |> Enum.sort |> List.last) + 1
