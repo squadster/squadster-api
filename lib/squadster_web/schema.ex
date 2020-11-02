@@ -3,9 +3,10 @@ defmodule Squadster.Schema do
 
   alias SquadsterWeb.Resolvers.Accounts, as: AccountsResolver
   alias SquadsterWeb.Resolvers.Formations, as: FormationsResolver
-  alias Squadster.{Accounts, Formations}
+  alias SquadsterWeb.Resolvers.Schedules, as: SchedulesResolver
+  alias Squadster.{Accounts, Formations, Schedules}
 
-  import_types SquadsterWeb.Schema.{SharedTypes, AccountTypes, FormationTypes}
+  import_types SquadsterWeb.Schema.{SharedTypes, AccountTypes, FormationTypes, SchedulesTypes}
 
   query do
     @desc "Get current user"
@@ -104,6 +105,60 @@ defmodule Squadster.Schema do
 
       resolve &FormationsResolver.delete_squad_member/3
     end
+
+    @desc "Create a timetable"
+    field :create_timetable, type: :timetable do
+      arg :date, type: :date
+      arg :squad_id, non_null(:id)
+
+      resolve &SchedulesResolver.create_timetable/3
+    end
+
+    @desc "Delete timetable"
+    field :delete_timetable, type: :timetable do
+      arg :timetable_id, non_null(:id)
+
+      resolve &SchedulesResolver.delete_timetable/3
+    end
+
+    @desc "Update existing timetable"
+    field :update_timetable, type: :timetable do
+      arg :timetable_id, non_null(:id)
+      arg :date, type: :date
+
+      resolve &SchedulesResolver.update_timetable/3
+    end
+
+    @desc "Create a lesson"
+    field :create_lesson, type: :lesson do
+      arg :timetable_id, non_null(:id)
+      arg :name, :string
+      arg :teacher, :string
+      arg :index, :integer
+      arg :note, :string
+
+      resolve &SchedulesResolver.create_lesson/3
+    end
+
+    @desc "Delete a lesson"
+    field :delete_lesson, type: :lesson do
+      arg :index, non_null(:integer)
+      arg :timetable_id, non_null(:id)
+
+      resolve &SchedulesResolver.delete_lesson/3
+    end
+
+    @desc "Update a lesson"
+    field :update_lesson, type: :lesson do
+      arg :timetable_id, non_null(:id)
+      arg :current_index, non_null(:integer)
+      arg :name, :string
+      arg :teacher, :string
+      arg :index, :integer
+      arg :note, :string
+
+      resolve &SchedulesResolver.update_lesson/3
+    end
   end
 
   def context(ctx) do
@@ -111,6 +166,7 @@ defmodule Squadster.Schema do
       Dataloader.new
       |> Dataloader.add_source(Accounts, Accounts.data())
       |> Dataloader.add_source(Formations, Formations.data())
+      |> Dataloader.add_source(Schedules, Schedules.data())
 
     Map.put(ctx, :loader, loader)
   end
