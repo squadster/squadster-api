@@ -8,7 +8,7 @@ defmodule Squadster.Web.AuthControllerSpec do
   alias Squadster.Accounts.User
 
   describe "vk.com OAuth" do
-    let :provider, do: :vk
+    let provider: :vk
 
     def request(action, conn \\ build_conn()) do
       conn |> get(auth_path(conn, action, provider()))
@@ -23,8 +23,8 @@ defmodule Squadster.Web.AuthControllerSpec do
 
     describe "GET /api/auth/vk/callback" do
       context "when vk auth is successful" do
-        let :ueberauth, do: build(:ueberauth)
-        let :success_conn, do: %{build_conn() | assigns: %{ueberauth_auth: ueberauth()}}
+        let ueberauth: build(:ueberauth)
+        let success_conn: %{build_conn() | assigns: %{ueberauth_auth: ueberauth()}}
         let make_request: url()
 
         it "redirects to front-end" do
@@ -67,7 +67,7 @@ defmodule Squadster.Web.AuthControllerSpec do
 
           context "when user with provided uid already exists" do
             let! :user, do: insert(:user, uid: ueberauth().extra.raw_info.user["id"] |> Integer.to_string)
-            let :url, do: success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
+            let url: success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
 
             it_behaves_like RedirectsToFrontendWithUserInfo
 
@@ -83,7 +83,7 @@ defmodule Squadster.Web.AuthControllerSpec do
           end
 
           context "when it's new user" do
-            let :url, do: success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
+            let url: success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
 
             it_behaves_like RedirectsToFrontendWithUserInfo
 
@@ -178,7 +178,7 @@ defmodule Squadster.Web.AuthControllerSpec do
       conn |> delete(logout_path(conn, :destroy))
     end
 
-    let :user, do: insert(:user)
+    let user: insert(:user)
 
     context "when user is not authenticated" do
       it "responds with an error" do
