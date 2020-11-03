@@ -17,7 +17,7 @@ defmodule Squadster.Web.AuthControllerSpec do
     describe "GET /api/auth/vk" do
       it "redirects to vk.com" do
         redirect_url = request(:request) |> redirected_to(302)
-        expect(redirect_url =~ "https://oauth.vk.com/authorize") |> to(eq true)
+        expect(redirect_url) |> to(match "https://oauth.vk.com/authorize")
       end
     end
 
@@ -28,7 +28,7 @@ defmodule Squadster.Web.AuthControllerSpec do
 
         it "redirects to front-end" do
           conn = request(:callback, success_conn())
-          expect(conn |> redirected_to(302) =~ "squadster") |> to(eq true)
+          expect(conn |> redirected_to(302)) |> to(match "squadster")
         end
 
         describe "user creation/search logic" do
@@ -37,10 +37,10 @@ defmodule Squadster.Web.AuthControllerSpec do
 
             it "redirects to front-end with user info" do
               redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-              expect(redirect_url =~ "last_name") |> to(be true)
-              expect(redirect_url =~ "uid") |> to(be true)
-              expect(redirect_url =~ "auth_token") |> to(be true)
-              expect(redirect_url =~ "image_url") |> to(be true)
+              expect(redirect_url) |> to(match "last_name")
+              expect(redirect_url) |> to(match "uid")
+              expect(redirect_url) |> to(match "auth_token")
+              expect(redirect_url) |> to(match "image_url")
             end
 
             it "should not create user" do
@@ -51,7 +51,7 @@ defmodule Squadster.Web.AuthControllerSpec do
 
             it "includes show_info: false" do
               redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-              expect(redirect_url =~ "show_info=false") |> to(be true)
+              expect(redirect_url) |> to(match "show_info=false")
             end
           end
 
@@ -64,15 +64,15 @@ defmodule Squadster.Web.AuthControllerSpec do
 
             it "redirects to front-end with user info" do
               redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-              expect(redirect_url =~ "last_name") |> to(be true)
-              expect(redirect_url =~ "uid") |> to(be true)
-              expect(redirect_url =~ "auth_token") |> to(be true)
-              expect(redirect_url =~ "image_url") |> to(be true)
+              expect(redirect_url) |> to(match "last_name")
+              expect(redirect_url) |> to(match "uid")
+              expect(redirect_url) |> to(match "auth_token")
+              expect(redirect_url) |> to(match "image_url")
             end
 
             it "includes show_info: true" do
               redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-              expect(redirect_url =~ "show_info=true") |> to(be true)
+              expect(redirect_url) |> to(match "show_info=true")
             end
           end
         end
@@ -86,8 +86,8 @@ defmodule Squadster.Web.AuthControllerSpec do
 
           it "redirects to front-end with error message" do
             redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-            expect(redirect_url =~ "Error") |> to(be true)
-            expect(redirect_url =~ message()) |> to(be true)
+            expect(redirect_url) |> to(match "Error")
+            expect(redirect_url) |> to(match message())
           end
         end
 
@@ -103,20 +103,20 @@ defmodule Squadster.Web.AuthControllerSpec do
 
               it "redirects to front-end with user info" do
                 redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=#{hash_id()}"}) |> redirected_to(302)
-                expect(redirect_url =~ "last_name") |> to(be true)
-                expect(redirect_url =~ "uid") |> to(be true)
-                expect(redirect_url =~ "auth_token") |> to(be true)
-                expect(redirect_url =~ "image_url") |> to(be true)
+                expect(redirect_url) |> to(match "last_name")
+                expect(redirect_url) |> to(match "uid")
+                expect(redirect_url) |> to(match "auth_token")
+                expect(redirect_url) |> to(match "image_url")
               end
             end
 
             context "and when there in no squad with such hash_id and link invitations enabled" do
               it "redirects to front-end with user info" do
                 redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=123"}) |> redirected_to(302)
-                expect(redirect_url =~ "last_name") |> to(be true)
-                expect(redirect_url =~ "uid") |> to(be true)
-                expect(redirect_url =~ "auth_token") |> to(be true)
-                expect(redirect_url =~ "image_url") |> to(be true)
+                expect(redirect_url) |> to(match "last_name")
+                expect(redirect_url) |> to(match "uid")
+                expect(redirect_url) |> to(match "auth_token")
+                expect(redirect_url) |> to(match "image_url")
               end
 
               it "includes warning message that indicates that the hash_id is invalid" do
@@ -125,8 +125,8 @@ defmodule Squadster.Web.AuthControllerSpec do
                   |> AuthController.callback(%{"state" => "hash_id=123"})
                   |> redirected_to(302)
 
-                expect(redirect_url =~ "warnings") |> to(be true)
-                expect(redirect_url =~ "Invalid+hash_id") |> to(be true)
+                expect(redirect_url) |> to(match "warnings")
+                expect(redirect_url) |> to(match "Invalid+hash_id")
               end
             end
 
@@ -146,16 +146,16 @@ defmodule Squadster.Web.AuthControllerSpec do
           context "and when there is no hash_id" do
             it "redirects to front-end with user info" do
               redirect_url = success_conn() |> AuthController.callback(%{"state" => "hello"}) |> redirected_to(302)
-              expect(redirect_url =~ "last_name") |> to(be true)
-              expect(redirect_url =~ "uid") |> to(be true)
-              expect(redirect_url =~ "auth_token") |> to(be true)
-              expect(redirect_url =~ "image_url") |> to(be true)
+              expect(redirect_url) |> to(match "last_name")
+              expect(redirect_url) |> to(match "uid")
+              expect(redirect_url) |> to(match "auth_token")
+              expect(redirect_url) |> to(match "image_url")
             end
 
             it "includes warning message that indicates that the state is invalid" do
               redirect_url = success_conn() |> AuthController.callback(%{"state" => "hello"}) |> redirected_to(302)
-              expect(redirect_url =~ "warnings") |> to(be true)
-              expect(redirect_url =~ "Invalid+state") |> to(be true)
+              expect(redirect_url) |> to(match "warnings")
+              expect(redirect_url) |> to(match "Invalid+state")
             end
           end
         end
@@ -169,8 +169,8 @@ defmodule Squadster.Web.AuthControllerSpec do
 
         it "redirects to front-end with error message" do
           redirect_url = failure_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-          expect(redirect_url =~ "Error") |> to(be true)
-          expect(redirect_url =~ message()) |> to(be true)
+          expect(redirect_url) |> to(match "Error")
+          expect(redirect_url) |> to(match message())
         end
       end
     end
@@ -197,7 +197,7 @@ defmodule Squadster.Web.AuthControllerSpec do
 
     it "responds with status message" do
       conn = login_as(user()) |> delete_request()
-      expect(conn.resp_body =~ "message") |> to(eq true)
+      expect(conn.resp_body) |> to(match "message")
     end
   end
 end
