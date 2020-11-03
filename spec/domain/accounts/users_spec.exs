@@ -67,7 +67,7 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
         end
       end
 
-      defmodule VkPriorityUserField do
+      defmodule VkPriorityUserParam do
         use ESpec, shared: true
 
         let_overridable [:param, :default_value, :new_value]
@@ -99,23 +99,23 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
       it_behaves_like SimpleUserParam, param: :faculty, default_value: "faculty of pizza", new_value: "faculty of AI"
       it_behaves_like SimpleUserParam, param: :uid, default_value: "asd123", new_value: "qwe321"
 
-      it_behaves_like VkPriorityUserField, param: :auth_token, default_value: "V2YLKL/Hi", new_value: "ZTMm9T0XSy"
+      it_behaves_like VkPriorityUserParam, param: :auth_token, default_value: "V2YLKL/Hi", new_value: "ZTMm9T0XSy"
       it_behaves_like(
-        VkPriorityUserField,
+        VkPriorityUserParam,
         param: :vk_url,
         default_value: "https://vk.com/id500663175",
         new_value: "https://vk.com/id314474672"
       )
 
       it_behaves_like(
-        VkPriorityUserField,
+        VkPriorityUserParam,
         param: :image_url,
         default_value: "http://robohash.org/set_set1/bgset_bg2/3MWcVowjAz0RQj",
         new_value: "http://robohash.org/set_set2/bgset_bg2/aOIEj"
       )
 
       it_behaves_like(
-        VkPriorityUserField,
+        VkPriorityUserParam,
         param: :small_image_url,
         default_value: "http://robohash.org/set_set1/bgset_bg2/3MWcVowjAz0RQj",
         new_value: "http://robohash.org/set_set2/bgset_bg2/aOIEj"

@@ -36,10 +36,12 @@ defmodule Squadster.Web.AuthControllerSpec do
           defmodule RedirectsToFrontendWithUserInfo do
             use ESpec, shared: true
 
+            @front_end_url Application.fetch_env!(:ueberauth, Ueberauth.Strategy.VK.OAuth)[:base_redirect_url]
+
             let_overridable :url
 
             it "redirects to front-end" do
-
+              expect(url()) |> to(match @front_end_url)
             end
 
             it "includes user info as url params" do
@@ -53,10 +55,12 @@ defmodule Squadster.Web.AuthControllerSpec do
           defmodule RedirectsToFrontendWithError do
             use ESpec, shared: true
 
+            @front_end_url Application.fetch_env!(:ueberauth, Ueberauth.Strategy.VK.OAuth)[:base_redirect_url]
+
             let_overridable [:url, :message]
 
             it "redirects to front-end" do
-
+              expect(url()) |> to(match @front_end_url)
             end
 
             it "includes error message in url params" do
