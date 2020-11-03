@@ -30,7 +30,14 @@ defmodule Squadster.Accounts.User do
     :birth_date,
     :mobile_phone,
     :university,
-    :faculty,
+    :faculty
+  ]
+
+  @vk_priority_fields [
+    :vk_url,
+    :small_image_url,
+    :image_url,
+    :auth_token
   ]
 
   schema "users" do
@@ -53,7 +60,7 @@ defmodule Squadster.Accounts.User do
   def user_fields, do: [:id | @auth_fields]
 
   def changeset(params) do
-     changeset(%__MODULE__{}, params)
+    changeset(%__MODULE__{}, params)
   end
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
@@ -64,13 +71,15 @@ defmodule Squadster.Accounts.User do
   end
 
   def auth_changeset(params) do
-     auth_changeset(%__MODULE__{}, params)
+    auth_changeset(%__MODULE__{}, params)
   end
 
   def auth_changeset(%__MODULE__{} = struct, params \\ %{}) do
+    filtered_params = params |> reject_existing_fields(struct)
+
     struct
-    |> cast(params, @auth_fields)
-    |> validate_required([:uid, :first_name, :last_name])
+    |> cast(filtered_params, @auth_fields)
+    |> validate_required([:uid])
   end
 
   def data_from_auth(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}, info: %{phone: phone}} = auth) do
@@ -91,5 +100,11 @@ defmodule Squadster.Accounts.User do
 
   def uid_from_auth(%Auth{extra: %{raw_info: %{user: %{"id" => uid}}}}) do
     Integer.to_string(uid)
+  end
+
+  defp reject_existing_fields(params, user) do
+    params |> Enum.filter(fn {key, _value} ->
+      is_nil(user |> Map.get(key)) || key in @vk_priority_fields
+    end) |> Map.new
   end
 end

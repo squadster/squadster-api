@@ -23,7 +23,7 @@ defmodule Squadster.Domain.AccountsSpec do
 
     context "when user with given uid present" do
       it "finds user by uid and updates it" do
-        {:ok, user} = auth() |> Accounts.find_or_create_user()
+        {:found, user} = auth() |> Accounts.find_or_create_user()
 
         expect user.id |> to(eq user().id)
         expect user.auth_token |> to(eq auth().credentials.token)
@@ -35,7 +35,7 @@ defmodule Squadster.Domain.AccountsSpec do
 
       it "creates user" do
         initial_count = entities_count(User)
-        {:ok, user} = new_auth() |> Accounts.find_or_create_user()
+        {:created, user} = new_auth() |> Accounts.find_or_create_user()
         expect initial_count |> to_not(eq entities_count(User))
         expect user.id |> to_not(eq user().id)
       end

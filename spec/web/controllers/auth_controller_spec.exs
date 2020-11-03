@@ -8,7 +8,7 @@ defmodule Squadster.Web.AuthControllerSpec do
   alias Squadster.Accounts.User
 
   describe "vk.com OAuth" do
-    let :provider, do: :vk
+    let provider: :vk
 
     def request(action, conn \\ build_conn()) do
       conn |> get(auth_path(conn, action, provider()))
@@ -17,62 +17,101 @@ defmodule Squadster.Web.AuthControllerSpec do
     describe "GET /api/auth/vk" do
       it "redirects to vk.com" do
         redirect_url = request(:request) |> redirected_to(302)
-        expect(redirect_url =~ "https://oauth.vk.com/authorize") |> to(eq true)
+        expect(redirect_url) |> to(match "https://oauth.vk.com/authorize")
       end
     end
 
     describe "GET /api/auth/vk/callback" do
       context "when vk auth is successful" do
-        let :ueberauth, do: build(:ueberauth)
-        let :success_conn, do: %{build_conn() | assigns: %{ueberauth_auth: ueberauth()}}
+        let ueberauth: build(:ueberauth)
+        let success_conn: %{build_conn() | assigns: %{ueberauth_auth: ueberauth()}}
+        let make_request: url()
 
         it "redirects to front-end" do
           conn = request(:callback, success_conn())
-          expect(conn |> redirected_to(302) =~ "squadster") |> to(eq true)
+          expect(conn |> redirected_to(302)) |> to(match "squadster")
         end
 
-        describe "user creation logic" do
-          context "when user with provided token already exists" do
-            let! :user, do: insert(:user, auth_token: ueberauth().credentials.token)
+        describe "user creation/search logic" do
+          defmodule RedirectsToFrontendWithUserInfo do
+            use ESpec, shared: true
 
-            it "redirects to front-end with user info" do
-              redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-              expect(redirect_url =~ "last_name") |> to(be true)
-              expect(redirect_url =~ "uid") |> to(be true)
-              expect(redirect_url =~ "auth_token") |> to(be true)
-              expect(redirect_url =~ "image_url") |> to(be true)
+            @front_end_url Application.fetch_env!(:ueberauth, Ueberauth.Strategy.VK.OAuth)[:base_redirect_url]
+
+            let_overridable :url
+
+            it "redirects to front-end" do
+              expect(url()) |> to(match @front_end_url)
+            end
+
+            it "includes user info as url params" do
+              expect(url()) |> to(match "last_name")
+              expect(url()) |> to(match "uid")
+              expect(url()) |> to(match "auth_token")
+              expect(url()) |> to(match "image_url")
+            end
+          end
+
+          defmodule RedirectsToFrontendWithError do
+            use ESpec, shared: true
+
+            @front_end_url Application.fetch_env!(:ueberauth, Ueberauth.Strategy.VK.OAuth)[:base_redirect_url]
+
+            let_overridable [:url, :message]
+
+            it "redirects to front-end" do
+              expect(url()) |> to(match @front_end_url)
+            end
+
+            it "includes error message in url params" do
+              expect(url()) |> to(match "Error")
+              expect(url()) |> to(match message())
+            end
+          end
+
+          context "when user with provided uid already exists" do
+            let! :user, do: insert(:user, uid: ueberauth().extra.raw_info.user["id"] |> Integer.to_string)
+            let url: success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
+
+            it_behaves_like RedirectsToFrontendWithUserInfo
+
+            it "should not create user" do
+              initial_count = entities_count(User)
+              make_request()
+              expect(entities_count(User)) |> to(eq(initial_count))
+            end
+
+            it "includes show_info: false" do
+              expect(url()) |> to(match "show_info=false")
             end
           end
 
           context "when it's new user" do
+            let url: success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
+
+            it_behaves_like RedirectsToFrontendWithUserInfo
+
             it "creates user" do
               initial_count = entities_count(User)
-              success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
+              make_request()
               expect(entities_count(User)) |> to(eq(initial_count + 1))
             end
 
-            it "redirects to front-end with user info" do
-              redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-              expect(redirect_url =~ "last_name") |> to(be true)
-              expect(redirect_url =~ "uid") |> to(be true)
-              expect(redirect_url =~ "auth_token") |> to(be true)
-              expect(redirect_url =~ "image_url") |> to(be true)
+            it "includes show_info: true" do
+              expect(url()) |> to(match "show_info=true")
             end
           end
         end
 
         context "when user serch/creation failed" do
-          let :message, do: "Bad_things_happened"
+          let message: "Bad_things_happened"
+          let url: success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
 
           before do
             mock Squadster.Accounts, :find_or_create_user, {:error, message()}
           end
 
-          it "redirects to front-end with error message" do
-            redirect_url = success_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-            expect(redirect_url =~ "Error") |> to(be true)
-            expect(redirect_url =~ message()) |> to(be true)
-          end
+          it_behaves_like RedirectsToFrontendWithError
         end
 
         context "when there is state param included" do
@@ -82,35 +121,21 @@ defmodule Squadster.Web.AuthControllerSpec do
             end
 
             context "and when there is a squad with this hash_id and link invitations enabled" do
-              let :hash_id, do: "YFuzkbC6ONC4pEM3AhIBhA=="
-              let! :squad, do: insert(:squad, hash_id: hash_id(), link_invitations_enabled: true)
+              let hash_id: "YFuzkbC6ONC4pEM3AhIBhA=="
+              let url: success_conn() |> AuthController.callback(%{"state" => "hash_id=#{hash_id()}"}) |> redirected_to(302)
+              let! squad: insert(:squad, hash_id: hash_id(), link_invitations_enabled: true)
 
-              it "redirects to front-end with user info" do
-                redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=#{hash_id()}"}) |> redirected_to(302)
-                expect(redirect_url =~ "last_name") |> to(be true)
-                expect(redirect_url =~ "uid") |> to(be true)
-                expect(redirect_url =~ "auth_token") |> to(be true)
-                expect(redirect_url =~ "image_url") |> to(be true)
-              end
+              it_behaves_like RedirectsToFrontendWithUserInfo
             end
 
             context "and when there in no squad with such hash_id and link invitations enabled" do
-              it "redirects to front-end with user info" do
-                redirect_url = success_conn() |> AuthController.callback(%{"state" => "hash_id=123"}) |> redirected_to(302)
-                expect(redirect_url =~ "last_name") |> to(be true)
-                expect(redirect_url =~ "uid") |> to(be true)
-                expect(redirect_url =~ "auth_token") |> to(be true)
-                expect(redirect_url =~ "image_url") |> to(be true)
-              end
+              let url: success_conn() |> AuthController.callback(%{"state" => "hash_id=123"}) |> redirected_to(302)
+
+              it_behaves_like RedirectsToFrontendWithUserInfo
 
               it "includes warning message that indicates that the hash_id is invalid" do
-                redirect_url =
-                  success_conn()
-                  |> AuthController.callback(%{"state" => "hash_id=123"})
-                  |> redirected_to(302)
-
-                expect(redirect_url =~ "warnings") |> to(be true)
-                expect(redirect_url =~ "Invalid+hash_id") |> to(be true)
+                expect(url()) |> to(match "warnings")
+                expect(url()) |> to(match "Invalid+hash_id")
               end
             end
 
@@ -128,34 +153,26 @@ defmodule Squadster.Web.AuthControllerSpec do
           end
 
           context "and when there is no hash_id" do
-            it "redirects to front-end with user info" do
-              redirect_url = success_conn() |> AuthController.callback(%{"state" => "hello"}) |> redirected_to(302)
-              expect(redirect_url =~ "last_name") |> to(be true)
-              expect(redirect_url =~ "uid") |> to(be true)
-              expect(redirect_url =~ "auth_token") |> to(be true)
-              expect(redirect_url =~ "image_url") |> to(be true)
-            end
+            let url: success_conn() |> AuthController.callback(%{"state" => "hello"}) |> redirected_to(302)
+
+            it_behaves_like RedirectsToFrontendWithUserInfo
 
             it "includes warning message that indicates that the state is invalid" do
-              redirect_url = success_conn() |> AuthController.callback(%{"state" => "hello"}) |> redirected_to(302)
-              expect(redirect_url =~ "warnings") |> to(be true)
-              expect(redirect_url =~ "Invalid+state") |> to(be true)
+              expect(url()) |> to(match "warnings")
+              expect(url()) |> to(match "Invalid+state")
             end
           end
         end
       end
 
       context "when auth failure accured" do
-        let :message, do: "No_token_provided"
+        let message: "No_token_provided"
+        let url: failure_conn() |> AuthController.callback(%{}) |> redirected_to(302)
         let :failure_conn do
           %{build_conn() | assigns: %{ueberauth_failure: %{errors: [%{message: message()}]}}}
         end
 
-        it "redirects to front-end with error message" do
-          redirect_url = failure_conn() |> AuthController.callback(%{}) |> redirected_to(302)
-          expect(redirect_url =~ "Error") |> to(be true)
-          expect(redirect_url =~ message()) |> to(be true)
-        end
+        it_behaves_like RedirectsToFrontendWithError
       end
     end
   end
@@ -165,7 +182,7 @@ defmodule Squadster.Web.AuthControllerSpec do
       conn |> delete(logout_path(conn, :destroy))
     end
 
-    let :user, do: insert(:user)
+    let user: insert(:user)
 
     context "when user is not authenticated" do
       it "responds with an error" do
@@ -181,7 +198,7 @@ defmodule Squadster.Web.AuthControllerSpec do
 
     it "responds with status message" do
       conn = login_as(user()) |> delete_request()
-      expect(conn.resp_body =~ "message") |> to(eq true)
+      expect(conn.resp_body) |> to(match "message")
     end
   end
 end
