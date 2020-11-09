@@ -18,7 +18,10 @@ defmodule Squadster.Schedules.Services.CreateLesson do
   end
 
   defp get_last_index(lessons) do
-    (lessons |> Enum.map(fn el -> el.index end) |> Enum.sort |> List.last) + 1
+    case lessons |> Enum.empty? do
+      true -> 1
+      false -> (lessons |> Enum.map(fn el -> el.index end) |> Enum.sort |> List.last) + 1
+    end
   end
 
   defp create(args) do
