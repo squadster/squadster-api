@@ -41,6 +41,7 @@ defmodule Squadster.Accounts.User do
   ]
 
   schema "users" do
+    field :hash_id, :string
     field :first_name, :string
     field :last_name, :string
     field :birth_date, :date
@@ -68,6 +69,7 @@ defmodule Squadster.Accounts.User do
     |> cast(params, @user_fields)
     |> validate_required([:first_name, :last_name])
     |> validate_format(:mobile_phone, ~r/^[-+()0-9]+$/)
+    |> set_hash_id
   end
 
   def auth_changeset(params) do
@@ -80,6 +82,15 @@ defmodule Squadster.Accounts.User do
     struct
     |> cast(filtered_params, @auth_fields)
     |> validate_required([:uid])
+    |> set_hash_id
+  end
+
+  def set_hash_id(%Ecto.Changeset{data: user} = changeset) do
+    unless user.hash_id do
+      changeset |> Ecto.Changeset.put_change(:hash_id, :crypto.strong_rand_bytes(16) |> Base.url_encode64)
+    else
+      changeset
+    end
   end
 
   def data_from_auth(%Auth{extra: %{raw_info: %{user: info}}, credentials: %{token: token}, info: %{phone: phone}} = auth) do

@@ -218,7 +218,8 @@ CREATE TABLE public.users (
     image_url character varying(255),
     vk_url character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL
+    updated_at timestamp(0) without time zone NOT NULL,
+    hash_id character varying(255)
 );
 
 
@@ -361,6 +362,13 @@ CREATE UNIQUE INDEX squads_hash_id_index ON public.squads USING btree (hash_id);
 
 
 --
+-- Name: users_hash_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_hash_id_index ON public.users USING btree (hash_id);
+
+
+--
 -- Name: lessons lessons_timetable_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -429,3 +437,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20200711235358);
 INSERT INTO public."schema_migrations" (version) VALUES (20200712000103);
 INSERT INTO public."schema_migrations" (version) VALUES (20201008171100);
 INSERT INTO public."schema_migrations" (version) VALUES (20201009202124);
+INSERT INTO public."schema_migrations" (version) VALUES (20201112204057);
