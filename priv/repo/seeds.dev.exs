@@ -20,7 +20,7 @@ for _ <- (1..seeds_config[:users]), do: insert(:user)
 for _ <- (1..seeds_config[:squads]), do: insert(:squad)
 
 # create users with unapproved squad request
-for index <- (1..seeds_config[:unapproved_users]) do
+for _ <- (1..seeds_config[:unapproved_users]) do
   squad = Repo.get(Squad, 1)
   build(:user) |> with_request_to_squad(squad) |> insert
 end

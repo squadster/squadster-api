@@ -11,7 +11,8 @@ defmodule Squadster.Support.Factory.Formations.SquadRequestFactory do
       end
 
       def approved(request) do
-        %{request | approver: insert(:squad_member), approved_at: Faker.DateTime.backward(10)}
+        approver = build(:squad_member, squad: nil, squad_id: request.squad_id)
+        %{request | approver: approver, approved_at: Faker.DateTime.backward(10)}
       end
 
       def approved_by(request, squad_member) do
