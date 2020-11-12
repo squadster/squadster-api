@@ -7,6 +7,7 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
         avatar = Faker.Avatar.image_url
 
         %Squadster.Accounts.User{
+          hash_id: :crypto.strong_rand_bytes(16) |> Base.url_encode64,
           first_name: Faker.Person.first_name,
           last_name: Faker.Person.last_name,
           birth_date: Faker.Date.date_of_birth(17..20),
