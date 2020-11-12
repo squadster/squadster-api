@@ -14,7 +14,7 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
         let :user, do: insert(:user, hash_id: nil)
 
         it "should set hash_id" do
-          %{changes: changes} = apply(User, changeset_function(), [user(), %{}])
+          %{changes: changes} = User |> apply(changeset_function(), [user(), %{}])
           expect changes
           |> Map.has_key?(:hash_id)
           |> to(be true)
@@ -25,7 +25,7 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
         let :user, do: insert(:user)
 
         it "should not update hash_id" do
-          %{changes: changes} = apply(User, changeset_function(), [user(), %{}])
+          %{changes: changes} = User |> apply(changeset_function(), [user(), %{}])
           expect changes
           |> Map.has_key?(:hash_id)
           |> to(be false)
