@@ -35,8 +35,10 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
 
     describe "changeset" do
       context "when params are valid" do
+        let valid_params: %{first_name: "John", last_name: "Galt"}
+
         it "is valid" do
-          %{valid?: is_valid} = %{first_name: "John", last_name: "Galt"} |> User.changeset
+          %{valid?: is_valid} = valid_params() |> User.changeset
           expect is_valid |> to(be true)
         end
 
@@ -69,8 +71,10 @@ defmodule Squadster.Domain.Accounts.UsersSpec do
 
     describe "auth_changeset" do
       context "when params are valid" do
+        let valid_params: %{uid: "123", first_name: "John", last_name: "Galt"}
+
         it "is valid" do
-          %{valid?: is_valid} = %{uid: "123", first_name: "John", last_name: "Galt"} |> User.auth_changeset
+          %{valid?: is_valid} = valid_params() |> User.auth_changeset
           expect is_valid |> to(be true)
         end
 

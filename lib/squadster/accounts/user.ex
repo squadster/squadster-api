@@ -86,10 +86,10 @@ defmodule Squadster.Accounts.User do
   end
 
   def set_hash_id(%Ecto.Changeset{data: user} = changeset) do
-    unless user.hash_id do
-      changeset |> Ecto.Changeset.put_change(:hash_id, :crypto.strong_rand_bytes(16) |> Base.url_encode64)
-    else
+    if user.hash_id do
       changeset
+    else
+      changeset |> Ecto.Changeset.put_change(:hash_id, :crypto.strong_rand_bytes(16) |> Base.url_encode64)
     end
   end
 
