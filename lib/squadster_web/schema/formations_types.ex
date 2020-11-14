@@ -16,7 +16,7 @@ defmodule SquadsterWeb.Schema.FormationTypes do
 
   object :squad do
     field :id, non_null(:id)
-    field :hash_id, :string
+    field :hash_id, non_null(:string)
     field :link_invitations_enabled, :boolean
     field :squad_number, :string
     field :advertisment, :string

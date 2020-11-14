@@ -12,9 +12,7 @@ defmodule Squadster.Domain.Formations.SquadSpec do
       end
 
       describe "hash_id case" do
-        let :squad, do: insert(:squad)
-
-        context "when squad is not have hash_id yet" do
+        context "when squad does not have hash_id yet" do
           let :squad, do: insert(:squad, hash_id: nil)
 
           it "should set hash_id" do
@@ -26,6 +24,8 @@ defmodule Squadster.Domain.Formations.SquadSpec do
         end
 
         context "when squad has hash_id" do
+          let :squad, do: insert(:squad)
+
           it "should not update hash_id" do
             %{changes: changes} = squad() |> Squad.changeset(%{})
             expect changes

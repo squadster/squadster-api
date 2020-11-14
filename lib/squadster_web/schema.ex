@@ -10,7 +10,7 @@ defmodule Squadster.Schema do
 
   query do
     @desc "Get current user"
-    field :current_user, :user do
+    field :current_user, :current_user do
       resolve &AccountsResolver.current_user/3
     end
 

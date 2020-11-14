@@ -33,10 +33,10 @@ defmodule Squadster.Formations.Squad do
   end
 
   def set_hash_id(%Ecto.Changeset{data: squad} = changeset) do
-    unless squad.hash_id do
-      changeset |> Ecto.Changeset.put_change(:hash_id, :crypto.strong_rand_bytes(16) |> Base.url_encode64)
-    else
+    if squad.hash_id do
       changeset
+    else
+      changeset |> Ecto.Changeset.put_change(:hash_id, :crypto.strong_rand_bytes(16) |> Base.url_encode64)
     end
   end
 

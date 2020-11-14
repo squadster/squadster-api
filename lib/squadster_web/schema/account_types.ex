@@ -18,4 +18,10 @@ defmodule SquadsterWeb.Schema.AccountTypes do
     field :squad_request, :squad_request, resolve: dataloader(Squadster.Formations)
     field :squad_member, :squad_member, resolve: dataloader(Squadster.Formations)
   end
+
+  object :current_user do
+    field :hash_id, non_null(:string)
+
+    import_fields(:user)
+  end
 end
