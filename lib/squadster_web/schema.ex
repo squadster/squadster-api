@@ -114,6 +114,7 @@ defmodule Squadster.Schema do
       resolve &SchedulesResolver.create_timetable/3
     end
 
+    # TODO: do we need it?
     @desc "Delete timetable"
     field :delete_timetable, type: :timetable do
       arg :timetable_id, non_null(:id)
@@ -121,6 +122,7 @@ defmodule Squadster.Schema do
       resolve &SchedulesResolver.delete_timetable/3
     end
 
+    # TODO: do we need it?
     @desc "Update existing timetable"
     field :update_timetable, type: :timetable do
       arg :timetable_id, non_null(:id)

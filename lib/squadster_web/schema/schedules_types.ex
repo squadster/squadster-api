@@ -18,6 +18,8 @@ defmodule SquadsterWeb.Schema.SchedulesTypes do
     field :teacher, :string
     field :index, :integer
     field :note, :string
+    field :type, :string
+    field :classroom, :string
     field :timetable, :timetable, resolve: dataloader(Squadster.Schedules)
   end
 end

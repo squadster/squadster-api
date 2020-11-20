@@ -3,11 +3,15 @@ defmodule Squadster.Schedules.Lesson do
 
   import Ecto.Changeset
 
+  @available_types ["practical", "lecture", "lab"]
+
   schema "lessons" do
     field :name, :string
     field :teacher, :string
     field :index, :integer
     field :note, :string
+    field :type, :string, default: "practical"
+    field :classroom, :string
     belongs_to :timetable, Squadster.Schedules.Timetable
 
     timestamps()
@@ -19,7 +23,8 @@ defmodule Squadster.Schedules.Lesson do
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :teacher, :index, :note, :timetable_id])
+    |> cast(params, [:name, :teacher, :index, :note, :type, :classroom, :timetable_id])
+    |> validate_inclusion(:type, @available_types)
     |> validate_required([:name, :index, :timetable_id])
     |> foreign_key_constraint(:timetable_id)
   end

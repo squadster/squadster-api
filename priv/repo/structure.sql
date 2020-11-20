@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.4 (Ubuntu 12.4-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 12.4 (Ubuntu 12.4-0ubuntu0.20.04.1)
+-- Dumped from database version 12.5 (Ubuntu 12.5-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.5 (Ubuntu 12.5-0ubuntu0.20.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -32,7 +32,9 @@ CREATE TABLE public.lessons (
     note character varying(255),
     timetable_id bigint,
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL
+    updated_at timestamp(0) without time zone NOT NULL,
+    classroom character varying(255),
+    type character varying(255)
 );
 
 
@@ -438,3 +440,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20200712000103);
 INSERT INTO public."schema_migrations" (version) VALUES (20201008171100);
 INSERT INTO public."schema_migrations" (version) VALUES (20201009202124);
 INSERT INTO public."schema_migrations" (version) VALUES (20201112204057);
+INSERT INTO public."schema_migrations" (version) VALUES (20201120215642);
