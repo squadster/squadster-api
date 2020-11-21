@@ -5,6 +5,7 @@ defmodule Squadster.Domain.Formations.Services.ApproveSquadRequestSpec do
   import Mockery
   import Mockery.Assertions
 
+  alias Squadster.Accounts.Tasks.Notify
   alias Squadster.Formations.Services.ApproveSquadRequest
   alias Squadster.Formations.Tasks.NormalizeQueue
 
@@ -30,6 +31,11 @@ defmodule Squadster.Domain.Formations.Services.ApproveSquadRequestSpec do
     it "schedules queue normalization" do
       ApproveSquadRequest.call(squad_request(), user())
       assert_called NormalizeQueue, :start_link
+    end
+
+    it "notifies user" do
+      ApproveSquadRequest.call(squad_request(), user())
+      assert_called Notify, :start_link
     end
 
     it "creates a new squad_member" do
