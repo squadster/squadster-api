@@ -4,7 +4,7 @@ defmodule Squadster.Schedules do
   alias Squadster.Repo
   alias Squadster.Helpers.Permissions
   alias Squadster.Formations.{Squad}
-  alias Squadster.Schedules.Timetable
+  alias Squadster.Schedules.{Timetable, Lesson}
   alias Squadster.Schedules.Services.{
     CreateTimetable,
     UpdateTimetable,
@@ -79,5 +79,27 @@ defmodule Squadster.Schedules do
     else
       {:error, "Not enough permissions"}
     end
+  end
+
+  def bulk_update_lessons(args, user) do
+    lessons =
+      Enum.map(args, fn data -> data[:id] end)
+      |> all_lessons
+
+    %{timetable: %{squad: squad}} = lessons |> List.first |> Repo.preload(timetable: :squad)
+
+    if user |> Permissions.can_update?(squad) do
+      lessons |> UpdateLesson.call(args)
+    else
+      {:error, "Not enough permissions"}
+    end
+  end
+
+  def all_lessons(ids) do
+    from(
+      lesson in Lesson,
+      where: lesson.id in ^ids
+    )
+    |> Repo.all
   end
 end
