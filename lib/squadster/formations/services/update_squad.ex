@@ -12,7 +12,7 @@ defmodule Squadster.Formations.Services.UpdateSquad do
 
     case changeset |> Repo.update do
       {:ok, squad} ->
-        unless is_nil(changeset.changes[:class_day]) do
+        if changeset.changes[:class_day] do
           squad |> update_timetable_dates(changeset)
         end
 
