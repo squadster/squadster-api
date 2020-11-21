@@ -72,7 +72,7 @@ defmodule Squadster.Formations do
   def delete_squad_request(id, user) do
     with squad_request <- SquadRequest |> Repo.get(id) do
       if user |> Permissions.can_delete?(squad_request) do
-        squad_request |> DeleteSquadRequest.call
+        user |> DeleteSquadRequest.call(squad_request)
       else
         {:error, "Not enough permissions"}
       end
