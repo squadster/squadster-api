@@ -5,11 +5,14 @@ alias Squadster.Repo
 alias Squadster.Accounts.User
 alias Squadster.Formations.Squad
 alias Squadster.Formations.SquadMember
+alias Squadster.Schedules.Timetable
 
 seeds_config = [
   users: 40,
   squads: 2,
-  unapproved_users: 5 # for each squad in addition to users number above
+  unapproved_users: 5, # for each squad in addition to users number above
+  timetables_per_squad: 4,
+  lessons_per_timetable: 4
 ] # users / squads should be >= 3
 
 for _ <- (1..seeds_config[:users]),  do: insert(:user)  # create users
@@ -24,6 +27,20 @@ for index <- (1..seeds_config[:squads]) do
   |> Enum.slice((index - 1) * users_per_squad, users_per_squad)
   |> Enum.each(fn user -> insert(:squad_member, user: user, squad: squad, role: :student) end)
 end
+
+# add timetables to squads
+Squad
+|> Repo.all
+|> Enum.each(fn squad ->
+  for _ <- (1..seeds_config[:timetables_per_squad]), do: insert(:timetable, squad_id: squad.id)
+end)
+
+# add lessons to timetables
+Timetable
+|> Repo.all
+|> Enum.each(fn timetable ->
+  for _ <- (1..seeds_config[:lessons_per_timetable]), do: insert(:lesson, timetable_id: timetable.id)
+end)
 
 # mark first 3 members as main roles
 Repo.all(Squad)
