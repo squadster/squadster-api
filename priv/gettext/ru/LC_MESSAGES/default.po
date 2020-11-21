@@ -2,17 +2,25 @@
 msgid "You are on duty tomorrow!"
 msgstr "Завтра ты назначен ответственным за лопату!"
 
+# squad_request approve notification text
+msgid "Your request to squad %{squad_number} was approved!"
+msgstr "Ваш запрос во взвод %{squad_number} был принят!"
+
+# squad_request rejection notification text
+msgid "Your request to squad %{squad_number} was rejected! Contact your squad commander."
+msgstr "Ваш запрос во взвод %{squad_number} был отклонён! Свяжитесь с командиром взвода."
+
 # Squad update notification text
 msgid "Squad info has been changed:"
 msgstr "Ваш взвод был обновлён:"
 
 # Class day update notification text
-msgid "Class day has been updated to %{new_class_day}"
-msgstr "День занятий теперь %{new_class_day}"
+msgid "Class day has been updated to %{new_class_day}."
+msgstr "День занятий теперь %{new_class_day}."
 
 # New advertisment notification text
-msgid "New squad advertisment: %{advertisment}"
-msgstr "Новое объявление: '%{advertisment}'"
+msgid "New squad advertisment: %{advertisment}."
+msgstr "Новое объявление: '%{advertisment}'."
 
 # New squad_number notification text
 msgid "Squad number has been changed to %{new_squad_number}."
