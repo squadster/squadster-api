@@ -1,8 +1,5 @@
 defmodule Squadster.Schedules.Services.DeleteLesson do
-  import Ecto.Query, only: [from: 2]
-
   alias Squadster.Repo
-  alias Squadster.Schedules.Lesson
 
   def call(timetable, index) do
     timetable.lessons

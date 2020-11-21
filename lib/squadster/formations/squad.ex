@@ -45,4 +45,8 @@ defmodule Squadster.Formations.Squad do
     |> Ecto.assoc(:members)
     |> Repo.get_by(role: :commander)
   end
+
+  def class_day_number(class_day) do
+    ClassDayEnum.__enum_map__[class_day]
+  end
 end

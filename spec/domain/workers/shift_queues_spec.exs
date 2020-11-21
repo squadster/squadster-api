@@ -7,11 +7,11 @@ defmodule Squadster.Workers.ShiftQueuesSpec do
   alias Squadster.Workers.ShiftQueues
   alias Squadster.Helpers.Dates
 
-  let :squad, do: insert(:squad, class_day: Dates.tomorrow |> Dates.day_of_a_week)
+  let :squad, do: insert(:squad, class_day: Dates.tomorrow |> Date.day_of_week)
   let! :members, do: insert_list(5, :squad_member, squad: squad())
 
   context "when squad's class_day is yesterday" do
-    let :squad, do: insert(:squad, class_day: Dates.yesterday |> Dates.day_of_a_week)
+    let :squad, do: insert(:squad, class_day: Dates.yesterday |> Date.day_of_week)
 
     describe "shifted member" do
       context "when member is in queue" do

@@ -25,7 +25,7 @@ defmodule Squadster.Support.Factory.Schedules.TimetableFactory do
       end
 
       defp days_gap(class_day, date) when is_atom(class_day) do
-        Squad.ClassDayEnum.__enum_map__[class_day] - (date |> Date.day_of_week)
+        Squad.class_day_number(class_day) - (date |> Date.day_of_week)
       end
     end
   end

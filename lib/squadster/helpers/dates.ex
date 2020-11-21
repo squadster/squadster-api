@@ -36,14 +36,6 @@ defmodule Squadster.Helpers.Dates do
     Timex.now |> Timex.shift(days: 1)
   end
 
-  def day_of_a_week(date) do
-    {day_of_a_week, _remainder} =
-      date
-      |> Timex.format!("%w", :strftime)
-      |> Integer.parse()
-    if day_of_a_week == 0, do: 7, else: day_of_a_week # because Sunday is 0 for Timex
-  end
-
   defp parse(date) do
     date
     |> Timex.parse!("%-d.%-m.%Y", :strftime)

@@ -10,7 +10,7 @@ defmodule Squadster.Workers.NotifyDutiesSpec do
   alias Squadster.Accounts.Tasks.Notify
 
   context "when there is squad with class_day tomorrow" do
-    let! :squad, do: insert(:squad, class_day: Dates.tomorrow |> Dates.day_of_a_week)
+    let! :squad, do: insert(:squad, class_day: Dates.tomorrow |> Date.day_of_week)
 
     before do
       insert(:squad_member, squad: squad(), queue_number: 1)
@@ -23,7 +23,7 @@ defmodule Squadster.Workers.NotifyDutiesSpec do
     end
 
     context "when there are several squads with class_day tomorrow" do
-      let! :another_squad, do: insert(:squad, class_day: Dates.tomorrow |> Dates.day_of_a_week)
+      let! :another_squad, do: insert(:squad, class_day: Dates.tomorrow |> Date.day_of_week)
 
       before do
         insert(:squad_member, squad: another_squad(), queue_number: 1)

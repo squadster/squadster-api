@@ -17,7 +17,7 @@ defmodule Squadster.Schedules.Services.UpdateLesson do
 
   def call(lesson, args) do
     lesson
-    |> Lesson.changeset
+    |> Lesson.changeset(args)
     |> Repo.update
   end
 
