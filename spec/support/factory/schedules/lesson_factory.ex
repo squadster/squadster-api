@@ -4,7 +4,7 @@ defmodule Squadster.Support.Factory.Schedules.LessonFactory do
       def lesson_factory do
         %Squadster.Schedules.Lesson{
           name: Faker.Lorem.word,
-          teacher: Faker.Name.name,
+          teacher: Faker.Person.name,
           index: 1,
           note: Faker.Lorem.sentence,
           type: ["practical", "lecture", "lab"] |> Enum.random,
