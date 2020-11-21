@@ -5,6 +5,7 @@ defmodule Squadster.Formations.Services.ApproveSquadRequest do
   alias Squadster.Repo
   alias Squadster.Formations.{Squad, SquadRequest, SquadMember}
   alias Squadster.Formations.Tasks.NormalizeQueue
+  alias Squadster.Accounts.User
 
   def call(squad_request, approver_user) do
     %{squad_member: approver} = approver_user |> Repo.preload(:squad_member)
@@ -37,7 +38,7 @@ defmodule Squadster.Formations.Services.ApproveSquadRequest do
 
     mockable(Squadster.Accounts.Tasks.Notify).start_link([
       message: gettext("Your request to squad %{squad_number} was approved!", squad_number: squad_number),
-      target: %Squadster.Accounts.User{id: user_id},
+      target: %User{id: user_id},
     ])
 
     result

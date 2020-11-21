@@ -104,21 +104,49 @@ defmodule Squadster.Domain.FormationsSpec do
   end
 
   describe "delete_squad_request/2" do
-    let! :squad_request, do: insert(:squad_request, user: user())
+    let! squad_request: insert(:squad_request, user: user())
 
-    it "deletes existing squad_request" do
-      previous_count = entities_count(SquadRequest)
-      Formations.delete_squad_request(squad_request().id, user())
-      expect entities_count(SquadRequest) |> to(eq previous_count - 1)
+    before do
+      mock Notify, :start_link
+    end
+
+    context "when user has enough permissions" do
+      it "deletes existing squad_request" do
+        previous_count = entities_count(SquadRequest)
+        Formations.delete_squad_request(squad_request().id, user())
+        expect entities_count(SquadRequest) |> to(eq previous_count - 1)
+      end
+
+      it "returns deleted squad_request" do
+        {:ok, squad_request} = Formations.delete_squad_request(squad_request().id, user())
+        expect(squad_request.__struct__) |> to(eq Squadster.Formations.SquadRequest)
+      end
+    end
+
+    context "when user does not have enough permissions" do
+      let stranger: insert(:user)
+
+      it "should not delete existing squad_request" do
+        previous_count = entities_count(SquadRequest)
+        Formations.delete_squad_request(squad_request().id, stranger())
+        expect entities_count(SquadRequest) |> to(eq previous_count)
+      end
+
+      it "returns error" do
+        {:error, message} = Formations.delete_squad_request(squad_request().id, stranger())
+
+        expect message |> to_not(be nil)
+      end
     end
   end
 
   describe "approve_squad_request/2" do
-    let! :squad_request, do: insert(:squad_request, user: insert(:user), squad: squad())
-    let :squad, do: build(:squad) |> with_commander(user()) |> insert
+    let! squad_request: insert(:squad_request, user: insert(:user), squad: squad())
+    let squad: build(:squad) |> with_commander(user()) |> insert
 
     before do
       mock NormalizeQueue, :start_link
+      mock Notify, :start_link
     end
 
     context "when user has enough permissions" do

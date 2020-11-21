@@ -16,6 +16,7 @@ defmodule Squadster.Domain.Formations.Services.ApproveSquadRequestSpec do
   describe "call/2" do
     before do
       mock NormalizeQueue, :start_link
+      mock Notify, :start_link
     end
 
     it "approves an existing squad_request and sets approved_at and approver" do
