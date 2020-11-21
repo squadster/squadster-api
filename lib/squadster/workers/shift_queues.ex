@@ -24,7 +24,7 @@ defmodule Squadster.Workers.ShiftQueues do
   end
 
   defp yesterday do
-    Dates.yesterday |> Dates.day_of_a_week
+    Dates.yesterday |> Date.day_of_week
   end
 
   defp update_query(members) do

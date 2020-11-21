@@ -82,18 +82,4 @@ defmodule Squadster.Domain.Helpers.DatesSpec do
       expect Dates.yesterday.day |> to(eq Timex.shift(Timex.now, days: -1).day)
     end
   end
-
-  describe "day_of_a_week/1" do
-    it "returns current day of a week" do
-      expect Dates.day_of_a_week(datetime()) |> to(eq 5)
-    end
-
-    context "when it's Sunday" do
-      let :sunday, do: datetime() |> Timex.shift(days: 2)
-
-      it "returns 7 instead of 0" do
-        expect Dates.day_of_a_week(sunday()) |> to(eq 7)
-      end
-    end
-  end
 end
