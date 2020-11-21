@@ -13,7 +13,7 @@ defmodule Squadster.Schema do
   mutation do
     import_fields :accounts_mutations
     import_fields :formations_mutations
-    import_fields :timetables_mutations
+    import_fields :schedules_mutations
   end
 
   def context(ctx) do

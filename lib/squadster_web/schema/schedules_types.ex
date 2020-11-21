@@ -23,7 +23,7 @@ defmodule SquadsterWeb.Schema.SchedulesTypes do
     field :timetable, :timetable, resolve: dataloader(Squadster.Schedules)
   end
 
-  object :timetables_mutations do
+  object :schedules_mutations do
     @desc "Create a timetable"
     field :create_timetable, type: :timetable do
       arg :date, type: :date
