@@ -70,18 +70,29 @@ defmodule SquadsterWeb.Schema.SchedulesTypes do
       resolve &SchedulesResolver.delete_lesson/3
     end
 
+    @desc "Update a batch of lessons"
+    field :update_lessons, type: list_of(:lesson) do
+      arg :batch, list_of(:lessons_batch)
+
+      resolve &SchedulesResolver.update_lessons/3
+    end
+
     @desc "Update a lesson"
     field :update_lesson, type: :lesson do
       arg :timetable_id, non_null(:id)
       arg :current_index, non_null(:integer)
       arg :name, :string
       arg :teacher, :string
-      arg :index, :integer
       arg :note, :string
       arg :classroom, :string
       arg :type, :string
 
       resolve &SchedulesResolver.update_lesson/3
     end
+  end
+
+  input_object :lessons_batch do
+    field :id, non_null(:id)
+    field :index, :integer
   end
 end

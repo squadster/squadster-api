@@ -50,4 +50,15 @@ defmodule SquadsterWeb.Resolvers.Schedules do
   def update_lesson(_parent, _args, _resolution) do
     {:error, "Access denied"}
   end
+
+  def update_lessons(_parent, %{batch: args}, %{context: %{current_user: user}}) do
+    case mockable(Schedules).bulk_update_lessons(args, user) do
+      {:ok, result} -> {:ok, Enum.map(result, fn {_index, element} -> element end)}
+      nil -> {:error, "Error"}
+    end
+  end
+
+  def update_lessons(_parent, _args, _resolution) do
+    {:error, "Access denied"}
+  end
 end
