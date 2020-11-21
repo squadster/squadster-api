@@ -32,7 +32,11 @@ end
 Squad
 |> Repo.all
 |> Enum.each(fn squad ->
-  for _ <- (1..seeds_config[:timetables_per_squad]), do: insert(:timetable, squad_id: squad.id)
+  for _ <- (1..seeds_config[:timetables_per_squad]) do
+    build(:timetable)
+    |> with_squad(squad)
+    |> insert
+  end
 end)
 
 # add lessons to timetables
