@@ -18,4 +18,12 @@ defmodule SquadsterWeb.Resolvers.Accounts do
   def update_current_user(_parent, _args, _resolution) do
     {:error, "Not logged in"}
   end
+
+  def update_user_settings(_parent, args, %{context: %{current_user: current_user}}) do
+    mockable(Accounts).update_user_settings(args, current_user)
+  end
+
+  def update_user_settings(_parent, _args, _resolution) do
+    {:error, "Permission denied"}
+  end
 end

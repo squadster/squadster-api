@@ -2,8 +2,12 @@ defmodule Squadster.Accounts do
   alias Ueberauth.Auth
   alias Squadster.Repo
   alias Squadster.Accounts.User
-  alias Squadster.Accounts.Services.UpdateUser
-  alias Squadster.Accounts.Services.CreateUserSettings
+  alias Squadster.Accounts.Services.{
+    UpdateUser,
+    CreateUserSettings,
+    UpdateUserSettings
+  }
+  alias Squadster.Helpers.Permissions
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -28,6 +32,15 @@ defmodule Squadster.Accounts do
 
   def find_user_by_token(token) do
     User |> Repo.get_by(auth_token: token)
+  end
+
+  def update_user_settings(%{user_id: id} = args, current_user) do
+    target_user = User |> Repo.get(id) |> Repo.preload(:settings)
+    if current_user |> Permissions.can_update?(target_user) do
+      args |> UpdateUserSettings.call(target_user.settings)
+    else
+      {:error, "Not enough permissions"}
+    end
   end
 
   def find_or_create_user(%Auth{} = auth) do
