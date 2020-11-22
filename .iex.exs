@@ -10,6 +10,7 @@ alias Squadster.Workers.ShiftQueues
 
 alias Squadster.Accounts
 alias Squadster.Accounts.User
+alias Squadster.Accounts.UserSettings
 alias Squadster.Accounts.Tasks.Notify
 
 alias Squadster.Formations

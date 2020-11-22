@@ -203,6 +203,38 @@ ALTER SEQUENCE public.timetables_id_seq OWNED BY public.timetables.id;
 
 
 --
+-- Name: user_settings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_settings (
+    id bigint NOT NULL,
+    vk_notifications_enabled boolean DEFAULT true,
+    telegram_notifications_enabled boolean DEFAULT false,
+    email_notifications_enabled boolean DEFAULT false,
+    user_id bigint
+);
+
+
+--
+-- Name: user_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_settings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_settings_id_seq OWNED BY public.user_settings.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -280,6 +312,13 @@ ALTER TABLE ONLY public.timetables ALTER COLUMN id SET DEFAULT nextval('public.t
 
 
 --
+-- Name: user_settings id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_settings ALTER COLUMN id SET DEFAULT nextval('public.user_settings_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -332,6 +371,14 @@ ALTER TABLE ONLY public.squads
 
 ALTER TABLE ONLY public.timetables
     ADD CONSTRAINT timetables_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_settings user_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_settings
+    ADD CONSTRAINT user_settings_pkey PRIMARY KEY (id);
 
 
 --
@@ -427,6 +474,14 @@ ALTER TABLE ONLY public.timetables
 
 
 --
+-- Name: user_settings user_settings_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_settings
+    ADD CONSTRAINT user_settings_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -441,3 +496,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20201008171100);
 INSERT INTO public."schema_migrations" (version) VALUES (20201009202124);
 INSERT INTO public."schema_migrations" (version) VALUES (20201112204057);
 INSERT INTO public."schema_migrations" (version) VALUES (20201120215642);
+INSERT INTO public."schema_migrations" (version) VALUES (20201121230145);

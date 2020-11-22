@@ -17,6 +17,7 @@ defmodule SquadsterWeb.Schema.AccountTypes do
     field :small_image_url, :string
     field :image_url, :string
     field :vk_url, :string
+    field :settings, :user_settings, resolve: dataloader(Squadster.Accounts)
     field :squad_request, :squad_request, resolve: dataloader(Squadster.Formations)
     field :squad_member, :squad_member, resolve: dataloader(Squadster.Formations)
   end
@@ -25,6 +26,12 @@ defmodule SquadsterWeb.Schema.AccountTypes do
     field :hash_id, non_null(:string)
 
     import_fields(:user)
+  end
+
+  object :user_settings do
+    field :vk_notifications_enabled, :boolean
+    field :telegram_notifications_enabled, :boolean
+    field :email_notifications_enabled, :boolean
   end
 
   object :accounts_queries do
