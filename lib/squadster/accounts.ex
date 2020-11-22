@@ -3,6 +3,7 @@ defmodule Squadster.Accounts do
   alias Squadster.Repo
   alias Squadster.Accounts.User
   alias Squadster.Accounts.Services.UpdateUser
+  alias Squadster.Accounts.Services.CreateUserSettings
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)
@@ -35,7 +36,9 @@ defmodule Squadster.Accounts do
       |> User.auth_changeset(User.data_from_auth(auth))
       |> Repo.update
       |> case do
-        {:ok, user}      -> {:found, user}
+        {:ok, user}      ->
+          user |> CreateUserSettings.call
+          {:found, user}
         {:error, reason} -> {:error, reason}
       end
     else
@@ -44,7 +47,9 @@ defmodule Squadster.Accounts do
       |> User.auth_changeset
       |> Repo.insert
       |> case do
-        {:ok, user}      -> {:created, user}
+        {:ok, user} ->
+          user |> CreateUserSettings.call
+          {:created, user}
         {:error, reason} -> {:error, reason}
       end
     end
