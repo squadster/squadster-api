@@ -11,6 +11,7 @@ defmodule Squadster.Accounts.Tasks.Notify do
   @bot_endpoint Application.fetch_env!(:squadster, :bot_url) <> "/message"
   @bot_token "ApiKey " <> Application.fetch_env!(:squadster, :bot_token)
   @request_headers [{"content-type", "application/json"}, {"Authorization", @bot_token}]
+  @settings_fields [:vk_notifications_enabled, :telegram_notifications_enabled, :email_notifications_enabled]
 
   def start_link(args) do
     Task.start_link(__MODULE__, :notify, [args])
@@ -19,8 +20,9 @@ defmodule Squadster.Accounts.Tasks.Notify do
   def notify([message: message, target: target]), do: message |> send_to(target)
   def notify([message: message, target: target, options: options]), do: message |> send_to(target, options)
 
-  defp send_to(message, %User{id: id}) do
-    mockable(HTTPoison).post @bot_endpoint, request_body(message, id), @request_headers
+  defp send_to(message, user) do
+    user |> Repo.preload(:settings)
+    mockable(HTTPoison).post @bot_endpoint, request_body(message, user), @request_headers
   end
 
   defp send_to(message, %SquadMember{user_id: user_id}) do
@@ -41,12 +43,24 @@ defmodule Squadster.Accounts.Tasks.Notify do
     |> Enum.each(fn member -> message |> send_to(member) end)
   end
 
-  defp request_body(message, user_id) do
+  defp request_body(message, %User{id: id, settings: settings}) do
     """
       {
         "text": "#{message}",
-        "target": #{user_id}
+        "target": #{id},
+        "channels": #{inspect settings |> user_notification_channels}
       }
     """
+  end
+
+  defp user_notification_channels(settings) do
+    @settings_fields
+    |> Enum.map(fn field ->
+      if settings |> Map.get(field) do
+        [channel | _] = field |> Atom.to_string |> String.split("_")
+        channel
+      end
+    end)
+    |> Enum.filter(fn channel -> !is_nil(channel) end)
   end
 end
