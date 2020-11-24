@@ -14,7 +14,8 @@ defmodule Squadster.Domain.AccountsSpec do
     it "finds user by token" do
       expect user().auth_token
       |> Accounts.find_user_by_token()
-      |> to(eq user())
+      |> Map.get(:id)
+      |> to(eq user().id)
     end
   end
 

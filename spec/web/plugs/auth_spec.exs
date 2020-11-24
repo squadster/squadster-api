@@ -42,7 +42,7 @@ defmodule Squadster.Web.Plugs.AuthSpec do
                    |> put_req_header("authorization", "Bearer " <> user().auth_token)
                    |> Auth.call([])
 
-            expect conn.assigns.current_user |> to(eq user())
+            expect conn.assigns.current_user.id |> to(eq user().id)
           end
         end
       end
