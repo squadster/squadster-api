@@ -19,6 +19,7 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
           small_image_url: avatar,
           image_url: avatar,
           vk_url: "https://vk.com/id" <> uid,
+          settings: build(:user_settings)
         }
       end
 
