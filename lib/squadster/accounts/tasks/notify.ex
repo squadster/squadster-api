@@ -20,7 +20,7 @@ defmodule Squadster.Accounts.Tasks.Notify do
   def notify([message: message, target: target]), do: message |> send_to(target)
   def notify([message: message, target: target, options: options]), do: message |> send_to(target, options)
 
-  defp send_to(message, user) do
+  defp send_to(message, %User{} = user) do
     user |> Repo.preload(:settings)
     mockable(HTTPoison).post @bot_endpoint, request_body(message, user), @request_headers
   end
