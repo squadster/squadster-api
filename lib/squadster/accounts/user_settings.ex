@@ -5,7 +5,7 @@ defmodule Squadster.Accounts.UserSettings do
 
   alias Ecto.Repo
 
-  @validating_fields [
+  @cast_fields [
     :vk_notifications_enabled,
     :telegram_notifications_enabled,
     :email_notifications_enabled,
@@ -13,9 +13,9 @@ defmodule Squadster.Accounts.UserSettings do
   ]
 
   schema "user_settings" do
-    field :vk_notifications_enabled, :boolean
-    field :telegram_notifications_enabled, :boolean
-    field :email_notifications_enabled, :boolean
+    field :vk_notifications_enabled, :boolean, default: true
+    field :telegram_notifications_enabled, :boolean, default: false
+    field :email_notifications_enabled, :boolean, default: false
     belongs_to :user, Squadster.Accounts.User
   end
 
@@ -25,7 +25,7 @@ defmodule Squadster.Accounts.UserSettings do
 
   def changeset(%__MODULE__{} = struct, params \\ %{}) do
     struct
-    |> cast(params, @validating_fields)
+    |> cast(params, @cast_fields)
     |> validate_required([:user_id])
     |> foreign_key_constraint(:user_id)
   end

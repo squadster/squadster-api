@@ -84,7 +84,7 @@ end)
 
 # create additional users with unapproved squad requests to existing squads
 Repo.all(Squad) |> Enum.each(fn squad ->
-  for i <- (1..seeds_config[:unapproved_users]) do
+  for _ <- (1..seeds_config[:unapproved_users]) do
     build(:user) |> with_request_to_squad(squad) |> insert
   end
 end)

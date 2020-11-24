@@ -21,8 +21,7 @@ defmodule Squadster.Accounts.Tasks.Notify do
   def notify([message: message, target: target, options: options]), do: message |> send_to(target, options)
 
   defp send_to(message, %User{} = user) do
-    user |> Repo.preload(:settings)
-    mockable(HTTPoison).post @bot_endpoint, request_body(message, user), @request_headers
+    mockable(HTTPoison).post @bot_endpoint, request_body(message, user |> Repo.preload(:settings)), @request_headers
   end
 
   defp send_to(message, %SquadMember{user_id: user_id}) do
@@ -48,7 +47,7 @@ defmodule Squadster.Accounts.Tasks.Notify do
       {
         "text": "#{message}",
         "target": #{id},
-        "channels": #{inspect settings |> user_notification_channels}
+        "channels": #{settings |> user_notification_channels |> Poison.encode!}
       }
     """
   end
