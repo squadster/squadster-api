@@ -43,7 +43,9 @@ end)
 Timetable
 |> Repo.all
 |> Enum.each(fn timetable ->
-  for _ <- (1..seeds_config[:lessons_per_timetable]), do: insert(:lesson, timetable_id: timetable.id)
+  for index <- (1..seeds_config[:lessons_per_timetable]) do
+    insert(:lesson, timetable_id: timetable.id, index: index)
+  end
 end)
 
 # mark first 3 members as main roles
