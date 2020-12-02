@@ -11,14 +11,21 @@ defmodule Squadster.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      preferred_cli_env: [espec: :test],
+      preferred_cli_env: [
+        espec: :test,
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
       releases: [
         squadster: [
           include_executables_for: [:unix],
           applications: [runtime_tools: :permanent]
         ]
       ],
-      default_release: 'squadster'
+      default_release: 'squadster',
+      test_coverage: [tool: ExCoveralls, test_task: "espec"]
     ]
   end
 
@@ -63,6 +70,7 @@ defmodule Squadster.MixProject do
       {:ex_machina, "~> 2.4.0"},
       {:httpoison, "~> 1.7.0"},
       {:mockery, "~> 2.3.1", runtime: false},
+      {:excoveralls, "~> 0.11.1"},
 
       {:phoenix_live_reload, "~> 1.2.4", only: :dev},
 
