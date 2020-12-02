@@ -1,5 +1,7 @@
 # Squadster
 
+[![Build Status](https://travis-ci.com/squadster/squadster-api.svg?branch=master)](https://travis-ci.com/squadster/squadster-api)
+
 Application for facilitation military departments studies.
 
 ![Logo](https://github.com/squadster/squadster-api/blob/master/logo.png "Hello :)")
