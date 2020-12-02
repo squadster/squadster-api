@@ -22,8 +22,8 @@ before_install:
   - sudo apt-get install -y libssl1.0.0 postgresql-client
   - sudo apt-get autoclean
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+#after_success:
+  #- bash <(curl -s https://codecov.io/bash)
 
 jobs:
   include:
@@ -33,6 +33,6 @@ jobs:
         - MIX_ENV=test mix ecto.create
         - MIX_ENV=test mix ecto.migrate
       script:
-        - MIX_ENV=test mix coveralls.json
+        - MIX_ENV=test mix coveralls.travis
     - stage: build
       script: ./scripts/build.sh
