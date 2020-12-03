@@ -3,7 +3,7 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
     quote do
       def user_factory do
         # should be string, cannot start with zero
-        uid = Enum.random(100_000_000..999_999_999) |> Integer.to_string
+        uid = random_number() |> Integer.to_string
         avatar = Faker.Avatar.image_url
 
         %Squadster.Accounts.User{
@@ -11,7 +11,7 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
           first_name: Faker.Person.first_name,
           last_name: Faker.Person.last_name,
           birth_date: Faker.Date.date_of_birth(17..20),
-          mobile_phone: "+375" <> uid,
+          mobile_phone: "+375" <> (random_number() |> Integer.to_string),
           university: "University of " <> Faker.Industry.sector,
           faculty: "Faculty of " <> Faker.Industry.sub_sector,
           uid: uid,
@@ -19,6 +19,7 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
           small_image_url: avatar,
           image_url: avatar,
           vk_url: "https://vk.com/id" <> uid,
+          telegram_chat_id: random_number(),
           settings: build(:user_settings)
         }
       end
@@ -36,6 +37,10 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
       def with_squad_member(user) do
         squad_member = build(:squad_member, user: nil, user_id: user.id)
         %{user | squad_member: squad_member}
+      end
+
+      defp random_number do
+        Enum.random(100_000_000..999_999_999)
       end
     end
   end
