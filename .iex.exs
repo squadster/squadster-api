@@ -9,24 +9,38 @@ alias Squadster.Workers.NotifyDuties
 alias Squadster.Workers.ShiftQueues
 
 alias Squadster.Accounts
-alias Squadster.Accounts.User
-alias Squadster.Accounts.UserSettings
+alias Squadster.Accounts.{User, UserSettings}
 alias Squadster.Accounts.Tasks.Notify
+alias Squadster.Accounts.Services.{
+  UpdateUser,
+  CreateUserSettings,
+  UpdateUserSettings
+}
 
 alias Squadster.Formations
 alias Squadster.Formations.{Squad, SquadRequest, SquadMember}
 alias Squadster.Formations.Tasks.NormalizeQueue
 alias Squadster.Formations.Services.{
-  ApproveSquadRequest,
   CreateSquad,
-  CreateSquadRequest,
-  DeleteSquadMember,
+  UpdateSquad,
+  CreateSquadMember,
   UpdateSquadMember,
-  UpdateSquad
+  DeleteSquadMember,
+  CreateSquadRequest,
+  ApproveSquadRequest,
+  DeleteSquadRequest,
+  NotifySquadChanges
 }
 
-alias Squadster.Schedules.Lesson
-alias Squadster.Schedules.Timetable
+alias Squadster.Schedules
+alias Squadster.Schedules.{Lesson, Timetable}
+alias Squadster.Schedules.Services.{
+  CreateLesson,
+  UpdateLesson,
+  DeleteLesson,
+  CreateTimetable,
+  UpdateTimetable
+}
 
 alias Squadster.Helpers
 alias Squadster.Helpers.{Dates, Permissions}
