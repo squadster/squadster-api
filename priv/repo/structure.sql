@@ -203,6 +203,39 @@ ALTER SEQUENCE public.timetables_id_seq OWNED BY public.timetables.id;
 
 
 --
+-- Name: user_configurations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_configurations (
+    id bigint NOT NULL,
+    speaker character varying(255),
+    language character varying(255),
+    rate character varying(255),
+    enable_voice_messages boolean,
+    user_id bigint
+);
+
+
+--
+-- Name: user_configurations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_configurations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_configurations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_configurations_id_seq OWNED BY public.user_configurations.id;
+
+
+--
 -- Name: user_settings; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -253,7 +286,8 @@ CREATE TABLE public.users (
     vk_url character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL,
-    hash_id character varying(255)
+    hash_id character varying(255),
+    telegram_chat_id bigint
 );
 
 
@@ -309,6 +343,13 @@ ALTER TABLE ONLY public.squads ALTER COLUMN id SET DEFAULT nextval('public.squad
 --
 
 ALTER TABLE ONLY public.timetables ALTER COLUMN id SET DEFAULT nextval('public.timetables_id_seq'::regclass);
+
+
+--
+-- Name: user_configurations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_configurations ALTER COLUMN id SET DEFAULT nextval('public.user_configurations_id_seq'::regclass);
 
 
 --
@@ -374,6 +415,14 @@ ALTER TABLE ONLY public.timetables
 
 
 --
+-- Name: user_configurations user_configurations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_configurations
+    ADD CONSTRAINT user_configurations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: user_settings user_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -415,6 +464,13 @@ CREATE UNIQUE INDEX squads_hash_id_index ON public.squads USING btree (hash_id);
 --
 
 CREATE UNIQUE INDEX users_hash_id_index ON public.users USING btree (hash_id);
+
+
+--
+-- Name: users_telegram_chat_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_telegram_chat_id_index ON public.users USING btree (telegram_chat_id);
 
 
 --
@@ -474,6 +530,14 @@ ALTER TABLE ONLY public.timetables
 
 
 --
+-- Name: user_configurations user_configurations_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_configurations
+    ADD CONSTRAINT user_configurations_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: user_settings user_settings_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -497,3 +561,5 @@ INSERT INTO public."schema_migrations" (version) VALUES (20201009202124);
 INSERT INTO public."schema_migrations" (version) VALUES (20201112204057);
 INSERT INTO public."schema_migrations" (version) VALUES (20201120215642);
 INSERT INTO public."schema_migrations" (version) VALUES (20201121230145);
+INSERT INTO public."schema_migrations" (version) VALUES (20201203173820);
+INSERT INTO public."schema_migrations" (version) VALUES (20201203174319);
