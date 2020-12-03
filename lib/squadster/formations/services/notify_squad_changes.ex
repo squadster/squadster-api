@@ -3,11 +3,13 @@ defmodule Squadster.Formations.Services.NotifySquadChanges do
   import Mockery.Macro
 
   def call(changes, squad, %{id: user_id}) do
-    mockable(Squadster.Accounts.Tasks.Notify).start_link([
-      message: text(changes),
-      target: squad,
-      options: [skip: [user_id]]
-    ])
+    if changes[:class_day] || changes[:advertisment] || changes[:squad_number] do
+      mockable(Squadster.Accounts.Tasks.Notify).start_link([
+        message: text(changes),
+        target: squad,
+        options: [skip: [user_id]]
+      ])
+    end
   end
 
   defp text(changes) do

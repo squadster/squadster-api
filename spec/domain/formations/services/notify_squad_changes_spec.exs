@@ -6,6 +6,7 @@ defmodule Squadster.Domain.Formations.Services.NotifySquadChangesSpec do
   import Mockery.Assertions
 
   alias Squadster.Formations.Services.NotifySquadChanges
+  alias Squadster.Formations.Squad
   alias Squadster.Accounts.Tasks.Notify
 
   let :user, do: insert(:user)
@@ -17,8 +18,15 @@ defmodule Squadster.Domain.Formations.Services.NotifySquadChangesSpec do
     end
 
     it "notifies given squad members" do
-      NotifySquadChanges.call(%{}, squad(), user())
+      Squad.changeset(%{squad_number: "123"}).changes |> NotifySquadChanges.call(squad(), user())
       assert_called Notify, :start_link
+    end
+
+    context "when changes do not include class_day, squad_number or advertisment" do
+      it "should not notify user" do
+        Squad.changeset(%{link_invitations_enabled: true}).changes |> NotifySquadChanges.call(squad(), user())
+        refute_called Notify, :start_link
+      end
     end
   end
 end
