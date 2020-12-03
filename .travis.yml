@@ -30,6 +30,8 @@ jobs:
         - MIX_ENV=test mix ecto.create
         - MIX_ENV=test mix ecto.migrate
       script:
-        - MIX_ENV=test mix espec
+        - MIX_ENV=test mix coveralls.json
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
     - stage: build
       script: ./scripts/build.sh

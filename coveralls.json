@@ -1,0 +1,16 @@
+{
+  "coverage_options": {
+    "minimum_coverage": 50
+  },
+  "skip_files": [
+    "spec/",
+    "lib/squadster.ex",
+    "lib/squadster/application.ex",
+    "lib/squadster/repo.ex",
+    "lib/squadster/release.ex",
+    "lib/squadster_web.ex",
+    "lib/squadster_web/endpoint.ex",
+    "lib/squadster_web/gettext.ex",
+    "lib/squadster_web/views/error_helpers.ex"
+  ]
+}

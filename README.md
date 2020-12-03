@@ -1,6 +1,7 @@
 # Squadster
 
 [![Build Status](https://travis-ci.com/squadster/squadster-api.svg?branch=master)](https://travis-ci.com/squadster/squadster-api)
+[![Coverage](https://codecov.io/gh/squadster/squadster-api/branch/master/graph/badge.svg)](https://codecov.io/gh/squadster/squadster-api)
 
 Application for facilitation military departments studies.
 
