@@ -287,7 +287,9 @@ CREATE TABLE public.users (
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL,
     hash_id character varying(255),
-    telegram_chat_id bigint
+    telegram_chat_id bigint,
+    telegram_id bigint,
+    telegram_token character varying(255)
 );
 
 
@@ -561,5 +563,5 @@ INSERT INTO public."schema_migrations" (version) VALUES (20201009202124);
 INSERT INTO public."schema_migrations" (version) VALUES (20201112204057);
 INSERT INTO public."schema_migrations" (version) VALUES (20201120215642);
 INSERT INTO public."schema_migrations" (version) VALUES (20201121230145);
-INSERT INTO public."schema_migrations" (version) VALUES (20201203173820);
 INSERT INTO public."schema_migrations" (version) VALUES (20201203174319);
+INSERT INTO public."schema_migrations" (version) VALUES (20201205205445);
