@@ -54,9 +54,8 @@ defmodule SquadsterWeb.Schema.AccountTypes do
       resolve &AccountsResolver.update_current_user/3
     end
 
-    @desc "Update user's settings"
+    @desc "Update current user's settings"
     field :update_user_settings, type: :user_settings do
-      arg :user_id, non_null(:id)
       arg :vk_notifications_enabled, :boolean
       arg :telegram_notifications_enabled, :boolean
       arg :email_notifications_enabled, :boolean

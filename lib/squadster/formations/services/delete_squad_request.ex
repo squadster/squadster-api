@@ -12,7 +12,7 @@ defmodule Squadster.Formations.Services.DeleteSquadRequest do
     |> notify_user(user)
   end
 
-  defp notify_user({:error, _} = result), do: result
+  defp notify_user({:error, _} = result, _user), do: result
   defp notify_user({:ok, %{user_id: user_id, squad_id: squad_id}} = result, %{id: deleted_by_id}) do
     unless user_id == deleted_by_id do
       %{squad_number: squad_number} = Squad |> Repo.get(squad_id)
