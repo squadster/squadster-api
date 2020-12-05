@@ -2,9 +2,9 @@ defmodule Squadster.Accounts do
   alias Ueberauth.Auth
   alias Squadster.Repo
   alias Squadster.Accounts.User
+  alias Squadster.Accounts.Services.Auth, as: AuthService
   alias Squadster.Accounts.Services.{
     UpdateUser,
-    CreateUserSettings,
     UpdateUserSettings
   }
 
@@ -40,26 +40,9 @@ defmodule Squadster.Accounts do
 
   def find_or_create_user(%Auth{} = auth) do
     if user = User |> Repo.get_by(uid: User.uid_from_auth(auth)) do
-      user
-      |> User.auth_changeset(User.data_from_auth(auth))
-      |> Repo.update
-      |> case do
-        {:ok, user}      ->
-          user |> CreateUserSettings.call
-          {:found, user}
-        {:error, reason} -> {:error, reason}
-      end
+      user |> AuthService.UpdateUser.call(auth)
     else
-      auth
-      |> User.data_from_auth
-      |> User.auth_changeset
-      |> Repo.insert
-      |> case do
-        {:ok, user} ->
-          user |> CreateUserSettings.call
-          {:created, user}
-        {:error, reason} -> {:error, reason}
-      end
+      auth |> AuthService.CreateUser.call
     end
   end
 

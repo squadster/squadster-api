@@ -25,5 +25,6 @@ defmodule Squadster.Accounts.UserSettings do
     struct
     |> cast(params, @cast_fields)
     |> validate_required(@cast_fields)
+    |> foreign_key_constraint(:user_id)
   end
 end
