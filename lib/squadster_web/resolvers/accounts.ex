@@ -24,6 +24,6 @@ defmodule SquadsterWeb.Resolvers.Accounts do
   end
 
   def update_user_settings(_parent, _args, _resolution) do
-    {:error, "Permission denied"}
+    {:error, "Not logged in"}
   end
 end
