@@ -26,6 +26,10 @@ config :squadster,
   bot_url: EnvHelper.safe_env("BOT_URL", "squadster.wtf:5000"),
   bot_token: EnvHelper.safe_env("BOT_TOKEN", "dummy bot token")
 
+config :squadster,
+  mailgun_domain: EnvHelper.safe_env("MAILGUN_DOMAIN"),
+  mailgun_key: EnvHelper.safe_env("MAILGUN_API_KEY")
+
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,
   url: [host: EnvHelper.safe_env("HOSTNAME", "squadster.wtf")],
