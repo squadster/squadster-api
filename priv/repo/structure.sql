@@ -288,7 +288,7 @@ CREATE TABLE public.users (
     updated_at timestamp(0) without time zone NOT NULL,
     hash_id character varying(255),
     telegram_chat_id bigint,
-    telegram_id bigint,
+    telegram_id integer,
     telegram_token character varying(255)
 );
 
