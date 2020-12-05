@@ -31,7 +31,9 @@ defmodule Squadster.Accounts.User do
     :mobile_phone,
     :university,
     :faculty,
-    :telegram_chat_id
+    :telegram_chat_id,
+    :telegram_id,
+    :telegram_token
   ]
 
   @vk_priority_fields [
@@ -55,6 +57,8 @@ defmodule Squadster.Accounts.User do
     field :image_url, :string
     field :vk_url, :string
     field :telegram_chat_id, :integer
+    field :telegram_id, :integer
+    field :telegram_token, :string
     has_one :squad_member, Squadster.Formations.SquadMember
     has_one :squad_request, Squadster.Formations.SquadRequest
     has_one :settings, Squadster.Accounts.UserSettings

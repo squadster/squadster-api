@@ -20,6 +20,8 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
           image_url: avatar,
           vk_url: "https://vk.com/id" <> uid,
           telegram_chat_id: random_number(),
+          telegram_id: random_number(),
+          telegram_token: Faker.String.base64(85),
           settings: build(:user_settings)
         }
       end
