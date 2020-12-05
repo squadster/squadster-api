@@ -7,7 +7,6 @@ defmodule Squadster.Accounts do
     CreateUserSettings,
     UpdateUserSettings
   }
-  alias Squadster.Helpers.Permissions
 
   def data() do
     Dataloader.Ecto.new(Repo, query: &query/2)

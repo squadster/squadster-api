@@ -3,8 +3,6 @@ defmodule Squadster.Accounts.UserSettings do
 
   import Ecto.Changeset
 
-  alias Ecto.Repo
-
   @cast_fields [
     :vk_notifications_enabled,
     :telegram_notifications_enabled,

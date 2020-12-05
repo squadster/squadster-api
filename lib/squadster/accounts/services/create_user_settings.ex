@@ -6,7 +6,7 @@ defmodule Squadster.Accounts.Services.CreateUserSettings do
     %{settings: settings} = user |> Repo.preload(:settings)
     case settings do
       nil -> create(id)
-      user_settings -> {:error, "User already has initialized settings"}
+      _settings -> {:error, "User already has initialized settings"}
     end
   end
 
