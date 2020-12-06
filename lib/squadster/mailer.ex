@@ -1,5 +1,5 @@
 defmodule Squadster.Mailer do
-  @from "noreply@squadster.com"
+  @from Application.get_env(:squadster, :default_from)
   @test_config domain: Application.get_env(:squadster, :mailgun_domain),
                key: Application.get_env(:squadster, :mailgun_key),
                mode: :test,

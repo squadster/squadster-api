@@ -28,7 +28,8 @@ config :squadster,
 
 config :squadster,
   mailgun_domain: EnvHelper.safe_env("MAILGUN_DOMAIN"),
-  mailgun_key: EnvHelper.safe_env("MAILGUN_API_KEY")
+  mailgun_key: EnvHelper.safe_env("MAILGUN_API_KEY"),
+  default_from: EnvHelper.safe_env("DEFAULT_FROM")
 
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,

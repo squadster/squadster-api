@@ -1,2 +1,2 @@
-defmodule Blog.Mailer.Emails do
+defmodule Squadster.Mailer.Emails do
 end

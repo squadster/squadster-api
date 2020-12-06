@@ -7,7 +7,6 @@ defmodule Squadster.Accounts.Tasks.Notify do
   alias Squadster.Formations.SquadMember
   alias Squadster.Accounts.User
   alias Squadster.Mailer
-  alias Squadster.Mailer.Email
   alias Squadster.Mailer.Emails.NotifyEmail
   alias Squadster.Repo
 
@@ -28,7 +27,7 @@ defmodule Squadster.Accounts.Tasks.Notify do
 
     if user_with_settings.settings.email_notifications_enabled and user.email do
       user.email
-      |> Mailer.send("Squadster notification",
+      |> mockable(Mailer).send("Squadster notification",
                      NotifyEmail.html_template(message, user),
                      NotifyEmail.text_template(message, user))
     end
