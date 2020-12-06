@@ -6,6 +6,8 @@ defmodule Squadster.Accounts.Tasks.Notify do
   alias Squadster.Formations.Squad
   alias Squadster.Formations.SquadMember
   alias Squadster.Accounts.User
+  alias Squadster.Mailer
+  alias Squadster.Mailer.Emails.NotifyEmail
   alias Squadster.Repo
 
   @bot_endpoint Application.fetch_env!(:squadster, :bot_url) <> "/message"
@@ -21,7 +23,16 @@ defmodule Squadster.Accounts.Tasks.Notify do
   def notify([message: message, target: target, options: options]), do: message |> send_to(target, options)
 
   defp send_to(message, %User{} = user) do
-    mockable(HTTPoison).post @bot_endpoint, request_body(message, user |> Repo.preload(:settings)), @request_headers
+    user_with_settings = user |> Repo.preload(:settings)
+
+    if user_with_settings.settings.email_notifications_enabled and user.email do
+      user.email
+      |> mockable(Mailer).send("Squadster notification",
+                     NotifyEmail.html_template(message, user),
+                     NotifyEmail.text_template(message, user))
+    end
+
+    mockable(HTTPoison).post @bot_endpoint, request_body(message, user_with_settings), @request_headers
   end
 
   defp send_to(message, %SquadMember{user_id: user_id}) do

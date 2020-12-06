@@ -7,6 +7,7 @@ defmodule Squadster.Accounts.UserSettings do
     :vk_notifications_enabled,
     :telegram_notifications_enabled,
     :email_notifications_enabled,
+    :user_id
   ]
 
   schema "user_settings" do

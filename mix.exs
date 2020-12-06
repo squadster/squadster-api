@@ -51,13 +51,13 @@ defmodule Squadster.MixProject do
     [
       {:phoenix, "~> 1.5.6"},
       {:phoenix_pubsub, "~> 2.0.0"},
+      {:phoenix_html, "~> 2.14.2"},
       {:phoenix_ecto, "~> 4.2.1"},
       {:ecto_sql, "~> 3.5.1"},
       {:postgrex, ">= 0.15.7"},
       {:gettext, "~> 0.18.2"},
       {:jason, "~> 1.2.2"},
       {:plug_cowboy, "~> 2.4.0"},
-      {:poison, "~> 4.0.1"},
       {:ueberauth_vk, git: "https://github.com/ueberauth/ueberauth_vk.git", branch: :master}, # TODO: need to set it back to 0.4.0 when it will be released
       {:absinthe, "~> 1.4.0"},
       {:absinthe_plug, "~> 1.4.0"},
@@ -71,7 +71,8 @@ defmodule Squadster.MixProject do
       {:httpoison, "~> 1.7.0"},
       {:mockery, "~> 2.3.1", runtime: false},
       {:excoveralls, "~> 0.11.1"},
-
+      {:mailgun, "~> 0.1.2"},
+      {:poison, "~> 2.1", override: true},
       {:phoenix_live_reload, "~> 1.2.4", only: :dev},
 
       {:espec, "~> 1.8.2", only: :test},

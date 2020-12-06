@@ -10,6 +10,8 @@ defmodule Squadster.Accounts.Tasks.NotifySpec do
   import Mockery.Assertions
 
   alias Squadster.Accounts.Tasks.Notify
+  alias Squadster.Mailer
+  alias Squadster.Accounts.UserSettings
 
   let :squad, do: insert(:squad)
 
@@ -22,9 +24,46 @@ defmodule Squadster.Accounts.Tasks.NotifySpec do
     end
 
     context "when the target is user" do
+      before do
+        mock Mailer, :send
+      end
+
       it "sends message to this user" do
         Notify.notify(message: message(), target: user())
         assert_called HTTPoison, :post
+      end
+
+      context "when user has email notifications enabled" do
+        before do
+          user()
+          |> Repo.preload(:settings)
+          |> Map.get(:settings)
+          |> UserSettings.changeset(%{email_notifications_enabled: true})
+          |> Repo.update
+        end
+
+        it "sends email message to this user" do
+          Notify.notify(message: message(), target: user() |> Repo.preload(:settings, force: true))
+          assert_called Mailer, :send
+        end
+
+        context "when user does not have email" do
+          let :user, do: insert(:user, email: nil)
+
+          it "does not sent email message to this user" do
+            Notify.notify(message: message(), target: user())
+
+            refute_called Mailer, :send
+          end
+        end
+      end
+
+      context "when user does not have email notifications enabled" do
+        it "ooes not sent email message to this user" do
+          Notify.notify(message: message(), target: user())
+
+          refute_called Mailer, :send
+        end
       end
     end
 
