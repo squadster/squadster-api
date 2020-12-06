@@ -27,12 +27,6 @@ config :squadster,
   bot_url: EnvHelper.safe_env("BOT_URL", "squadster.wtf:5000"),
   bot_token: EnvHelper.safe_env("BOT_TOKEN")
 
-# Mailer setup
-config :squadster,
-  mailgun_domain: EnvHelper.safe_env("MAILGUN_DOMAIN"),
-  mailgun_key: EnvHelper.safe_env("MAILGUN_API_KEY"),
-  default_from_email: EnvHelper.safe_env("DEFAULT_FROM_EMAIL", "noreply@squadster.com")
-
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,
   url: [host: EnvHelper.safe_env("HOSTNAME", "squadster.wtf")],
@@ -52,6 +46,7 @@ config :gettext, :default_locale, "ru"
 
 import_config "oauth.exs"
 import_config "scheduler.exs"
+import_config "mailer.exs"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
