@@ -10,7 +10,7 @@ defmodule Squadster.Support.Factory.Accounts.UserFactory do
           hash_id: :crypto.strong_rand_bytes(16) |> Base.url_encode64,
           first_name: Faker.Person.first_name,
           last_name: Faker.Person.last_name,
-          email: "test@mail.com",
+          email: Faker.Internet.email,
           birth_date: Faker.Date.date_of_birth(17..20),
           mobile_phone: "+375" <> (random_number() |> Integer.to_string),
           university: "University of " <> Faker.Industry.sector,
