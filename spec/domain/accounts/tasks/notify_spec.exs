@@ -34,22 +34,34 @@ defmodule Squadster.Accounts.Tasks.NotifySpec do
       end
 
       context "when user has email notifications enabled" do
-        it "sends email message to this user" do
-          user = user()
-          %{settings: settings} = user |> Repo.preload(:settings)
-          settings = settings
+        before do
+          user()
+          |> Repo.preload(:settings)
+          |> Map.get(:settings)
           |> UserSettings.changeset(%{email_notifications_enabled: true})
           |> Repo.update
+        end
 
-          Notify.notify(message: message(), target: user |> Repo.preload(:settings, force: true))
+        it "sends email message to this user" do
+          Notify.notify(message: message(), target: user() |> Repo.preload(:settings, force: true))
           assert_called Mailer, :send
-        end 
+        end
+
+        context "when user does not have email" do
+          let :user, do: insert(:user, email: nil)
+
+          it "does not sent email message to this user" do
+            Notify.notify(message: message(), target: user())
+
+            refute_called Mailer, :send
+          end
+        end
       end
 
       context "when user does not have email notifications enabled" do
         it "ooes not sent email message to this user" do
           Notify.notify(message: message(), target: user())
-          
+
           refute_called Mailer, :send
         end
       end

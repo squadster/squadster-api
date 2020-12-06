@@ -20,16 +20,18 @@ defmodule EnvHelper do
   end
 end
 
+# URL references
 config :squadster,
   ecto_repos: [Squadster.Repo],
   frontend_url: EnvHelper.safe_env("FRONTEND_URL", "squadster.wtf:3000"),
   bot_url: EnvHelper.safe_env("BOT_URL", "squadster.wtf:5000"),
-  bot_token: EnvHelper.safe_env("BOT_TOKEN", "dummy bot token")
+  bot_token: EnvHelper.safe_env("BOT_TOKEN")
 
+# Mailer setup
 config :squadster,
   mailgun_domain: EnvHelper.safe_env("MAILGUN_DOMAIN"),
   mailgun_key: EnvHelper.safe_env("MAILGUN_API_KEY"),
-  default_from_email: EnvHelper.safe_env("DEFAULT_FROM_EMAIL")
+  default_from_email: EnvHelper.safe_env("DEFAULT_FROM_EMAIL", "noreply@squadster.com")
 
 # Configures the endpoint
 config :squadster, SquadsterWeb.Endpoint,
