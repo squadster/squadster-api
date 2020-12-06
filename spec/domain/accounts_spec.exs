@@ -7,8 +7,30 @@ defmodule Squadster.Domain.AccountsSpec do
 
   alias Squadster.Accounts
   alias Squadster.Accounts.User
+  alias Squadster.Accounts.UserSettings
 
   let :user, do: insert(:user)
+
+  describe "#update_user_settings/2" do
+    let :user_settings_params, do: %{
+      vk_notifications_enabled: false,
+      telegram_notifications_enabled: false,
+      email_notifications_enabled: false,
+    }
+
+    let :user, do: insert(:user)
+    let :user_settings, do: build(:user_settings) |> with_user(user()) |> insert
+
+    it "updates user settings" do
+      Accounts.update_user_settings(user_settings_params(), user())
+
+      %{settings: updated_user_settings} = reload(user()) |> Repo.preload(:settings)
+
+      expect updated_user_settings.vk_notifications_enabled |> to(eq user_settings_params().vk_notifications_enabled)
+      expect updated_user_settings.email_notifications_enabled |> to(eq user_settings_params().email_notifications_enabled)
+      expect updated_user_settings.telegram_notifications_enabled |> to(eq user_settings_params().telegram_notifications_enabled)
+    end
+  end
 
   describe "find_user_by_token/1" do
     it "finds user by token" do
