@@ -80,7 +80,6 @@ defmodule SquadsterWeb.Schema.SchedulesTypes do
     @desc "Update a lesson"
     field :update_lesson, type: :lesson do
       arg :timetable_id, non_null(:id)
-      arg :current_index, non_null(:integer)
       arg :name, :string
       arg :teacher, :string
       arg :note, :string
