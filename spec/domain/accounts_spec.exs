@@ -27,7 +27,12 @@ defmodule Squadster.Domain.AccountsSpec do
         {:found, user} = auth() |> Accounts.find_or_create_user()
 
         expect user.id |> to(eq user().id)
-        expect user.auth_token |> to(eq auth().credentials.token)
+      end
+
+      it "should not update auth_token" do
+        {:found, user} = auth() |> Accounts.find_or_create_user()
+
+        expect user.auth_token |> to(eq user().auth_token)
       end
     end
 
