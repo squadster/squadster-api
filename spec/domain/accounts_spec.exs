@@ -2,33 +2,32 @@ defmodule Squadster.Domain.AccountsSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
+  import Mockery
+  import Mockery.Assertions
+
   import Plug.Conn
   import Phoenix.ConnTest
 
   alias Squadster.Accounts
   alias Squadster.Accounts.User
   alias Squadster.Accounts.UserSettings
+  alias Squadster.Accounts.Services.UpdateUserSettings
 
   let :user, do: insert(:user)
 
   describe "#update_user_settings/2" do
     let :user_settings_params, do: %{
       vk_notifications_enabled: false,
-      telegram_notifications_enabled: false,
-      email_notifications_enabled: false,
+      telegram_notifications_enabled: true,
+      email_notifications_enabled: true,
     }
 
-    let :user, do: insert(:user)
-    let :user_settings, do: build(:user_settings) |> with_user(user()) |> insert
+    before do: mock UpdateUserSettings, :call
 
-    it "updates user settings" do
+    it "calls updater service" do
       Accounts.update_user_settings(user_settings_params(), user())
 
-      %{settings: updated_user_settings} = reload(user()) |> Repo.preload(:settings)
-
-      expect updated_user_settings.vk_notifications_enabled |> to(eq user_settings_params().vk_notifications_enabled)
-      expect updated_user_settings.email_notifications_enabled |> to(eq user_settings_params().email_notifications_enabled)
-      expect updated_user_settings.telegram_notifications_enabled |> to(eq user_settings_params().telegram_notifications_enabled)
+      assert_called UpdateUserSettings, :call
     end
   end
 
