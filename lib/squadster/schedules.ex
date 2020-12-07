@@ -63,10 +63,10 @@ defmodule Squadster.Schedules do
     end
   end
 
-  def delete_lesson(%{timetable_id: timetable_id, index: index}, user) do
-    timetable = Timetable |> Repo.get(timetable_id) |> Repo.preload([:squad, :lessons])
-    if user |> Permissions.can_update?(timetable.squad) do
-       DeleteLesson.call(timetable, index)
+  def delete_lesson(id, user) do
+    lesson = Lesson |> Repo.get(id) |> Repo.preload(timetable: :squad)
+    if user |> Permissions.can_update?(lesson.timetable.squad) do
+       DeleteLesson.call(lesson)
     else
       {:error, "Not enough permissions"}
     end

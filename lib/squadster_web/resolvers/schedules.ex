@@ -35,8 +35,8 @@ defmodule SquadsterWeb.Resolvers.Schedules do
     {:error, "Access denied"}
   end
 
-  def delete_lesson(_parent, args, %{context: %{current_user: user}}) do
-    mockable(Schedules).delete_lesson(args, user)
+  def delete_lesson(_parent, %{id: id}, %{context: %{current_user: user}}) do
+    mockable(Schedules).delete_lesson(id, user)
   end
 
   def delete_lesson(_parent, _args, _resolution) do

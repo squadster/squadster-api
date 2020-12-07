@@ -64,8 +64,7 @@ defmodule SquadsterWeb.Schema.SchedulesTypes do
 
     @desc "Delete a lesson"
     field :delete_lesson, type: :lesson do
-      arg :index, non_null(:integer)
-      arg :timetable_id, non_null(:id)
+      arg :id, non_null(:id)
 
       resolve &SchedulesResolver.delete_lesson/3
     end
