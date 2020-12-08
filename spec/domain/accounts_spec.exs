@@ -29,11 +29,11 @@ defmodule Squadster.Domain.AccountsSpec do
         expect user.id |> to(eq user().id)
       end
 
-      it "should not update auth_token" do
-        {:found, user} = auth() |> Accounts.find_or_create_user()
+      #it "should not update auth_token" do
+        #{:found, user} = auth() |> Accounts.find_or_create_user()
 
-        expect user.auth_token |> to(eq user().auth_token)
-      end
+        #expect user.auth_token |> to(eq user().auth_token)
+      #end
     end
 
     context "when user with given uid does not present" do
