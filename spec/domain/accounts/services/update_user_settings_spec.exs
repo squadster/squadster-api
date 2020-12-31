@@ -15,7 +15,7 @@ defmodule Squadster.Domain.Services.UpdateUserSettingsSpec do
 
   describe "#call/2" do
     it "updates user settings" do
-      UpdateUserSettings.call(update_params, user().settings)
+      UpdateUserSettings.call(update_params(), user().settings)
 
       %{settings: settings} = reload(user()) |> Repo.preload(:settings)
 

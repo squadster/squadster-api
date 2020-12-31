@@ -2,7 +2,6 @@ defmodule Squadster.Accounts.Services.CreateUserSettingsSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
-  alias Squadster.Accounts.User
   alias Squadster.Accounts.UserSettings
   alias Squadster.Accounts.Services.CreateUserSettings
 
@@ -20,7 +19,7 @@ defmodule Squadster.Accounts.Services.CreateUserSettingsSpec do
         |> Map.get(:settings)
         |> Repo.delete
 
-        subject
+        subject()
 
         expect initial_count |> to(eq entities_count(UserSettings))
       end
@@ -32,7 +31,7 @@ defmodule Squadster.Accounts.Services.CreateUserSettingsSpec do
       it "create user settings" do
         initial_count = entities_count(UserSettings)
 
-        subject
+        subject()
 
         expect initial_count |> not_to(eq entities_count(UserSettings))
       end
