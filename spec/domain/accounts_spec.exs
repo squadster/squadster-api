@@ -2,13 +2,34 @@ defmodule Squadster.Domain.AccountsSpec do
   use ESpec.Phoenix, async: true
   use ESpec.Phoenix.Extend, :domain
 
+  import Mockery
+  import Mockery.Assertions
+
   import Plug.Conn
   import Phoenix.ConnTest
 
   alias Squadster.Accounts
   alias Squadster.Accounts.User
+  alias Squadster.Accounts.UserSettings
+  alias Squadster.Accounts.Services.UpdateUserSettings
 
   let :user, do: insert(:user)
+
+  describe "#update_user_settings/2" do
+    let :user_settings_params, do: %{
+      vk_notifications_enabled: false,
+      telegram_notifications_enabled: true,
+      email_notifications_enabled: true,
+    }
+
+    before do: mock UpdateUserSettings, :call
+
+    it "calls updater service" do
+      Accounts.update_user_settings(user_settings_params(), user())
+
+      assert_called UpdateUserSettings, :call
+    end
+  end
 
   describe "find_user_by_token/1" do
     it "finds user by token" do

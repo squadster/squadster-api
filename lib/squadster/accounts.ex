@@ -1,4 +1,6 @@
 defmodule Squadster.Accounts do
+  import Mockery.Macro
+
   alias Ueberauth.Auth
   alias Squadster.Repo
   alias Squadster.Accounts.User
@@ -35,7 +37,7 @@ defmodule Squadster.Accounts do
 
   def update_user_settings(args, current_user) do
     %{settings: settings} = current_user |> Repo.preload(:settings)
-    args |> UpdateUserSettings.call(settings)
+    args |> mockable(UpdateUserSettings).call(settings)
   end
 
   def find_or_create_user(%Auth{} = auth) do
