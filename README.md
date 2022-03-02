@@ -1,5 +1,6 @@
 # Squadster
 
+[![License](https://img.shields.io/github/license/squadster/squadster-api.svg)](https://github.com/squadster/squadster-api/blob/master/LICENSE)
 [![Build status](https://travis-ci.com/squadster/squadster-api.svg?branch=master)](https://travis-ci.com/squadster/squadster-api)
 [![Coverage](https://codecov.io/gh/squadster/squadster-api/branch/master/graph/badge.svg)](https://codecov.io/gh/squadster/squadster-api)
 <!---
@@ -84,13 +85,3 @@ Also check the [Elixir deployment guides](https://hexdocs.pm/phoenix/deployment.
 ## Contributing
 
 Your ideas and wishes are welcome via [issues](https://github.com/squadster/squadster-api/issues) and [pull requets](https://github.com/squadster/squadster-api/pulls).
-
-## License
-
-[![by-nc-sa](https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0)
-
-* You cannot use this for commercial purposes.
-* If you make your own application based on this you must somehow link this repo on your pages.
-* You are not allowed to change license terms
-
-Check out the [LICENCE](LICENSE.md) file
